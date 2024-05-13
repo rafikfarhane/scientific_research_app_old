@@ -1,0 +1,37 @@
+body{
+    background-color:#2D2C34;
+    color: white;
+}
+
+.NP_UI{
+    display: flex;
+    flex-direction: column;
+}
+
+.NP_UI_Heading{
+    display: flex;
+    flex-direction: row;
+}
+
+.NP_UI_Heading h1{
+    font-size: 55px;
+    margin-left: 12px;
+    letter-spacing: -0.5;
+}
+
+.NP_UI_Heading i{
+    font-size: 55px;
+    margin-top: 33px;
+}
+
+.NP_UI_input{
+    display: flex;
+    flex-direction: column;
+}
+
+.NP_UI_input input{
+    background-color: #D9D7E2;
+    font-size: 40px;
+    width: 90%;
+    border-radius: 5px;
+}
