@@ -7,8 +7,8 @@ h1 {
     margin-left: 20px;
 }
 
- 
-.table{
+
+.table {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -18,12 +18,14 @@ h1 {
     width: 90%;
     border-collapse: collapse;
     margin-top: 30px;
-  
+
 }
 
 caption {
-    text-align: left; /* Ausrichtung des Titels */
-    caption-side: top; /* Platzierung des Titels */
+    text-align: left;
+    /* Ausrichtung des Titels */
+    caption-side: top;
+    /* Platzierung des Titels */
     font-weight: bold;
     margin-bottom: 20px;
     color: white;
@@ -31,25 +33,36 @@ caption {
 
 .captioncontent h2 {
     font-size: 2.8em;
-    
+    margin-top: 40px;
+
 }
 
-.captioncontent{
+.captioncontent {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-   
+
 }
 
-.captioncontent button{
+hr {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}
+
+.captioncontent button {
     border-radius: 7px;
     background-color: #D9D9D9;
     font-weight: bold;
     font-size: 1.2em;
     height: 30px;
     outline: none;
-    border:none;
-    margin-top: 60px;
+    border: none;
+    margin-top: 90px;
 
 }
 
@@ -73,24 +86,26 @@ table tbody {
 }
 
 
-.projects-table th{
+.projects-table th {
     cursor: default;
     font-size: 1.3em;
-    
+
 }
+
 .projects-table td {
     cursor: pointer;
-   
+
 }
 
 
-.projects-table th, .projects-table td {
+.projects-table th,
+.projects-table td {
     padding: 20px;
     border: none;
-    
+
 }
 
-.projectsButton  {
+.projectsButton {
     background-color: transparent;
     border: none;
     padding: 0;
