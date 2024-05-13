@@ -10,6 +10,7 @@
 <body>
 
 <h1>scienceHUB</h1>
+<img src="assets/addIcon.png">
 
    
 <div class="table">
@@ -19,48 +20,34 @@
                 <h2>
                     Projects
                 </h2>
-                <button type="button", onclick="window.location.href='TEST';"> 
+                <button type="button", onclick="window.location.href='/NewUI';">
+                   
                     create new project
                 </button>
             </div>
             <hr> </hr>
         </caption>
         
-
         <thead>
             <tr>
-                <th>Project Name</th>
-                <th>Status</th>
-                <th>Role</th>
-                <th>Creator + Members</th>
-                <th>Created On</th>
+                <th>project name</th>
+                <th>status</th>
+                <th>role</th>
+                <th>creator + members</th>
+                <th>created on</th>
             </tr>
         </thead>
     <tbody>
-        <tr class= "projectsButton", onclick="window.location.href='your_link_here';">
+        <tr class= "projectsButton", onclick="window.location.href='/project/aplabet_txt';">
                 <td class="projectsname">alphabet txt</td>
-                <td>Open</td>
+                <td>Closed</td>
                 <td>Admin</td>
                 <td>Me + 2 Members</td>
                 <td>05.01.2023</td>
             </button>    
         </tr>
-        <tr  class= "projectsButton", onclick="window.location.href='your_link_here';">
-            <td class="projectsname">literature rev</td>
-            <td>Closed</td>
-            <td>Writer</td>
-            <td>Kane + 10 Members</td>
-            <td>12.10.2023</td>
-        </tr>
-        <tr  class= "projectsButton", onclick="window.location.href='your_link_here';">
-            <td class="projectsname">drittes porject</td>
-            <td>Open</td>
-            <td>Writer</td>
-            <td>Sane + me</td>
-            <td>13.05.2024</td>
-        </tr>
         {% for list in textForColumn %}
-        <tr  class= "projectsButton", onclick="window.location.href='your_link_here';">
+        <tr  class= "projectsButton", onclick="window.location.href='/project/{{list[0]}}';">
             <td class="projectsname">{{list[0]}}</td>
             <td>{{list[1]}}</td>
             <td>{{list[2]}}</td>
@@ -68,7 +55,6 @@
             <td>{{list[4]}}</td>
         </tr>
         {% endfor %}
-
     </tbody>
     </table>
 
