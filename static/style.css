@@ -4,7 +4,30 @@ body {
 
 h1 {
     color: #CDC4DE;
-    margin-left: 30px;
+    margin-left: 20px;
+}
+
+ 
+.table{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.projects-table {
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 30px;
+  
+}
+
+caption {
+    text-align: left; /* Ausrichtung des Titels */
+    caption-side: top; /* Platzierung des Titels */
+    font-weight: bold;
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    color: white;
 }
 
 
@@ -12,24 +35,33 @@ table tbody {
     border-top: 20px solid #2D2C34;
 }
 
-.projects-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 40px;
-
-
-    border: solid black 1px;
-
-}
-
-.projects-table th, .projects-table td {
-    padding: 20px;
-    border-bottom: 1px solid #444;
-    background-color: #CDC4DE;
-    text-align: center;
-
-}
 
 .projects-table tr {
-    padding: 40px;
+    border-bottom: 5px solid #2D2C34;
+    background-color: #CDC4DE;
+    text-align: center;
+}
+
+.projects-table th{
+    cursor: default;
+}
+.projects-table td {
+    cursor: pointer;
+}
+
+
+
+.projectsname {
+    font-weight: bold;
+}
+.projects-table th, .projects-table td {
+    padding: 20px;
+    border: none;
+
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
 }
