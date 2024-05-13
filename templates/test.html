@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,7 +59,16 @@
             <td>Sane + me</td>
             <td>13.05.2024</td>
         </tr>
-        
+        {% for list in textForColumn %}
+        <tr  class= "projectsButton", onclick="window.location.href='your_link_here';">
+            <td class="projectsname">{{list[0]}}</td>
+            <td>{{list[1]}}</td>
+            <td>{{list[2]}}</td>
+            <td>{{list[3]}}</td>
+            <td>{{list[4]}}</td>
+        </tr>
+        {% endfor %}
+
     </tbody>
     </table>
 
