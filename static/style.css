@@ -5,6 +5,8 @@ body {
 h1 {
     color: #CDC4DE;
     margin-left: 20px;
+
+
 }
 
 
@@ -17,10 +19,11 @@ h1 {
 .projects-table {
     width: 90%;
     border-collapse: collapse;
-    margin-top: 30px;
+    margin-top: auto;
+
+
 
 }
-
 caption {
     text-align: left;
     /* Ausrichtung des Titels */
@@ -31,56 +34,55 @@ caption {
     color: white;
 }
 
-.captioncontent h2 {
-    font-size: 2.8em;
-    margin-top: 40px;
-
-}
 
 .captioncontent {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+}
+
+.captioncontent h2 {
+    font-size: 65px;
+    height: 25px;
+    outline: none;
+    border: none;
+    margin-top: 90px;
+
+
+}
+
+.captioncontent button {
+
+    border-radius: 7px;
+    background-color: #D9D9D9;
+    font-weight: bold;
+    font-size: 20px;
+    height: 35px;
+    outline: none;
+    border: none;
+    margin-top: auto;
+    cursor: pointer;
 
 }
 
 hr {
     display: block;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
     border-style: inset;
     border-width: 1px;
 }
 
-.captioncontent button {
-    border-radius: 7px;
-    background-color: #D9D9D9;
-    font-weight: bold;
-    font-size: 1.2em;
-    height: 30px;
-    outline: none;
-    border: none;
-    margin-top: 90px;
-
-}
-
-.projects-table {
-    margin-top: 10px;
-}
 
 table tbody {
-    border-top: 20px solid #2D2C34;
+    border-top: 30px solid #2D2C34;
 }
 
-.projectsname {
-    font-weight: bold;
-}
 
 
 .projects-table tr {
-    border-bottom: 5px solid #2D2C34;
+    border-bottom: 15px solid #2D2C34;
     background-color: #CDC4DE;
     text-align: center;
 }
@@ -88,21 +90,25 @@ table tbody {
 
 .projects-table th {
     cursor: default;
-    font-size: 1.3em;
+    font-size: 30px;
 
 }
 
 .projects-table td {
     cursor: pointer;
+    font-size: 25px;
+    
 
 }
-
 
 .projects-table th,
 .projects-table td {
     padding: 20px;
     border: none;
 
+}
+.projectsname {
+    font-weight: bold;
 }
 
 .projectsButton {
