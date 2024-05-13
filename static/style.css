@@ -1,0 +1,35 @@
+body {
+    background-color: #2D2C34;
+}
+
+h1 {
+    color: #CDC4DE;
+    margin-left: 30px;
+}
+
+
+table tbody {
+    border-top: 20px solid #2D2C34;
+}
+
+.projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+
+
+    border: solid black 1px;
+
+}
+
+.projects-table th, .projects-table td {
+    padding: 20px;
+    border-bottom: 1px solid #444;
+    background-color: #CDC4DE;
+    text-align: center;
+
+}
+
+.projects-table tr {
+    padding: 40px;
+}
