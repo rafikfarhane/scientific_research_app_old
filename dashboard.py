@@ -12,7 +12,7 @@ def home():
         if (i < 10):
             i = "0" + str(i)
         
-        newProject = [ "Name" + str(i), "Open", "Writer", "Namen + " +  str(i) + " Member", str(i) + ".06.2024"]
+        newProject = [ "name" + str(i), "open", "writer", "namen + " +  str(i) + " member", str(i) + ".06.2024"]
         projects.append(newProject)
         
     return render_template('dashboard.html', textForColumn=projects)
