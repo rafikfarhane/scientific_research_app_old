@@ -27,11 +27,30 @@ body{
 .NP_UI_input{
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
-.NP_UI_input input{
+.NP_UI_input input, textarea{
     background-color: #D9D7E2;
     font-size: 40px;
     width: 90%;
     border-radius: 5px;
 }
+
+#ProDes{
+    height: 200px;
+    margin-top: 40px;
+}
+
+#ProNam {
+    height: 88px;
+}
+
+.NP_UI_horinput{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90.4%;
+}
+
