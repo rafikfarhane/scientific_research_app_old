@@ -70,3 +70,22 @@ body{
     margin-top: 20px;
 }
 
+.NP_UI_create button{
+    height: 50px;
+    width: 250px;
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    align-items : center;
+    border: #079214 solid 2px;
+    background-color: #D9D7E2;
+    cursor: pointer;
+}
+
+.NP_UI_create button p {
+    margin-left: 15px;
+}
+
+.NP_UI_create button:hover{
+    background-color: #079214;
+}
