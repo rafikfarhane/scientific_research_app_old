@@ -15,7 +15,7 @@ def home():
         newProject = [ "Name" + str(i), "Open", "Writer", "Namen + " +  str(i) + " Member", str(i) + ".06.2024"]
         projects.append(newProject)
         
-    return render_template('test.html', textForColumn=projects)
+    return render_template('dashboard.html', textForColumn=projects)
 
 
 if __name__ == "__main__":
