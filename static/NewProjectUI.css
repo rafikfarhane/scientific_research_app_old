@@ -32,9 +32,10 @@ body{
 
 .NP_UI_input input, textarea{
     background-color: #D9D7E2;
-    font-size: 40px;
+    font-size: 22px;
     width: 90%;
-    border-radius: 5px;
+    border-radius: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 #ProDes{
@@ -44,6 +45,7 @@ body{
 
 #ProNam {
     height: 88px;
+    font-size: 36px;
 }
 
 .NP_UI_horinput{
@@ -52,5 +54,19 @@ body{
     justify-content: space-between;
     align-items: center;
     width: 90.4%;
+    margin-top: 40px;
+}
+
+.NP_UI_horinput input{
+    width: 45%;
+    height: 250px;
+}
+
+.NP_UI_create{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 95%;
+    margin-top: 20px;
 }
 
