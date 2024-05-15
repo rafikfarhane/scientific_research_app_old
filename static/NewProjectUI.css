@@ -14,13 +14,13 @@ body{
 }
 
 .NP_UI_Heading h1{
-    font-size: 55px;
+    font-size: 48px;
     margin-left: 12px;
     letter-spacing: -0.5;
 }
 
 .NP_UI_Heading i{
-    font-size: 55px;
+    font-size: 48px;
     margin-top: 33px;
 }
 
@@ -65,6 +65,55 @@ body{
 .NP_UI_horinput input{
     width: 45%;
     height: 250px;
+}
+
+.NP_UI_addMF{
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    width: 45%;
+}
+
+.addMF_input{
+    display: flex;
+    flex-direction: row;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #D9D7E2;
+}
+
+#nameinput{
+    height: 50px;
+    width: 85%;
+    flex-grow: 2;
+    border: none;
+    padding: 0 0 0 20px;
+
+}
+
+#namesubmit{
+    height: 100%;
+    border-top-right-radius: 5px;
+    width: 10%;
+    background-color: #268391;
+    border:none;
+    cursor: pointer;
+    font-size:22px;
+}
+
+#namesubmit:hover{
+    background-color: #2c9caf;
+}
+
+.mf_list{
+    background-color: #D9D7E2;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: black;
+    margin-top: 0;
+    height: 200px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .NP_UI_create{

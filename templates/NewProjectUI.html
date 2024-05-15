@@ -17,8 +17,28 @@
             <input id="ProNam" type="text" placeholder=" Project Name"></input>
             <textarea id="ProDes" type="text" placeholder=" description"></textarea>
             <div class="NP_UI_horinput">
-                <input type="text" placeholder=" addMembers"></input>
-                <input type="text" placeholder=" addFunders"></input>
+                <div class="NP_UI_addMF">
+                    <form class="addMF_input" method="POST" action="/NewProject/nutzer_hinzufuegen">
+                            <input id="nameinput" type="text" name="name" placeholder="add Member" required>
+                            <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
+                    </form>
+                    <ul class="mf_list">
+                        {% for nutzer in nutzer %}
+                            <li>{{ nutzer }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="NP_UI_addMF">
+                    <form class="addMF_input" method="POST" action="/NewProject/funding_hinzufuegen">
+                        <input id="nameinput" type="text" name="name" placeholder="add Funding" required>
+                        <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
+                    </form>
+                    <ul class="mf_list">
+                        {% for funder in funder %}
+                            <li>{{ funder }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="NP_UI_create">
