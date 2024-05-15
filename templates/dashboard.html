@@ -8,8 +8,6 @@
 <body>
 
 <h1>scienceHUB</h1>
-
-
    
 <div class="table">
     <table class="projects-table">
@@ -23,7 +21,9 @@
                     <span class="button-text">new project</span>
                 </button>
             </div>
+
             <hr> </hr>
+            
         </caption>
         
         <thead>
@@ -35,27 +35,30 @@
                 <th>created on</th>
             </tr>
         </thead>
-    <tbody>
-        <tr class= "projectsButton", onclick="window.location.href='/project/aplabet_txt';">
-                <td class="projectsname">alphabet txt</td>
-                <td>closed</td>
-                <td>admin</td>
-                <td>me + 2 members</td>
-                <td>05.01.2023</td>
-            </button>    
-        </tr>
-        {% for list in textForColumn %}
-        <tr  class= "projectsButton", onclick="window.location.href='/project/{{list[0]}}';">
-            <td class="projectsname">{{list[0]}}</td>
-            <td>{{list[1]}}</td>
-            <td>{{list[2]}}</td>
-            <td>{{list[3]}}</td>
-            <td>{{list[4]}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    </table>
 
+        <tbody>
+            <tr class= "projectsButton", onclick="window.location.href='/project/aplabet_txt';">
+                    <td class="projectsname">alphabet txt</td>
+                    <td>closed</td>
+                    <td>admin</td>
+                    <td>me + 2 members</td>
+                    <td>05.01.2023</td>
+                </button>    
+            </tr>
+
+            <!-- Hier werden von python die Daten eingesetzt -->
+            {% for list in textForColumn %}
+            <tr  class= "projectsButton", onclick="window.location.href='/project/{{list[0]}}';">
+                <td class="projectsname">{{list[0]}}</td>
+                <td>{{list[1]}}</td>
+                <td>{{list[2]}}</td>
+                <td>{{list[3]}}</td>
+                <td>{{list[4]}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 </div>
 
 </body>

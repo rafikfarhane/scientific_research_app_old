@@ -1,4 +1,3 @@
-
 /* font: inter regular */
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 /* font: inter semiBold */
@@ -21,7 +20,7 @@ h1 {
 
     color: #CDC4DE;
     margin-left: 20px;
- 
+
 }
 
 
@@ -36,8 +35,6 @@ h1 {
     border-collapse: collapse;
     margin-top: auto;
 
-
-
 }
 
 caption {
@@ -45,7 +42,7 @@ caption {
     /* Ausrichtung des Titels */
     caption-side: top;
     /* Platzierung des Titels */
-    font-weight:normal;
+    font-weight: normal;
     margin-bottom: 20px;
     color: white;
 }
@@ -58,49 +55,44 @@ caption {
 }
 
 .captioncontent h2 {
+
     font-family: Inter;
     font-weight: bold;
     font-size: 65px;
-    
+
     height: 0px;
     outline: none;
     border: none;
     margin-top: 90px;
-
-
 }
 
 .captioncontent button {
-   
+
     display: flex;
     background-color: #CDC4DE;
-    
+
     height: 35px;
     width: 170px;
     outline: none;
-    
-    
+
+
     border-radius: 8px;
-    border:none;
+    border: none;
 
     margin-top: 150px;
     text-align: center;
     cursor: pointer;
-    
-    
 }
 
 .captioncontent button:hover {
     background-color: white;
-
 }
 
 .button-icon {
     margin-top: 4px;
     margin-right: 10px;
-    /* Abstand zwischen Bild und Text */
+
     width: 25px;
-    /* Anpassung der Breite des Bildes */
     height: 25px;
 }
 
@@ -113,7 +105,6 @@ caption {
     display: inline-block;
     position: relative;
     top: 3px;
-    
 }
 
 
@@ -141,8 +132,9 @@ table tbody {
 
     border-bottom: 15px solid #2D2C34;
     background-color: #CDC4DE;
-    
+
 }
+
 .projects-table tr:hover {
     background-color: white;
 }
@@ -165,17 +157,15 @@ table tbody {
     font-size: 25px;
 }
 
-
-
-.projectsname {
-    font: Inter;
-    font-weight: bold;
-
-}
-
-
 .projectsButton {
     background-color: transparent;
     border: none;
     padding: 0;
 }
+
+.projectsname {
+    font: Inter;
+    font-weight: bold;
+}
+
+
