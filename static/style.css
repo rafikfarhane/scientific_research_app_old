@@ -56,7 +56,7 @@ caption {
 
     font-family: Inter;
     font-weight: bold;
-    font-size: 65px;
+    font-size: 80px;
 
     height: 0px;
     outline: none;
@@ -67,10 +67,10 @@ caption {
 .captioncontent button {
 
     display: flex;
-    background-color: #CDC4DE;
+    background-color: white;
 
-    height: 35px;
-    width: 170px;
+    height: 40px;
+    width: 200px;
     outline: none;
 
 
@@ -80,25 +80,28 @@ caption {
     margin-top: 150px;
     text-align: center;
     cursor: pointer;
+
+
 }
 
 .captioncontent button:hover {
-    background-color: white;
+    background-color: #38b000;
+    transform: scale(1.12);
 }
 
 .button-icon {
     margin-top: 4px;
     margin-right: 10px;
 
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
 }
 
 /* Stil für den Text im Button */
 .button-text {
     font-family: Inter;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 25px;
+    font-weight: bold;
 
     display: inline-block;
     position: relative;
@@ -133,8 +136,13 @@ table tbody {
 
 }
 
+/*TODO: Die erste Reihe darf NCIHT gehovert werden */
+
+
 .projects-table tr:hover {
     background-color: white;
+
+    transform: scale(1.03);
 }
 
 .projects-table th,
