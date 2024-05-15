@@ -41,11 +41,16 @@ body{
 #ProDes{
     height: 200px;
     margin-top: 40px;
+    padding: 20px;
+    width: 86.5%;
+    border: none;
 }
 
 #ProNam {
     height: 88px;
     font-size: 36px;
+    padding: 0 0 0 20px;
+    width: 88.2%;
 }
 
 .NP_UI_horinput{
@@ -77,8 +82,14 @@ body{
     display: flex;
     flex-direction: row;
     align-items : center;
-    border: #079214 solid 2px;
-    background-color: #D9D7E2;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #2c9caf;
+    transition: all 1000ms;
+    overflow: hidden;
+    outline: 2px solid #2c9caf;
     cursor: pointer;
 }
 
@@ -87,5 +98,25 @@ body{
 }
 
 .NP_UI_create button:hover{
-    background-color: #079214;
+    color: #fff;
+    transform: scale(1.1);
+    outline: 2px solid #70bdca;
+    box-shadow: 4px 5px 17px -4px #268391;
+}
+
+.NP_UI_create button::before{
+    content:"";
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background-color: #2c9caf;
+    transform: skewX(45deg);
+    z-index: -1;
+    transition: width 1000ms;
+}
+
+.NP_UI_create button:hover::before{
+    width: 250%;
 }
