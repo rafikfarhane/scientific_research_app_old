@@ -1,16 +1,14 @@
-/* font: inter regular */
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-/* font: inter semiBold */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
-/* font: inter bold */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
 
+/* font: Inter regular, semiBold(600), bold */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 body {
     background-color: #2D2C34;
 
     /* um gegen unschärfe beim zoomen des textet vor zu gehen*/
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    zoom: 75%;
 }
 
 

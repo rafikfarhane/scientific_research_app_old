@@ -16,14 +16,14 @@
                 <h2>
                     Projects
                 </h2>
-                <button type="button", onclick="window.location.href='/NewProject';">
+                <button type="button" onclick="window.location.href='/NewProject';">
                     <img alt="buttonImage" src="../static/addIcon.svg" class="button-icon">
                     <span class="button-text">new project</span>
                 </button>
             </div>
 
             <hr> </hr>
-            
+
         </caption>
         
         <thead>
@@ -37,18 +37,17 @@
         </thead>
 
         <tbody>
-            <tr class= "projectsButton", onclick="window.location.href='/project/aplabet_txt';">
+            <tr class= "projectsButton" onclick="window.location.href='/project/aplabet_txt';">
                     <td class="projectsname">alphabet txt</td>
                     <td>closed</td>
                     <td>admin</td>
                     <td>me + 2 members</td>
-                    <td>05.01.2023</td>
-                </button>    
+                    <td>05.01.2023</td>  
             </tr>
 
             <!-- Hier werden von python die Daten eingesetzt -->
             {% for list in textForColumn %}
-            <tr  class= "projectsButton", onclick="window.location.href='/project/{{list[0]}}';">
+            <tr  class= "projectsButton" onclick="window.location.href='/project/{{list[0]}}';">
                 <td class="projectsname">{{list[0]}}</td>
                 <td>{{list[1]}}</td>
                 <td>{{list[2]}}</td>

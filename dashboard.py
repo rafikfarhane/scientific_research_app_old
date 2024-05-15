@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 @app.route("/dashboard")
 def home():
+    # Erstellt eine Liste von Projektdaten für 19 Projekte mit formatierten Details
     
     projects = []
     
