@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../static/style.css">
+    <script src="https://kit.fontawesome.com/179535dd9d.js" crossorigin="annonymus"></script>
     <title>Dashboard</title>
 </head>
 
@@ -10,15 +11,16 @@
 <h1>scienceHUB</h1>
    
 <div class="table">
-    <table class="projects-table">
+    <table class="projects_table">
         <caption>
             <div class="captioncontent">
                 <h2>
                     Projects
                 </h2>
-                <button type="button" onclick="window.location.href='/NewProject';">
-                    <img alt="buttonImage" src="../static/addIcon.svg" class="button-icon">
-                    <span class="button-text">new project</span>
+                <button class="new_project_button" type="button" onclick="window.location.href='/NewProject';">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    <!--img alt="buttonImage" src="../static/addIcon.svg" class="button_icon"-->
+                    <span class="button_text">new project</span>
                 </button>
             </div>
 
@@ -40,7 +42,7 @@
             
             <!-- Hier werden von python die Daten eingesetzt -->
             {% for list in textForColumn %}
-            <tr  class= "projectsButton" onclick="window.location.href='/project/{{list[0]}}';">
+            <tr  class= "projects_button" onclick="window.location.href='/project/{{list[0]}}';">
                 <td class="projectsname">{{list[0]}}</td>
                 <td>{{list[1]}}</td>
                 <td>{{list[2]}}</td>

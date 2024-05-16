@@ -28,7 +28,7 @@ h1 {
     align-content: center;
 }
 
-.projects-table {
+.projects_table {
     width: 90%;
     border-collapse: collapse;
     margin-top: auto;
@@ -56,7 +56,7 @@ caption {
 
     font-family: Inter;
     font-weight: bold;
-    font-size: 80px;
+    font-size: 75px;
 
     height: 0px;
     outline: none;
@@ -68,9 +68,10 @@ caption {
 
     display: flex;
     background-color: white;
+    
 
-    height: 40px;
-    width: 200px;
+    height: 50px;
+    width: 210px;
     outline: none;
 
 
@@ -80,35 +81,37 @@ caption {
     margin-top: 150px;
     text-align: center;
     cursor: pointer;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 
 
 }
 
 .captioncontent button:hover {
-    background-color: #38b000;
+    background-color: #389678;
+    outline: 1px solid #389678 ;
+    color: white;
     transform: scale(1.12);
 }
 
-.button-icon {
-    margin-top: 4px;
-    margin-right: 10px;
+.new_project_button i {
 
-    width: 28px;
-    height: 28px;
+    font-size: 28px;
 }
 
 /* Stil für den Text im Button */
-.button-text {
+.button_text {
     font-family: Inter;
     font-size: 25px;
     font-weight: bold;
+    margin-right: 12px;
+
 
     display: inline-block;
     position: relative;
-    top: 3px;
+
 }
-
-
 
 hr {
     display: block;
@@ -126,7 +129,7 @@ table tbody {
 
 
 
-.projects-table tr {
+.projects_table tr {
     text-align: center;
     font-family: Inter;
     font-weight: normal;
@@ -139,31 +142,31 @@ table tbody {
 /*TODO: Die erste Reihe darf NCIHT gehovert werden */
 
 
-.projects-table tr:hover {
+.projects_table tr:hover {
     background-color: white;
-
+    border: none;
     transform: scale(1.03);
 }
 
-.projects-table th,
-.projects-table td {
+.projects_table th,
+.projects_table td {
     padding: 20px;
     border: none;
 
 }
 
-.projects-table th {
+.projects_table th {
     cursor: default;
     font-size: 30px;
     background-color: #CDC4DE;
 }
 
-.projects-table td {
+.projects_table td {
     cursor: pointer;
     font-size: 25px;
 }
 
-.projectsButton {
+.projects_button {
     background-color: transparent;
     border: none;
     padding: 0;
