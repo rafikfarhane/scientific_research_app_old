@@ -1,6 +1,10 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 body{
     background-color:#2D2C34;
     color: white;
+    font-family: Inter;
 }
 
 .NP_UI{
@@ -11,6 +15,12 @@ body{
 .NP_UI_Heading{
     display: flex;
     flex-direction: row;
+}
+
+.NP_UI_Heading img{
+    width: 110px;
+    height: 110px;
+    cursor: pointer;
 }
 
 .NP_UI_Heading h1{
@@ -35,7 +45,7 @@ body{
     font-size: 22px;
     width: 90%;
     border-radius: 10px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: Inter;
 }
 
 #ProDes{
