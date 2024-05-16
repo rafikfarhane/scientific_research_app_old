@@ -5,6 +5,7 @@ body{
     background-color:#2D2C34;
     color: white;
     font-family: Inter;
+    zoom: 95%;
 }
 
 .NP_UI{
@@ -26,7 +27,7 @@ body{
 .NP_UI_Heading h1{
     font-size: 48px;
     margin-left: 12px;
-    letter-spacing: -0.5;
+    letter-spacing: -2.0px;
 }
 hr{
     color: grey;
