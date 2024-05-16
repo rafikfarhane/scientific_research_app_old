@@ -42,7 +42,7 @@ body{
     height: 200px;
     margin-top: 40px;
     padding: 20px;
-    width: 86.5%;
+    width: 86.7%;
     border: none;
 }
 
@@ -58,7 +58,7 @@ body{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 90.4%;
+    width: 89.8%;
     margin-top: 40px;
 }
 
@@ -95,14 +95,14 @@ body{
     height: 100%;
     border-top-right-radius: 5px;
     width: 10%;
-    background-color: #268391;
+    background-color: #389678;
     border:none;
     cursor: pointer;
     font-size:22px;
 }
 
 #namesubmit:hover{
-    background-color: #2c9caf;
+    background-color: #44a787;
 }
 
 .mf_list{
@@ -114,6 +114,7 @@ body{
     height: 200px;
     overflow: hidden;
     overflow-y: scroll;
+    list-style-type:none;
 }
 
 .NP_UI_create{
@@ -135,10 +136,10 @@ body{
     border-radius: 5px;
     font-weight: bold;
     text-transform: uppercase;
-    color: #2c9caf;
-    transition: all 1000ms;
+    color: #44a787;
+    transition: all 800ms;
     overflow: hidden;
-    outline: 2px solid #2c9caf;
+    outline: 2px solid #44a787;
     cursor: pointer;
 }
 
@@ -149,8 +150,8 @@ body{
 .NP_UI_create button:hover{
     color: #fff;
     transform: scale(1.1);
-    outline: 2px solid #70bdca;
-    box-shadow: 4px 5px 17px -4px #268391;
+    outline: 2px solid #53c4a0;
+    box-shadow: 4px 5px 17px -4px #389678;
 }
 
 .NP_UI_create button::before{
@@ -160,12 +161,14 @@ body{
     top: 0;
     width: 0;
     height: 100%;
-    background-color: #2c9caf;
+    background-color: #44a787;
     transform: skewX(45deg);
     z-index: -1;
-    transition: width 1000ms;
+    transition: width 800ms;
 }
 
 .NP_UI_create button:hover::before{
     width: 250%;
 }
+
+
