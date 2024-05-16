@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/179535dd9d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/NewProjectUI.css">
+    <title>NewProjectUI</title>
+</head>
+<body>
+    <div class="NP_UI">
+        <div class="NP_UI_Heading">
+            <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/dashboard';">
+            <h1>scienceHUB</h1>
+        </div>
+        <hr>
+        <div class="NP_UI_input">
+            <input id="ProNam" type="text" placeholder="project name" maxlength="50"></input>
+            <textarea id="ProDes" type="text" placeholder="description" maxlength="750"></textarea>
+            <div class="NP_UI_horinput">
+                <div class="NP_UI_addMF">
+                    <form class="addMF_input" method="POST" action="/NewProject/nutzer_hinzufuegen">
+                            <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add member" required>
+                            <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
+                    </form>
+                    <ul class="mf_list">
+                        {% for nutzer in nutzer %}
+                            <li>{{ nutzer }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="NP_UI_addMF">
+                    <form class="addMF_input" method="POST" action="/NewProject/funding_hinzufuegen">
+                        <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add funding" required>
+                        <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
+                    </form>
+                    <ul class="mf_list">
+                        {% for funder in funder %}
+                            <li>{{ funder }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="NP_UI_create">
+            <button type="button"><i class="fa-solid fa-file-circle-plus"></i><p>create project</p></button>
+        </div>
+    </div>
+</body>
+</html>
