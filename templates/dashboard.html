@@ -37,14 +37,7 @@
         </thead>
 
         <tbody>
-            <tr class= "projectsButton" onclick="window.location.href='/project/aplabet_txt';">
-                    <td class="projectsname">alphabet txt</td>
-                    <td>closed</td>
-                    <td>admin</td>
-                    <td>me + 2 members</td>
-                    <td>05.01.2023</td>  
-            </tr>
-
+            
             <!-- Hier werden von python die Daten eingesetzt -->
             {% for list in textForColumn %}
             <tr  class= "projectsButton" onclick="window.location.href='/project/{{list[0]}}';">
