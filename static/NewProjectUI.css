@@ -187,4 +187,7 @@ hr{
     width: 250%;
 }
 
-
+input:focus,
+textarea:focus{
+    outline: none;
+}
