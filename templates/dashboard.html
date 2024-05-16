@@ -32,7 +32,7 @@
         </caption>
         
         <thead>
-            <tr class="projectsInfo">
+            <tr>
                 <th>project name</th>
                 <th>status</th>
                 <th>role</th>
@@ -44,9 +44,9 @@
         <tbody>
             
             <!-- Hier werden von python die Daten eingesetzt -->
-            {% for list in textForColumn %}
+            {% for list in text_for_column %}
             <tr  class= "projects_button" onclick="window.location.href='/project/{{list[0]}}';">
-                <td class="projectsname">{{list[0]}}</td>
+                <td class="projects_name">{{list[0]}}</td>
                 <td>{{list[1]}}</td>
                 <td>{{list[2]}}</td>
                 <td>{{list[3]}}</td>
