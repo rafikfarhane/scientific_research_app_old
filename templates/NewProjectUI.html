@@ -13,13 +13,14 @@
             <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/dashboard';">
             <h1>scienceHUB</h1>
         </div>
+        <hr>
         <div class="NP_UI_input">
-            <input id="ProNam" type="text" placeholder=" Project Name"></input>
-            <textarea id="ProDes" type="text" placeholder=" description"></textarea>
+            <input id="ProNam" type="text" placeholder="project name"></input>
+            <textarea id="ProDes" type="text" placeholder="description"></textarea>
             <div class="NP_UI_horinput">
                 <div class="NP_UI_addMF">
                     <form class="addMF_input" method="POST" action="/NewProject/nutzer_hinzufuegen">
-                            <input id="nameinput" type="text" name="name" placeholder="add Member" required>
+                            <input id="nameinput" type="text" name="name" placeholder="add member" required>
                             <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
                     </form>
                     <ul class="mf_list">
@@ -30,7 +31,7 @@
                 </div>
                 <div class="NP_UI_addMF">
                     <form class="addMF_input" method="POST" action="/NewProject/funding_hinzufuegen">
-                        <input id="nameinput" type="text" name="name" placeholder="add Funding" required>
+                        <input id="nameinput" type="text" name="name" placeholder="add funding" required>
                         <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
                     </form>
                     <ul class="mf_list">
