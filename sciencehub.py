@@ -106,7 +106,7 @@ class Database:
         """Generiere zufällige user_id"""
         return str(uuid.uuid4())
     
-    def create_table(self, conn):
+    def l_create_usertable(self, conn):
         """Erstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank"""
         try:
             cursor = conn.cursor()
@@ -123,6 +123,21 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
+    def l_register_user(self, conn, username, mail, password):
+        """Hinzufügen eines neuen Benutzers zur Tabelle 'l_nutzerdaten'"""
+        password_hash = self.hash_password(password)
+        user_id = self.generate_user_id()
+        try:
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO l_nutzerdaten (nutzer_id, nutzername, mail, passwort_hash) VALUES (?, ?, ?, ?)', 
+                           (user_id, username, mail, password_hash))
+            conn.commit()
+            print(f"User added successfully with ID {user_id}.")
+        except sqlite3.IntegrityError:
+            print("Username or email already exists.")
+        except sqlite3.Error as e:
+            print(e)
+    
     
 
 
