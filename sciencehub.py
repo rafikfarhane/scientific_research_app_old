@@ -4,6 +4,7 @@ from flask import request, redirect, url_for
 from flask import jsonify
 import sqlite3
 import hashlib
+import uuid
 
 app = Flask(__name__)
 
@@ -101,6 +102,24 @@ class Database:
         hash_object = hashlib.sha256(password.encode()) #passwort wird mit encode() als Byte-Sequenz angegeben und dann gehasht
         return hash_object.hexdigest()
     
+    def generate_user_id(self):
+        """Generiere zufällige user_id"""
+        return str(uuid.uuid4())
+    
+    def l_create_nutzerdaten(self, conn):
+        """Erstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank"""
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                '''
+                CREATE TABLE IF NOT EXISTS l_nutzerdaten (
+                    nutzer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nutzername TEXT UNIQUE NOT NULL,
+                    mail TEXT UNIQUE NOT NULL,
+                    passwort_hash TEXT NOT NULL
+                )
+            '''
+            )
 
         
 
