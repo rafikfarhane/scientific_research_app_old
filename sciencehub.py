@@ -24,17 +24,16 @@ def dashboard():
 
 
 #Dictionary which safes the information for the new project
-new_project_info = dict(project_name = None,
-                        project_description = None,
+new_project_info = dict(project_name = "",
+                        project_description = "",
                         project_member = [],
                         project_funder = []
                         )
 
 @app.route("/NewProject")
 def new_project():
-    print(new_project_info["project_name"])
     #rendering the NewProject page with project_nutzer and project_funding as parameters    
-    return render_template("NewProjectUI.html", name_value=new_project_info["project_name"], description_value=new_project_info["project_description"], nutzer=new_project_info["project_member"], funder=new_project_info["project_funder"])
+    return render_template("NewProjectUI.html", name_value = new_project_info["project_name"], description_value = new_project_info["project_description"], nutzer=new_project_info["project_member"], funder=new_project_info["project_funder"])
 
 #function to add a new Member to a newProject
 @app.route("/NewProject/nutzer_hinzufuegen", methods=['POST'])
@@ -46,17 +45,25 @@ def nutzer_hinzufuegen():
     #with redirect(url_for) we directly get back to the NewProject page
     return redirect(url_for("new_project"))
 
+
+#Function to save the projectname and the project description
 @app.route("/NewProject/saveData", methods = ['POST'])
 def saveData():
+    #request the json data which contains the projectname and the projectdescription
     data = request.json
+    #set variables to save the project_name and the project_description
     project_name = data.get('project_name')
     project_description = data.get('project_description')
 
-    if project_name and project_description:
+    #if Project_name data or project_description data were correctly transfered save the data in the dictionary
+    if project_name or project_description:
         new_project_info["project_name"] = project_name
         new_project_info["project_description"] = project_description
+        #return successmessage
         return jsonify({"message": "Project data saved successfully", "projects": new_project_info}), 200
+    #if data was not transfered correctly 
     else:
+        #return error message
         return jsonify({"message": "Invalid data"}), 400
 
 @app.route("/NewProject/funding_hinzufuegen", methods=['POST'])
