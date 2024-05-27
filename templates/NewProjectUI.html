@@ -15,8 +15,38 @@
         </div>
         <hr>
         <div class="NP_UI_input">
-            <input id="ProNam" type="text" placeholder="project name" maxlength="50"></input>
-            <textarea id="ProDes" type="text" placeholder="description" maxlength="750"></textarea>
+            <input id="ProNam" type="text" placeholder="project name" value = "{{ name_value }}" name="ProNam" maxlength="50"></input>
+            <textarea id="ProDes" type="text" placeholder="description" name="ProDes" maxlength="750">{{ description_value }}</textarea>
+            <script>
+                document.getElementById('ProNam').addEventListener('input', saveData);
+                document.getElementById('ProDes').addEventListener('input', saveData);
+
+                function saveData() {
+                    let project_name = document.getElementById('ProNam').value;
+                    let project_description = document.getElementById('ProDes').value;
+
+                    let data = {
+                        project_name: project_name,
+                        project_description: project_description
+                    };
+
+                    fetch("/NewProject/saveData", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error', error)
+                    });
+                }
+                    
+            </script>
             <div class="NP_UI_horinput">
                 <div class="NP_UI_addMF">
                     <form class="addMF_input" method="POST" action="/NewProject/nutzer_hinzufuegen">

@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
+from flask import jsonify
 
 app = Flask(__name__)
 
@@ -21,15 +22,19 @@ def dashboard():
     return render_template('dashboard.html', text_for_column=projects)
 
 
-#List to safe the members of a new project
-project_nutzer = []
-#List of funders of the new project
-project_funding = []
+
+#Dictionary which safes the information for the new project
+new_project_info = dict(project_name = None,
+                        project_description = None,
+                        project_member = [],
+                        project_funder = []
+                        )
 
 @app.route("/NewProject")
 def new_project():
+    print(new_project_info["project_name"])
     #rendering the NewProject page with project_nutzer and project_funding as parameters    
-    return render_template("NewProjectUI.html", nutzer=project_nutzer, funder=project_funding)
+    return render_template("NewProjectUI.html", name_value=new_project_info["project_name"], description_value=new_project_info["project_description"], nutzer=new_project_info["project_member"], funder=new_project_info["project_funder"])
 
 #function to add a new Member to a newProject
 @app.route("/NewProject/nutzer_hinzufuegen", methods=['POST'])
@@ -37,16 +42,29 @@ def nutzer_hinzufuegen():
     #request from the html where forms have the name name. Because this is an input the typed name of the new member is selected.
     nutzer = request.form['name']
     #the new Member is appended to the project_nutzer list
-    project_nutzer.append(nutzer)
+    new_project_info["project_member"].append(nutzer)
     #with redirect(url_for) we directly get back to the NewProject page
     return redirect(url_for("new_project"))
+
+@app.route("/NewProject/saveData", methods = ['POST'])
+def saveData():
+    data = request.json
+    project_name = data.get('project_name')
+    project_description = data.get('project_description')
+
+    if project_name and project_description:
+        new_project_info["project_name"] = project_name
+        new_project_info["project_description"] = project_description
+        return jsonify({"message": "Project data saved successfully", "projects": new_project_info}), 200
+    else:
+        return jsonify({"message": "Invalid data"}), 400
 
 @app.route("/NewProject/funding_hinzufuegen", methods=['POST'])
 def funding_hinzufuegen():
     #request from the html where forms have the name name. Because this is an input the typed name of the new funder is selected
     funder = request.form['name']
     #the new funder is added to the project_funder list
-    project_funding.append(funder)
+    new_project_info["project_funder"].append(funder)
     #redirect to the NewProject page
     return redirect(url_for("new_project"))
 
