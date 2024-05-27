@@ -2,6 +2,8 @@ from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
+import sqlite3
+
 
 app = Flask(__name__)
 
@@ -74,6 +76,40 @@ def funding_hinzufuegen():
     new_project_info["project_funder"].append(funder)
     #redirect to the NewProject page
     return redirect(url_for("new_project"))
+
+
+
+class Database:
+    def __init__(self):
+        self.id = None
+        self.p_db_name = 'project.db'
+        self.l_db_name = "nutzerdaten.db"
+
+
+    def p_create_connection(self):
+        """Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank"""
+        p_conn = None
+        try:
+            p_conn = sqlite3.connect(self.p_db_name)
+            return p_conn
+        except sqlite3.Error as e:
+            print(e)
+        return p_conn
+
+
+
+
+    def p_user_table(self, p_conn, NID):
+        None
+
+
+    
+    def p_project_table(self):
+        None
+
+
+    
+    def p_
 
 
 
