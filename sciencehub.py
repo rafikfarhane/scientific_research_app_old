@@ -106,20 +106,28 @@ class Database:
         """Generiere zufällige user_id"""
         return str(uuid.uuid4())
     
-    def l_create_nutzerdaten(self, conn):
+    def create_table(self, conn):
         """Erstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank"""
         try:
             cursor = conn.cursor()
-            cursor.execute(
-                '''
+            cursor.execute('''
                 CREATE TABLE IF NOT EXISTS l_nutzerdaten (
-                    nutzer_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nutzername TEXT UNIQUE NOT NULL,
-                    mail TEXT UNIQUE NOT NULL,
+                    nutzer_id TEXT PRIMARY KEY,
+                    nutzername VARCHAR UNIQUE NOT NULL,
+                    mail TEXT VARCHAR NOT NULL,
                     passwort_hash TEXT NOT NULL
                 )
-            '''
-            )
+            ''')
+            conn.commit()
+            print("Table 'l_nutzerdaten' created successfully.")
+        except sqlite3.Error as e:
+            print(e)
+
+    
+
+
+            
+
 
         
 
