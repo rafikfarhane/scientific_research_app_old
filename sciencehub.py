@@ -86,6 +86,7 @@ class Database:
         self.l_db_name = "nutzerdaten.db"
 
 
+
     def p_create_connection(self):
         """Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank"""
         p_conn = None
@@ -98,18 +99,31 @@ class Database:
 
 
 
+    def p_user_table(self, p_conn):
+        """Erstelle Tabelle für den User"""
+        try:
+            c = p_conn.cursor()
+            c.execute(f"""
+                CREATE TABLE IF NOT EXISTS {self.id} (
+                      PID VARCHAR(40) FOREIGN KEY,
+                      ROLE VARCHAR(5) NOT NULL
+                );
+            """)
+        except sqlite3.Error as e:
+            print(e)
 
-    def p_user_table(self, p_conn, NID):
+
+
+    def p_project_table(self, p_conn):
+        """Erstelle Tabelle für Projekte"""
         None
 
 
-    
-    def p_project_table(self):
+
+    def p_insert_user(self, p_conn):
         None
 
 
-    
-    def p_
 
 
 
