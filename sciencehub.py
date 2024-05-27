@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
 import sqlite3
+import hashlib
 
 app = Flask(__name__)
 
@@ -76,6 +77,32 @@ def funding_hinzufuegen():
     #redirect to the NewProject page
     return redirect(url_for("new_project"))
 
+
+
+
+class Database:
+    def __init__(self):
+        self.id = None
+        self.p_db_name = 'project.db'
+        self.l_db_name = 'nutzerdaten.db'
+
+    def l_create_connection(self):
+        """Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank"""
+        l_conn = None
+        try:
+            l_conn = sqlite3.connect(self.l_db_name)
+            return l_conn
+        except sqlite3.Error as e:
+            print(e)
+        return l_conn
+    
+    def hash_password(self, password):
+        """Hashen eines Passworts"""
+        hash_object = hashlib.sha256(password.encode()) #passwort wird mit encode() als Byte-Sequenz angegeben und dann gehasht
+        return hash_object.hexdigest()
+    
+
+        
 
 
 if __name__ == "__main__":
