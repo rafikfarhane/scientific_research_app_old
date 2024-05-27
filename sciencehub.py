@@ -116,13 +116,29 @@ class Database:
 
     def p_project_table(self, p_conn):
         """Erstelle Tabelle für Projekte"""
-        None
+        try:
+            c = p_conn.cursor()
+            c.execute(f"""
+                CREATE TABLE IF NOT EXISTS PROJECT (
+                      PID VARCHAR(40) PRIMARY KEY,
+                      NAME VARCHAR(30) NOT NULL,
+                      DESCRIPTION TEXT NOT NULL,
+                      ADMIN VARCHAR(40) NOT NULL,
+                      FUNDER TEXT
+                );
+            """)
+        except sqlite3.Error as e:
+            print(e)
 
 
 
     def p_insert_user(self, p_conn):
         None
 
+
+
+    def p_insert_project(self, p_conn):
+        None
 
 
 
