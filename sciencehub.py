@@ -6,7 +6,7 @@ import sqlite3
 import hashlib
 import uuid
 
-app = Flask(__name__)
+"""app = Flask(__name__)
 
 @app.route("/dashboard")
 
@@ -77,7 +77,7 @@ def funding_hinzufuegen():
     new_project_info["project_funder"].append(funder)
     #redirect to the NewProject page
     return redirect(url_for("new_project"))
-
+"""
 
 
 
@@ -105,6 +105,13 @@ class Database:
     def generate_user_id(self):
         """Generiere zufällige user_id"""
         return str(uuid.uuid4())
+    
+    def get_id(self):
+        return self.id
+    
+    def set_id(self, new_id):
+        self.id = new_id
+
     
     def l_create_usertable(self, conn):
         """Erstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank"""
@@ -138,7 +145,26 @@ class Database:
         except sqlite3.Error as e:
             print(e)
     
-    
+    def l_login_user(self, conn, username, password):
+        """Einloggen eines Benutzers"""
+        password_hash = self.hash_password(password)
+        try:
+            cursor = conn.cursor()
+            cursor.execute('SELECT nutzer_id, passwort_hash FROM l_nutzerdaten WHERE nutzername = ?', (username,))
+            row = cursor.fetchone()
+            if row is not None:
+                db_user_id, db_password_hash = row  # Tupel entpacken
+                if db_password_hash == password_hash:
+                    self.id = db_user_id  # Setze self.id auf die ID des eingeloggten Benutzers
+                    print("Login successful.")
+                    
+                else:
+                    print("Incorrect password.")
+            else:
+                print("User not found.")
+        except sqlite3.Error as e:
+            print(e)
+
 
 
             
@@ -147,5 +173,25 @@ class Database:
         
 
 
+# Teste die Funktionalitäten der Database-Klasse visuell
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Erstelle eine Instanz der Database-Klasse
+    db = Database()
+
+    # Öffne eine Verbindung zur Datenbank
+    conn = db.l_create_connection()
+
+    # Erstelle die Nutzertabelle
+    db.l_create_usertable(conn)
+
+    # Registriere einen neuen Benutzer
+    db.l_register_user(conn, 'testuser3', 'test3@example.com', 'password123')
+
+    # Logge den Benutzer ein
+    db.l_login_user(conn, 'testuser3', 'password123')
+
+    # Gib die UserID des eingeloggten Benutzers aus
+    print("User ID:", db.get_id())
+
+    # Schließe die Verbindung zur Datenbank
+    conn.close()
