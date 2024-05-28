@@ -184,7 +184,7 @@ class Database:
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT nutzer_id FROM all_users WHERE username = ?",
+                "SELECT user_id FROM all_users WHERE username = ?",
                 (username,),
             )
             # fetcone -> geht auf die erste Zeile (einzige Zeile)
@@ -254,16 +254,18 @@ class Database:
         db.create_table(conn_all_users, all_users_table)
 
         # Registriere einen neuen Benutzer
-        db.l_register_user(conn, "testuser4", "test5@example.com", "password13")
+        #db.l_register_user(conn, "testuser13", "test5@example.com", "password13")
 
         # Logge den Benutzer ein
-        db.l_login_user(conn, "testuser4", "password13")
+        #db.l_login_user(conn, "testuser13", "password13")
 
         # Gib die UserID des eingeloggten Benutzers aus
         print("User ID:", db.get_id())
 
-        
-        
+        # Teste get_from_name_id Methode
+        user_id = db.get_from_name_id(conn_all_users, "testuser12")
+        print("Returned User ID from get_from_name_id:", user_id)
+
         cursor = conn_all_users.cursor()
         cursor.execute(f"SELECT * FROM all_users")
 
@@ -278,6 +280,7 @@ class Database:
 
         # Schließe die Verbindung zur Datenbank
         conn.close()
+        conn_all_users.close()
 
 
 # Teste die Funktionalitäten der Database-Klasse visuell
