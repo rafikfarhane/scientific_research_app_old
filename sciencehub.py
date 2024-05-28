@@ -3,10 +3,7 @@ from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
 import sqlite3
-<<<<<<< HEAD
 import hashlib
-=======
->>>>>>> remotes/origin/project_db
 import uuid
 
 app = Flask(__name__)
@@ -36,7 +33,7 @@ def dashboard():
 
 # Dictionary which safes the information for the new project
 new_project_info = dict(
-    project_name="", project_description="", project_member=[], project_funder=[]
+    project_name = "", project_description = "", project_member = [], project_funder = []
 )
 
 
@@ -45,10 +42,10 @@ def new_project():
     # rendering the NewProject page with project_nutzer and project_funding as parameters
     return render_template(
         "NewProjectUI.html",
-        name_value=new_project_info["project_name"],
-        description_value=new_project_info["project_description"],
-        nutzer=new_project_info["project_member"],
-        funder=new_project_info["project_funder"],
+        name_value = new_project_info["project_name"],
+        description_value = new_project_info["project_description"],
+        nutzer = new_project_info["project_member"],
+        funder = new_project_info["project_funder"],
     )
 
 
@@ -109,7 +106,6 @@ class Database:
         self.l_db_name = "sign_in_up_user_data.db"
         self.l_allUser_db = "all_users.db"
 
-<<<<<<< HEAD
     def create_connection(self, name):
 
         # Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank
@@ -147,7 +143,6 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-   
     def l_register_user(self, conn, username, mail, password):
 
         # Hinzufügen eines neuen Benutzers zur Tabelle 'l_nutzerdaten
@@ -160,31 +155,29 @@ class Database:
                 (user_id, username, mail, password_hash),
             )
             conn.commit()
-            
-            self.l_add_user_to_all_users(username,user_id)
-            
+
+            self.l_add_user_to_all_users(username, user_id)
+
             print(f"User added successfully with ID {user_id}.")
-            
+
         except sqlite3.IntegrityError:
             print("Username or email already exists.")
         except sqlite3.Error as e:
             print(e)
 
-    def l_add_user_to_all_users(self,username, user_id):
+    def l_add_user_to_all_users(self, username, user_id):
         conn = self.create_connection(self.l_allUser_db)
-        
+
         cursor = conn.cursor()
         cursor.execute(
-                "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
-                (user_id, username),
-            )
+            "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
+            (user_id, username),
+        )
         conn.commit()
-        
+
         print(f"User {username} was added")
-        
-    
-    
-    def get_from_name_id(self,conn,username):
+
+    def get_from_name_id(self, conn, username):
         try:
             cursor = conn.cursor()
             cursor.execute(
@@ -200,10 +193,10 @@ class Database:
                 return db_user_id
             else:
                 print("User not found.")
-                
+
         except sqlite3.Error as e:
             print(e)
-    
+
     def l_login_user(self, conn, username, password):
 
         # Einloggen eines Benutzers
@@ -258,10 +251,10 @@ class Database:
         db.create_table(conn_all_users, all_users_table)
 
         # Registriere einen neuen Benutzer
-        #db.l_register_user(conn, "testuser13", "test5@example.com", "password13")
+        # db.l_register_user(conn, "testuser13", "test5@example.com", "password13")
 
         # Logge den Benutzer ein
-        #db.l_login_user(conn, "testuser13", "password13")
+        # db.l_login_user(conn, "testuser13", "password13")
 
         # Gib die UserID des eingeloggten Benutzers aus
         print("User ID:", db.get_id())
@@ -288,7 +281,6 @@ class Database:
 
 
 # Teste die Funktionalitäten der Database-Klasse visuell
-=======
 @app.route("/NewProject/create_project")
 def create_project():
     # platzhalter
@@ -306,7 +298,7 @@ def create_project():
                       ADMIN VARCHAR(40) NOT NULL,
                       FUNDER TEXT
                 ); """
-    
+
     user_table = f"""
                 CREATE TABLE IF NOT EXISTS {nid} (
                       PID VARCHAR(40) NOT NULL,
@@ -314,23 +306,22 @@ def create_project():
                       FOREIGN KEY (PID) REFERENCES PROJECT(PID)
                 );
             """
-    
+
     # User Tabelle erstellen
     db.create_table(conn, user_table)
 
     # PID erstellen
     pid = str(uuid.uuid4())
-    # Die NID des Admins vom Projekt                         
+    # Die NID des Admins vom Projekt
     user_admin = nid
-    # Tupel erstellen                   
-    u_values = (pid, 'admin')      
-    # Tupel in Tabelle einfügen                     
-    db.p_insert_user(conn, u_values)  
-
+    # Tupel erstellen
+    u_values = (pid, "admin")
+    # Tupel in Tabelle einfügen
+    db.p_insert_user(conn, u_values)
 
     cursor = conn.cursor()
 
-    cursor.execute(f"SELECT * FROM \"{nid}\"")
+    cursor.execute(f'SELECT * FROM "{nid}"')
 
     # Spaltennamen abrufen
     column_names = [description[0] for description in cursor.description]
@@ -341,23 +332,20 @@ def create_project():
     for row in rows:
         print(" | ".join(map(str, row)))
 
+    project_name = new_project_info["project_name"]
+    project_description = new_project_info["project_description"]
+    project_funder = new_project_info["project_funder"]
+    project_funder_str = ",".join(project_funder)
 
-    project_name = new_project_info['project_name']
-    project_description = new_project_info['project_description']
-    project_funder = new_project_info['project_funder']
-    project_funder_str = ','.join(project_funder)
-    
     # Projekt Tabelle erstellen
-    db.create_table(conn, project_table)       
+    db.create_table(conn, project_table)
     # Tupel erstellen
-    
-    p_values = (pid, project_name, project_description, 
-                user_admin, project_funder_str)
-    # Tupel in Projekt Tabelle einfügen
-    
-    db.p_insert_project(conn, p_values)   
 
-                        
+    p_values = (pid, project_name, project_description, user_admin, project_funder_str)
+    # Tupel in Projekt Tabelle einfügen
+
+    db.p_insert_project(conn, p_values)
+
     cursor = conn.cursor()
 
     cursor.execute(f"SELECT * FROM PROJECT")
@@ -371,12 +359,10 @@ def create_project():
     for row in rows:
         print(" | ".join(map(str, row)))
 
-    
     new_project_info["project_name"] = ""
     new_project_info["project_description"] = ""
     new_project_info["project_funder"] = []
     new_project_info["project_member"] = []
-
 
     """
     # Plan: Die PID zu den einzelnen Member Tabellen einfügen, aber wie?
@@ -384,22 +370,15 @@ def create_project():
         db.p_insert_user(conn, member, pid, 'read')
     """
 
-
-
     return redirect(url_for("dashboard"))
-
-
-
-
 
 
 class Database:
     # Konstruktor mit der ID des Nutzers
     def __init__(self, nid):
         self.id = nid
-        self.p_db_name = 'project.db'
+        self.p_db_name = "project.db"
         self.l_db_name = "nutzerdaten.db"
-
 
     # Funktion zur Verbindung mit der Datenbank herstellen
     def p_create_connection(self):
@@ -409,10 +388,9 @@ class Database:
             p_conn = sqlite3.connect(self.p_db_name)
             return p_conn
         # Diese Zeilen fangen Fehler ab
-        except sqlite3.Error as e:                   
+        except sqlite3.Error as e:
             print(e)
         return p_conn
-
 
     # Datenbank Tabelle für Projekte erstellen
     def create_table(self, p_conn, sqlcode):
@@ -423,14 +401,13 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
     # Tupel in die Nutzer Tabelle einfügen
     def p_insert_user(self, p_conn, tupel):
         """Values werden in die User Tabelle eingefügt"""
         try:
             # Values(?,?) sind Platzhalter die vom Tupel ersetzt werden
-            sql = f''' INSERT INTO {self.id}(PID, ROLE)
-                    VALUES(?,?) '''                         
+            sql = f""" INSERT INTO {self.id}(PID, ROLE)
+                    VALUES(?,?) """
             cur = p_conn.cursor()
             cur.execute(sql, tupel)
             p_conn.commit()
@@ -438,14 +415,12 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
-
     # Tupel in die Projekt Tabelle einfügen
     def p_insert_project(self, p_conn, p_tupel):
         """Values werden in die Projekt Tabelle eingefügt"""
         try:
-            sql = f''' INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
-                    VALUES(?,?,?,?,?) '''
+            sql = f""" INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
+                    VALUES(?,?,?,?,?) """
             cur = p_conn.cursor()
             cur.execute(sql, p_tupel)
             p_conn.commit()
@@ -454,8 +429,6 @@ class Database:
             print(e)
 
 
-
->>>>>>> remotes/origin/project_db
 if __name__ == "__main__":
     db = Database()
     db.test()
