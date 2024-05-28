@@ -143,6 +143,7 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
+   
     def l_register_user(self, conn, username, mail, password):
 
         # Hinzufügen eines neuen Benutzers zur Tabelle 'l_nutzerdaten
@@ -155,12 +156,29 @@ class Database:
                 (user_id, username, mail, password_hash),
             )
             conn.commit()
+            
+            self.l_add_user_to_all_users(username,user_id)
+            
             print(f"User added successfully with ID {user_id}.")
+            
         except sqlite3.IntegrityError:
             print("Username or email already exists.")
         except sqlite3.Error as e:
             print(e)
 
+    def l_add_user_to_all_users(self,username, user_id):
+        conn = self.create_connection(self.l_allUser_db)
+        
+        cursor = conn.cursor()
+        cursor.execute(
+                "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
+                (user_id, username),
+            )
+        conn.commit()
+        
+        print(f"User {username} was added")
+        
+    
     def l_login_user(self, conn, username, password):
 
         # Einloggen eines Benutzers
@@ -207,8 +225,8 @@ class Database:
         db.create_table(conn, user_table)
 
         all_users_table = """CREATE TABLE IF NOT EXISTS all_users (
-                    nutzer_id TEXT PRIMARY KEY,
-                    nutzername VARCHAR UNIQUE NOT NULL
+                    user_id TEXT PRIMARY KEY,
+                    username VARCHAR UNIQUE NOT NULL
                 )"""
         # Erstelle all nutzertabelle
         db.create_connection(conn, all_users_table)
