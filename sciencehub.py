@@ -2,8 +2,6 @@ from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
-import sqlite3
-import uuid
 
 
 app = Flask(__name__)
@@ -77,120 +75,6 @@ def funding_hinzufuegen():
     new_project_info["project_funder"].append(funder)
     #redirect to the NewProject page
     return redirect(url_for("new_project"))
-
-
-@app.route("/NewProject/create", methods=['POST'])
-def create_project():
-    nid = "12345"                                   # platzhalter
-    db = Database(nid)
-    conn = db.p_create_connection()
-    db.p_user_table(conn)
-
-    pid = str(uuid.uuid4())                         # PID erstellen
-    user_admin = request.form[nid]                       # Der Admin des Projekts
-    u_values = (pid, 'admin')
-    db.p_insert_user(conn, u_values)
-
-    project_name = request.form['project_name']
-    project_description = request.form['project_description']
-    project_funder = request.form['project_funder']
-
-    # Insert the project into a general projects table if needed
-    # db.p_insert_project(conn, pid, project_name, project_description, admin)
-
-    db.p_project_tabe()
-    p_values = (conn, pid, project_name, project_description, user_admin, project_funder)
-    db.p_insert_project(p_values)
-
-    for member in request.form.getlist('project_members'):          # Besprechen!!!
-        db.p_insert_user(conn, member, pid, 'read')
-    return redirect(url_for("dashboard"))
-
-
-
-class Database:
-
-    def __init__(self):
-        self.id = None
-        self.p_db_name = 'project.db'
-        self.l_db_name = "nutzerdaten.db"
-
-
-
-    def p_create_connection(self):
-        """Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank"""
-        p_conn = None
-        try:
-            p_conn = sqlite3.connect(self.p_db_name)
-            return p_conn
-        except sqlite3.Error as e:
-            print(e)
-        return p_conn
-
-
-
-    def p_user_table(self, p_conn):
-        # Erstelle Tabelle für den User
-        try:
-            c = p_conn.cursor()
-            c.execute(f"""
-                CREATE TABLE IF NOT EXISTS {self.id} (
-                      PID VARCHAR(40) NOT NULL,
-                      ROLE VARCHAR(5) NOT NULL,
-                      FOREIGN KEY (PID) REFERENCES PROJECT(PID)
-                );
-            """)
-            p_conn.commit()
-        except sqlite3.Error as e:
-            print(e)
-
-
-
-    def p_project_tabe(self, p_conn):
-        # Erstelle Tabelle für Projekte
-        try:
-            c = p_conn.cursor()
-            c.execute(f"""
-                CREATE TABLE IF NOT EXISTS PROJECT (
-                      PID VARCHAR(40) PRIMARY KEY,
-                      NAME VARCHAR(30) NOT NULL,
-                      DESCRIPTION TEXT NOT NULL,
-                      ADMIN VARCHAR(40) NOT NULL,
-                      FUNDER TEXT
-                );
-            """)
-            p_conn.commit()
-        except sqlite3.Error as e:
-            print(e)
-
-
-
-    def p_insert_user(self, p_conn, tupel):
-        """Values werden in die User Tabelle eingefügt"""
-        try:
-            sql = f''' INSERT INTO {self.id}(PID, ROLE)
-                    VALUES(?,?) '''
-            cur = p_conn.cursor()
-            cur.execute(sql, tupel)
-            p_conn.commit()
-            return cur.lastrowid
-        except sqlite3.Error as e:
-            print(e)
-
-
-
-    def p_insert_project(self, p_conn, p_tupel):
-        """Values werden in die Projekt Tabelle eingefügt"""
-        try:
-            sql = f''' INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
-                    VALUES(?,?,?,?,?) '''
-            cur = p_conn.cursor()
-            cur.execute(sql, p_tupel)
-            p_conn.commit()
-            return cur.lastrowid
-        except sqlite3.Error as e:
-            print(e)
-
 
 
 
