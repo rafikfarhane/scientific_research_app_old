@@ -148,8 +148,22 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-            
-              
+
+
+    def p_insert_project(self, p_conn, p_tupel):
+        """Values werden in die Projekt Tabelle eingefügt"""
+        try:
+            sql = f''' INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
+                    VALUES(?,?,?,?,?) '''
+            cur = p_conn.cursor()
+            cur.execute(sql, p_tupel)
+            p_conn.commit()
+            return cur.lastrowid
+        except sqlite3.Error as e:
+            print(e)
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
