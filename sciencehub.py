@@ -229,6 +229,7 @@ class Database:
             print(e)
 
 
+
     # Tupel in die Projekt Tabelle einfügen
     def p_insert_project(self, p_conn, p_tupel):
         """Values werden in die Projekt Tabelle eingefügt"""
