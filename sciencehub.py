@@ -100,6 +100,23 @@ class Database:
 
 
 
+    def p_user_table(self, p_conn):
+        # Erstelle Tabelle für den User
+        try:
+            c = p_conn.cursor()
+            c.execute(f"""
+                CREATE TABLE IF NOT EXISTS {self.id} (
+                      PID VARCHAR(40) NOT NULL,
+                      ROLE VARCHAR(5) NOT NULL,
+                      FOREIGN KEY (PID) REFERENCES PROJECT(PID)
+                );
+            """)
+            p_conn.commit()
+        except sqlite3.Error as e:
+            print(e)
+
+            
+
 
 if __name__ == "__main__":
     app.run(debug=True)
