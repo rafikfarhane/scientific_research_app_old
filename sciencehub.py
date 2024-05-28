@@ -148,7 +148,7 @@ class Database:
             """
             )
             conn.commit()
-            # print("Table 'l_nutzerdaten' created successfully.")
+            print("Table 'l_nutzerdaten' created successfully.")
         except sqlite3.Error as e:
             print(e)
 
@@ -164,7 +164,7 @@ class Database:
                 (user_id, username, mail, password_hash),
             )
             conn.commit()
-            #print(f"User added successfully with ID {user_id}.")
+            print(f"User added successfully with ID {user_id}.")
         except sqlite3.IntegrityError:
             print("Username or email already exists.")
         except sqlite3.Error as e:
@@ -180,11 +180,15 @@ class Database:
                 "SELECT nutzer_id, passwort_hash FROM l_nutzerdaten WHERE nutzername = ?",
                 (username),
             )
+            
+            # fetcone -> geht auf die erste Zeile (einzige Zeile)
             row = cursor.fetchone()
             if row is not None:
-                db_user_id, db_password_hash = row  # Tupel entpacken
+                # Tupel entpacken
+                db_user_id, db_password_hash = row 
                 if db_password_hash == password_hash:
-                    self.id = db_user_id  # Setze self.id auf die ID des eingeloggten Benutzers
+                    # Setze self.id auf die ID des eingeloggten Benutzers
+                    self.id = db_user_id  
                     print("Login successful.")
 
                 else:
