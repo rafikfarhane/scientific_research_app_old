@@ -33,7 +33,7 @@ def dashboard():
 
 # Dictionary which safes the information for the new project
 new_project_info = dict(
-    project_name="", project_description="", project_member=[], project_funder=[]
+    project_name = "", project_description = "", project_member = [], project_funder = []
 )
 
 
@@ -42,10 +42,10 @@ def new_project():
     # rendering the NewProject page with project_nutzer and project_funding as parameters
     return render_template(
         "NewProjectUI.html",
-        name_value=new_project_info["project_name"],
-        description_value=new_project_info["project_description"],
-        nutzer=new_project_info["project_member"],
-        funder=new_project_info["project_funder"],
+        name_value = new_project_info["project_name"],
+        description_value = new_project_info["project_description"],
+        nutzer = new_project_info["project_member"],
+        funder = new_project_info["project_funder"],
     )
 
 
@@ -275,19 +275,17 @@ class Database:
 
     def l_add_user_to_all_users(self,username, user_id):
         conn = self.create_connection(self.l_allUser_db)
-        
+
         cursor = conn.cursor()
         cursor.execute(
-                "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
-                (user_id, username),
-            )
+            "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
+            (user_id, username),
+        )
         conn.commit()
-        
+
         print(f"User {username} was added")
-        
-    
-    
-    def get_from_name_id(self,conn,username):
+
+    def get_from_name_id(self, conn, username):
         try:
             cursor = conn.cursor()
             cursor.execute(
@@ -303,7 +301,7 @@ class Database:
                 return db_user_id
             else:
                 print("User not found.")
-                
+
         except sqlite3.Error as e:
             print(e)
     
@@ -362,10 +360,10 @@ class Database:
         db.create_table(conn_all_users, all_users_table)
 
         # Registriere einen neuen Benutzer
-        #db.l_register_user(conn, "testuser13", "test5@example.com", "password13")
+        # db.l_register_user(conn, "testuser13", "test5@example.com", "password13")
 
         # Logge den Benutzer ein
-        #db.l_login_user(conn, "testuser13", "password13")
+        # db.l_login_user(conn, "testuser13", "password13")
 
         # Gib die UserID des eingeloggten Benutzers aus
         print("User ID:", db.get_id())
@@ -406,8 +404,6 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
-
     # Tupel in die Projekt Tabelle einfügen
     def p_insert_project(self, conn, p_tupel):
         """Values werden in die Projekt Tabelle eingefügt"""
@@ -420,7 +416,6 @@ class Database:
             return cur.lastrowid
         except sqlite3.Error as e:
             print(e)
-
 
 
 if __name__ == "__main__":
