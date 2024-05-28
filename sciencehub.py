@@ -135,7 +135,21 @@ class Database:
             print(e)
 
 
+
+    def p_insert_user(self, p_conn, tupel):
+        """Values werden in die User Tabelle eingefügt"""
+        try:
+            sql = f''' INSERT INTO {self.id}(PID, ROLE)
+                    VALUES(?,?) '''
+            cur = p_conn.cursor()
+            cur.execute(sql, tupel)
+            p_conn.commit()
+            return cur.lastrowid
+        except sqlite3.Error as e:
+            print(e)
+
             
+              
 
 if __name__ == "__main__":
     app.run(debug=True)
