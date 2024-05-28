@@ -180,7 +180,16 @@ class Database:
 
 
     def p_insert_project(self, p_conn, p_tupel):
-        None
+        """Values werden in die Projekt Tabelle eingefügt"""
+        try:
+            sql = f''' INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
+                    VALUES(?,?,?,?,?) '''
+            cur = p_conn.cursor()
+            cur.execute(sql, p_tupel)
+            p_conn.commit()
+            return cur.lastrowid
+        except sqlite3.Error as e:
+            print(e)
 
 
 
