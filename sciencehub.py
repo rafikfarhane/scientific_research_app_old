@@ -179,6 +179,27 @@ class Database:
         print(f"User {username} was added")
         
     
+    
+    def get_from_name_id(self,conn,username):
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT nutzer_id FROM all_users WHERE username = ?",
+                (username,),
+            )
+            # fetcone -> geht auf die erste Zeile (einzige Zeile)
+            row = cursor.fetchone()
+            if row is not None:
+                # Tupel entpacken
+                db_user_id = row
+                print("Login successful.")
+                return db_user_id
+            else:
+                print("User not found.")
+                
+        except sqlite3.Error as e:
+            print(e)
+    
     def l_login_user(self, conn, username, password):
 
         # Einloggen eines Benutzers
@@ -213,6 +234,7 @@ class Database:
 
         # Öffne eine Verbindung zur Datenbank
         conn = db.create_connection(self.l_db_name)
+        conn_all_users = db.create_connection(self.l_allUser_db)
 
         user_table = """
                 CREATE TABLE IF NOT EXISTS l_nutzerdaten (
@@ -229,7 +251,7 @@ class Database:
                     username VARCHAR UNIQUE NOT NULL
                 )"""
         # Erstelle all nutzertabelle
-        db.create_connection(conn, all_users_table)
+        db.create_table(conn_all_users, all_users_table)
 
         # Registriere einen neuen Benutzer
         db.l_register_user(conn, "testuser4", "test5@example.com", "password13")
@@ -240,9 +262,10 @@ class Database:
         # Gib die UserID des eingeloggten Benutzers aus
         print("User ID:", db.get_id())
 
-        cursor = conn.cursor()
-
-        cursor.execute(f"SELECT * FROM l_nutzerdaten")
+        
+        
+        cursor = conn_all_users.cursor()
+        cursor.execute(f"SELECT * FROM all_users")
 
         # Spaltennamen abrufen
         column_names = [description[0] for description in cursor.description]
