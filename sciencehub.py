@@ -166,6 +166,11 @@ def create_project():
     # Tupel in Projekt Tabelle einfügen
     db.p_insert_project(conn, p_values)   
 
+    # Plan: Die PID zu den einzelnen Member Tabellen einfügen
+    for member in new_project_info['project_member']:
+        member_id = db.get_from_name_id(member)
+        db.p_insert_other_user(conn, member_id, (pid, 'read'))
+
 
     ### TEST: DRUCKE TABELLE ###                 
     cursor = conn.cursor()
@@ -182,12 +187,6 @@ def create_project():
     new_project_info["project_description"] = ""
     new_project_info["project_funder"] = []
     new_project_info["project_member"] = []
-
-    """
-    # Plan: Die PID zu den einzelnen Member Tabellen einfügen, aber wie?
-    for member in request.form.getlist('project_members'):                  # Besprechen!!!
-        db.p_insert_user(conn, member, pid, 'read')
-    """
 
     return redirect(url_for("dashboard"))
 
@@ -390,9 +389,8 @@ class Database:
 
 
 
-    # Tupel in die Nutzer Tabelle einfügen
     def p_insert_user(self, conn, tupel):
-        """Values werden in die User Tabelle eingefügt"""
+        # Values werden in die User Tabelle eingefügt
         try:
             # Values(?,?) sind Platzhalter die vom Tupel ersetzt werden
             sql = f''' INSERT INTO {self.id}(PID, ROLE)
@@ -404,18 +402,34 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-    # Tupel in die Projekt Tabelle einfügen
-    def p_insert_project(self, conn, p_tupel):
-        """Values werden in die Projekt Tabelle eingefügt"""
+
+
+    def p_insert_project(self, conn, tupel):
+        # Values werden in die Projekt Tabelle eingefügt
         try:
             sql = f''' INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
                     VALUES(?,?,?,?,?) '''
             cur = conn.cursor()
-            cur.execute(sql, p_tupel)
+            cur.execute(sql, tupel)
             conn.commit()
             return cur.lastrowid
         except sqlite3.Error as e:
             print(e)
+
+
+        
+    def p_insert_other_user(self, conn, nid, tupel):
+        # Values werden in die Tabelle eines anderen Users eingefügt
+        try:
+            sql = f''' INSERT INTO {nid}(PID, ROLE)
+                    VALUES(?,?) '''                         
+            cur = conn.cursor()
+            cur.execute(sql, tupel)
+            conn.commit()
+            return cur.lastrowid
+        except sqlite3.Error as e:
+            print(e)
+
 
 
 if __name__ == "__main__":
