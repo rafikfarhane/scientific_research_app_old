@@ -103,14 +103,15 @@ class Database:
     def __init__(self):
         self.id = None
         self.p_db_name = "project.db"
-        self.l_db_name = "nutzerdaten.db"
+        self.l_db_name = "sign_in_up_user_data.db"
+        self.l_allUser_db = "all_users.db"
 
-    def l_create_connection(self):
+    def create_connection(self, name):
 
         # Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank
         l_conn = None
         try:
-            l_conn = sqlite3.connect(self.l_db_name)
+            l_conn = sqlite3.connect(name)
             return l_conn
         except sqlite3.Error as e:
             print(e)
@@ -133,8 +134,11 @@ class Database:
     def set_id(self, new_id):
         self.id = new_id
 
+    def l_create_allNutzer(self, conn):
+        None
+
     def l_create_usertable(self, conn):
-        #rstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank
+        # rstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank
         try:
             cursor = conn.cursor()
             cursor.execute(
@@ -171,8 +175,8 @@ class Database:
             print(e)
 
     def l_login_user(self, conn, username, password):
-        
-        #Einloggen eines Benutzers
+
+        # Einloggen eines Benutzers
         password_hash = self.hash_password(password)
         try:
             cursor = conn.cursor()
@@ -180,15 +184,15 @@ class Database:
                 "SELECT nutzer_id, passwort_hash FROM l_nutzerdaten WHERE nutzername = ?",
                 (username,),
             )
-            
+
             # fetcone -> geht auf die erste Zeile (einzige Zeile)
             row = cursor.fetchone()
             if row is not None:
                 # Tupel entpacken
-                db_user_id, db_password_hash = row 
+                db_user_id, db_password_hash = row
                 if db_password_hash == password_hash:
                     # Setze self.id auf die ID des eingeloggten Benutzers
-                    self.id = db_user_id  
+                    self.id = db_user_id
                     print("Login successful.")
 
                 else:
@@ -198,42 +202,40 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
+    def test(self):
+        # Erstelle eine Instanz der Database-Klasse
+        db = Database()
 
-def test():
-    # Erstelle eine Instanz der Database-Klasse
-    db = Database()
+        # Öffne eine Verbindung zur Datenbank
+        conn = db.create_connection(self.l_db_name)
 
-    # Öffne eine Verbindung zur Datenbank
-    conn = db.l_create_connection()
+        # Erstelle die Nutzertabelle
+        db.l_create_usertable(conn)
 
-    # Erstelle die Nutzertabelle
-    db.l_create_usertable(conn)
+        # Registriere einen neuen Benutzer
+        db.l_register_user(conn, "testuser4", "test5@example.com", "password13")
 
-    # Registriere einen neuen Benutzer
-    db.l_register_user(conn, "testuser4", "test5@example.com", "password13")
+        # Logge den Benutzer ein
+        db.l_login_user(conn, "testuser4", "password13")
 
-    # Logge den Benutzer ein
-    db.l_login_user(conn, "testuser4", "password13")
+        # Gib die UserID des eingeloggten Benutzers aus
+        print("User ID:", db.get_id())
 
-    # Gib die UserID des eingeloggten Benutzers aus
-    print("User ID:", db.get_id())
-    
-    cursor = conn.cursor()
-    
-    cursor.execute(f"SELECT * FROM l_nutzerdaten")
+        cursor = conn.cursor()
 
-    # Spaltennamen abrufen
-    column_names = [description[0] for description in cursor.description]
-    print(" | ".join(column_names))
+        cursor.execute(f"SELECT * FROM l_nutzerdaten")
 
-    # Zeilen abrufen und drucken
-    rows = cursor.fetchall()
-    for row in rows:
-        print(" | ".join(map(str, row)))
-    
-    
-    # Schließe die Verbindung zur Datenbank
-    conn.close()
+        # Spaltennamen abrufen
+        column_names = [description[0] for description in cursor.description]
+        print(" | ".join(column_names))
+
+        # Zeilen abrufen und drucken
+        rows = cursor.fetchall()
+        for row in rows:
+            print(" | ".join(map(str, row)))
+
+        # Schließe die Verbindung zur Datenbank
+        conn.close()
 
 
 # Teste die Funktionalitäten der Database-Klasse visuell
