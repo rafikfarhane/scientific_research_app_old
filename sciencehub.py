@@ -134,25 +134,12 @@ class Database:
     def set_id(self, new_id):
         self.id = new_id
 
-    def l_create_allNutzer(self, conn):
-        None
-
-    def l_create_usertable(self, conn):
-        # rstellen einer Tabelle 'l_nutzerdaten' in der SQLite-Datenbank
+    def create_table(self, conn, sqlcode):
         try:
             cursor = conn.cursor()
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS l_nutzerdaten (
-                    nutzer_id TEXT PRIMARY KEY,
-                    nutzername VARCHAR UNIQUE NOT NULL,
-                    mail TEXT VARCHAR NOT NULL,
-                    passwort_hash TEXT NOT NULL
-                )
-            """
-            )
+            cursor.execute(sqlcode)
             conn.commit()
-            print("Table 'l_nutzerdaten' created successfully.")
+            print("Created table")
         except sqlite3.Error as e:
             print(e)
 
@@ -209,8 +196,22 @@ class Database:
         # Öffne eine Verbindung zur Datenbank
         conn = db.create_connection(self.l_db_name)
 
+        user_table = """
+                CREATE TABLE IF NOT EXISTS l_nutzerdaten (
+                    nutzer_id TEXT PRIMARY KEY,
+                    nutzername VARCHAR UNIQUE NOT NULL,
+                    mail TEXT VARCHAR NOT NULL,
+                    passwort_hash TEXT NOT NULL
+                )"""
         # Erstelle die Nutzertabelle
-        db.l_create_usertable(conn)
+        db.create_table(conn, user_table)
+
+        all_users_table = """CREATE TABLE IF NOT EXISTS all_users (
+                    nutzer_id TEXT PRIMARY KEY,
+                    nutzername VARCHAR UNIQUE NOT NULL
+                )"""
+        # Erstelle all nutzertabelle
+        db.create_connection(conn, all_users_table)
 
         # Registriere einen neuen Benutzer
         db.l_register_user(conn, "testuser4", "test5@example.com", "password13")
@@ -240,4 +241,5 @@ class Database:
 
 # Teste die Funktionalitäten der Database-Klasse visuell
 if __name__ == "__main__":
-    test()
+    db = Database()
+    db.test()
