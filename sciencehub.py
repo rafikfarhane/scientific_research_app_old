@@ -178,7 +178,7 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(
                 "SELECT nutzer_id, passwort_hash FROM l_nutzerdaten WHERE nutzername = ?",
-                (username),
+                (username,),
             )
             
             # fetcone -> geht auf die erste Zeile (einzige Zeile)
@@ -210,14 +210,28 @@ def test():
     db.l_create_usertable(conn)
 
     # Registriere einen neuen Benutzer
-    db.l_register_user(conn, "testuser3", "test3@example.com", "password123")
+    db.l_register_user(conn, "testuser4", "test5@example.com", "password13")
 
     # Logge den Benutzer ein
-    db.l_login_user(conn, "testuser3", "password123")
+    db.l_login_user(conn, "testuser4", "password13")
 
     # Gib die UserID des eingeloggten Benutzers aus
     print("User ID:", db.get_id())
+    
+    cursor = conn.cursor()
+    
+    cursor.execute(f"SELECT * FROM l_nutzerdaten")
 
+    # Spaltennamen abrufen
+    column_names = [description[0] for description in cursor.description]
+    print(" | ".join(column_names))
+
+    # Zeilen abrufen und drucken
+    rows = cursor.fetchall()
+    for row in rows:
+        print(" | ".join(map(str, row)))
+    
+    
     # Schließe die Verbindung zur Datenbank
     conn.close()
 
