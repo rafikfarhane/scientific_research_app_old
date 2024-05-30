@@ -18,10 +18,10 @@
             <input id="ProNam" type="text" placeholder="project name" value = "{{ name_value }}" name="ProNam" maxlength="50"></input>
             <textarea id="ProDes" type="text" placeholder="description" name="ProDes" maxlength="750">{{ description_value }}</textarea>
             <script>
-                document.getElementById('ProNam').addEventListener('input', saveData);
-                document.getElementById('ProDes').addEventListener('input', saveData);
+                document.getElementById('ProNam').addEventListener('input', save_data);
+                document.getElementById('ProDes').addEventListener('input', save_data);
 
-                function saveData() {
+                function save_data() {
                     let project_name = document.getElementById('ProNam').value;
                     let project_description = document.getElementById('ProDes').value;
 
@@ -30,7 +30,7 @@
                         project_description: project_description
                     };
 
-                    fetch("/NewProject/saveData", {
+                    fetch("/NewProject/save_data", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -49,18 +49,18 @@
             </script>
             <div class="NP_UI_horinput">
                 <div class="NP_UI_addMF">
-                    <form class="addMF_input" method="POST" action="/NewProject/nutzer_hinzufuegen">
+                    <form class="addMF_input" method="POST" action="/NewProject/add_user">
                             <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add member" required>
                             <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
                     </form>
                     <ul class="mf_list">
-                        {% for nutzer in nutzer %}
-                            <li>{{ nutzer }}</li>
+                        {% for user in user %}
+                            <li>{{ user }}</li>
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="NP_UI_addMF">
-                    <form class="addMF_input" method="POST" action="/NewProject/funding_hinzufuegen">
+                    <form class="addMF_input" method="POST" action="/NewProject/add_funding">
                         <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add funding" required>
                         <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
                     </form>
