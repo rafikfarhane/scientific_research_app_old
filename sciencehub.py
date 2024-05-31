@@ -3,7 +3,6 @@ from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
 import sqlite3
-import hashlib
 import uuid
 import database
 
@@ -34,7 +33,7 @@ def dashboard():
 
 # Dictionary which safes the information for the new project
 new_project_info = dict(
-    project_name = "", project_description = "", project_member = [], project_funder = []
+    project_name="", project_description="", project_member=[], project_funder=[]
 )
 
 
@@ -43,10 +42,10 @@ def new_project():
     # rendering the NewProject page with project_user and project_funding as parameters
     return render_template(
         "NewProjectUI.html",
-        name_value = new_project_info["project_name"],
-        description_value = new_project_info["project_description"],
-        user = new_project_info["project_member"],
-        funder = new_project_info["project_funder"],
+        name_value=new_project_info["project_name"],
+        description_value=new_project_info["project_description"],
+        user=new_project_info["project_member"],
+        funder=new_project_info["project_funder"],
     )
 
 
@@ -90,7 +89,6 @@ def save_data():
         return jsonify({"message": "Invalid data"}), 400
 
 
-
 @app.route("/NewProject/add_funding", methods=["POST"])
 def add_funding():
     # request from the html where forms have the name name. Because this is an input the typed name of the new funder is selected
@@ -101,10 +99,8 @@ def add_funding():
     return redirect(url_for("new_project"))
 
 
-
 # Nach dem Entwurf eines Projekts werden die Daten in der Datenbank gespeichert
 @app.route("/NewProject/create_project")
-
 def create_project():
 
     # Objekt der Datenbank erzeugen und connecten
@@ -119,7 +115,7 @@ def create_project():
                       ADMIN VARCHAR(40) NOT NULL,
                       FUNDER TEXT
                 ); """
-    
+
     user_table = f"""
                 CREATE TABLE IF NOT EXISTS {nid} (
                       PID VARCHAR(40) NOT NULL,
@@ -127,21 +123,21 @@ def create_project():
                       FOREIGN KEY (PID) REFERENCES PROJECT(PID)
                 );
             """
-    
+
     # User Tabelle erstellen
     db.create_table(conn, user_table)
 
     # PID erstellen
     pid = str(uuid.uuid4())
 
-    # Die NID des Admins vom Projekt                         
+    # Die NID des Admins vom Projekt
     user_admin = nid
 
-    # Tupel erstellen                   
-    user_values = (pid, "admin")      
+    # Tupel erstellen
+    user_values = (pid, "admin")
 
-    # Tupel in Tabelle einfügen                     
-    db.insert_user(conn, user_values)  
+    # Tupel in Tabelle einfügen
+    db.insert_user(conn, user_values)
 
     # Drucke User Tabelle
     print_table(conn, nid)
@@ -151,16 +147,21 @@ def create_project():
     project_description = new_project_info["project_description"]
     project_funder = new_project_info["project_funder"]
     project_funder_str = ",".join(project_funder)
-    
+
     # Projekt Tabelle erstellen
-    db.create_table(conn, project_table)  
+    db.create_table(conn, project_table)
 
     # Tupel erstellen
-    project_values = (pid, project_name, project_description, 
-                user_admin, project_funder_str)
-    
+    project_values = (
+        pid,
+        project_name,
+        project_description,
+        user_admin,
+        project_funder_str,
+    )
+
     # Tupel in Projekt Tabelle einfügen
-    db.insert_project(conn, project_values)   
+    db.insert_project(conn, project_values)
 
     # Plan: Die PID zu den einzelnen Member Tabellen einfügen
     for member in new_project_info["project_member"]:
@@ -179,12 +180,11 @@ def create_project():
     return redirect(url_for("dashboard"))
 
 
-
 # Druckt die Tabelle
 def print_table(conn, table_name):
     try:
         cursor = conn.cursor()
-        cursor.execute(f"SELECT * FROM \"{table_name}\"")
+        cursor.execute(f'SELECT * FROM "{table_name}"')
         rows = cursor.fetchall()
         print(f"Data from {table_name}:")
         for row in rows:
@@ -193,10 +193,9 @@ def print_table(conn, table_name):
         print(f"Error reading from table {table_name}: {e}")
 
 
-
 ######################################################################################################################################################
 
 if __name__ == "__main__":
     app.run(debug=True)
-    #db = Database()
-    #db.test()
+    # db = Database()
+    # db.test()
