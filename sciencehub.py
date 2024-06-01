@@ -193,9 +193,6 @@ def print_table(conn, table_name):
         print(f"Error reading from table {table_name}: {e}")
 
 
-######################################################################################################################################################
 
 if __name__ == "__main__":
     app.run(debug=True)
-    # db = Database()
-    # db.test()
