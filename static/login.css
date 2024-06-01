@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body{
+    background-color:#2D2C34;
+    color: white;
+    font-family: Inter;
+    zoom: 95%;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+
+.center {
+   
+    margin: 0;
+    padding: 0;
+    height: 600px;
+    width:  300px;
+    background-color: #CDC4DE;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
