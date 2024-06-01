@@ -1,25 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-body{
-    background-color:#2D2C34;
-    color: white;
+body {
+    background-color: #2D2C34;
+    /*color: white;*/
     font-family: Inter;
     zoom: 95%;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
+    /* Full viewport height */
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
 }
 
 
 .center {
-   
+
     margin: 0;
     padding: 0;
-    height: 600px;
-    width:  300px;
-    background-color: #CDC4DE;
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    height: 545px;
+    width: 469px;
+    background-color: #B7AADF;
+    /*display: flex;*/
+    flex-direction: row;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+}
+
+h1 {
+    margin-top: 45px;
+    margin-left: 110px;
+    color: black;
+    font-family: Inter;
+    font-weight: bold;
+}
+
+.input_container {
+    display: flex; /* Use flexbox for easy positioning */
+    align-items: center; /* Center items vertically */
+    margin-top: 20px; /* Adjust as needed */
+}
+
+.input_container img {
+    width: 25px;
+    height: 25px;
+    margin-left: 70px; /* Adjust spacing between image and input field */
+}
+
+#username {
+    width: 260px;
+    height: 48px;
+    border: none;
+    color: black;
+    padding: 0 0 0 20px;
+    font-size: 18px;
+    border-radius: 10px;
+
 }
