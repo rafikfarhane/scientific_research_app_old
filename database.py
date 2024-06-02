@@ -80,7 +80,7 @@ class Database:
 
         print(f"User {username} was added")
 
-    def get_from_name_id(self, username) -> int:
+    def get_from_name_id(self, username) -> str:
         
         conn = self.create_connection(self.all_users_db)
 
@@ -99,11 +99,11 @@ class Database:
                 return db_user_id
             else:
                 print("User not found.")
-                return 0
+                return "0"
 
         except sqlite3.Error as e:
             print(e)
-            return 0
+            return "0"
 
     def login_user(self, conn, username, password) -> bool:
         # Einloggen eines Benutzers
