@@ -39,15 +39,23 @@ h1 {
 }
 
 .input_container {
-    display: flex; /* Use flexbox for easy positioning */
-    align-items: center; /* Center items vertically */
-    margin-top: 20px; /* Adjust as needed */
+    position: relative;
+    display: flex;
+    /*Use flexbox for easy positioning */
+    align-items: center;
+    /* Center items vertically */
+    margin-top: 20px;
+    /* Adjust as needed */
 }
 
-.input_container img {
-    width: 25px;
-    height: 25px;
-    margin-left: 70px; /* Adjust spacing between image and input field */
+
+.input_container i {
+    position: absolute;
+;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #999;
 }
 
 #username {

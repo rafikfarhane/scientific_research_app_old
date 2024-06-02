@@ -10,8 +10,15 @@ app = Flask(__name__)
 
 
 @app.route("/")
+def starting_page():
+    return redirect("login")
+
+@app.route("/login")
 def login():
-    return render_template("login.html")
+    return render_template ("login.html")
+
+
+
 
 @app.route("/dashboard")
 def dashboard():
