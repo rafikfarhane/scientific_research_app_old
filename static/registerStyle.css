@@ -1,0 +1,19 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body{
+    background-color:#2D2C34;
+    color: white;
+    font-family: Inter;
+    zoom: 95%;
+}
+
+.register_page{
+    display: flex;
+    flex-direction: column;
+}
+
+.register_window{
+    display: flex;
+    flex-direction: column;
+}

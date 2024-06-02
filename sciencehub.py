@@ -9,6 +9,11 @@ import database
 app = Flask(__name__)
 
 
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
+
 @app.route("/dashboard")
 def dashboard():
 
