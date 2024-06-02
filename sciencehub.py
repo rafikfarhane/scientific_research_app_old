@@ -9,7 +9,7 @@ import database
 app = Flask(__name__)
 
 
-@app.route("/register")
+@app.route("/sign_up")
 def register():
     return render_template("register.html")
 
