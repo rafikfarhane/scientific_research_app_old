@@ -45,7 +45,7 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-    def register_user(self, conn, username, mail, password):
+    def register_user(self, conn, username, mail, password) -> bool:
         # Hinzufügen eines neuen Benutzers zur Tabelle "user_data" -> login_dn
         password_hash = self.hash_password(password)
         user_id = self.generate_user_id()
@@ -58,10 +58,13 @@ class Database:
             conn.commit()
             self.add_user_to_all_users(username, user_id)
             print(f"User added successfully with ID {user_id}.")
+            return True
         except sqlite3.IntegrityError:
             print("Username or email already exists.")
+            return False
         except sqlite3.Error as e:
             print(e)
+            return False
 
     def add_user_to_all_users(self, username, user_id):
         conn = self.create_connection(self.all_users_db)
@@ -77,8 +80,7 @@ class Database:
 
         print(f"User {username} was added")
 
-    # if 0 -> FAIL
-    def get_from_name_id(self, username):
+    def get_from_name_id(self, username) -> int:
         
         conn = self.create_connection(self.all_users_db)
 
@@ -103,7 +105,7 @@ class Database:
             print(e)
             return 0
 
-    def login_user(self, conn, username, password):
+    def login_user(self, conn, username, password) -> bool:
         # Einloggen eines Benutzers
         password_hash = self.hash_password(password)
         try:

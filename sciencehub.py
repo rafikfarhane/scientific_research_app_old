@@ -39,7 +39,7 @@ def create_dbs():
                 username VARCHAR UNIQUE NOT NULL
             )"""
 
-    # Erstelle eine Nutzertabell mit allen Nutzern, um auf id & username zuzugreifen
+    # Erstelle eine Nutzertabell mit allen Nutzern, um auf id & username zugreifen zu können
     db.create_table(conn_all_users, all_users_table)
 
     project_table = """CREATE TABLE IF NOT EXISTS PROJECT (
@@ -57,15 +57,14 @@ def create_dbs():
 @app.route("/")
 def starting_page():
 
-    #### TEST ####
+    """
+    ### TEST ###
     create_dbs()
 
     con_login = db.create_connection(db.login_db)
     db.register_user(con_login, "LukasB", "wasgeht@Email.com", "Test123")
     db.register_user(con_login, "LukasD", "wasgeht@Email.com", "Test2")
-
-    ### TEST ENDE ###
-
+    """
     return redirect("login")
 
 
@@ -82,16 +81,18 @@ def check_login():
     # password vom input Field bekommen
     password = request.form["password"]
 
-    # wenn eins der beiden leer, erneuter versuch
+    # wenn eins der beiden leer: erneuter Versuch
     if username == "" or password == "":
         return redirect(url_for("login"))
 
     # conection zur login Datenbank
     login_conn = db.create_connection(db.login_db)
 
-    # wenn Passwort & Nutzername korrekt
-    if db.login_user(login_conn, username, password):
+    # wenn Passwort & Nutzername inkorrekt
+    if db.login_user(login_conn, username, password) == False:
+        return redirect(url_for("login"))
 
+    else:
         # id des nutzer aus der DB anfragen
         cursor = login_conn.cursor()
         id = cursor.execute(
@@ -105,22 +106,16 @@ def check_login():
             # Tupel entpacken
             id = row[0]
 
-        # id auf den eingelogten Nutzersetzten
+        # id auf den eingelogten Nutzer setzten
         db.set_id(id)
 
         return redirect(url_for("dashboard", username=username))
-
-    else:
-        return redirect(url_for("login"))
 
 
 @app.route("/dashboard/<username>")
 def dashboard(username):
 
-
-    print("Drinnen")
-    print(db.get_id())
-    print(db.get_from_name_id(username))
+    # wenn der übergebene Nutzer nicht mit dem angemeldeten Nutzer übereinstimmt, zurück zu login
     if db.get_id() != db.get_from_name_id(username):
         return redirect(url_for("login"))
 
