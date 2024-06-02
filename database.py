@@ -174,6 +174,9 @@ class Database:
         except sqlite3.Error as e:
             print(e)
     
+
+        
+    
     
     def test(self):
         # Erstelle eine Instanz der Database-Klasse

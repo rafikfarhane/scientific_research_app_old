@@ -8,14 +8,60 @@ import database
 
 app = Flask(__name__)
 
+# db Instanz
+db = database.Database()
+
+# Dictionary which safes the information for the new project
+new_project_info = dict(
+    project_name="", project_description="", project_member=[], project_funder=[]
+)
+
+
+def create_dbs():
+    # Öffne eine Verbindung zur Datenbank
+    conn_user_data = db.create_connection(db.login_db)
+    conn_all_users = db.create_connection(db.all_users_db)
+    conn_project = db.create_connection(db.project_db)
+
+    user_table = """
+            CREATE TABLE IF NOT EXISTS user_data (
+                user_id TEXT PRIMARY KEY,
+                username VARCHAR UNIQUE NOT NULL,
+                mail TEXT VARCHAR NOT NULL,
+                passwort_hash TEXT NOT NULL
+            )"""
+
+    # Erstelle die Nutzertabelle mit allen Nutzern fürs login & registrieren
+    db.create_table(conn_user_data, user_table)
+
+    all_users_table = """CREATE TABLE IF NOT EXISTS all_users (
+                user_id TEXT PRIMARY KEY,
+                username VARCHAR UNIQUE NOT NULL
+            )"""
+
+    # Erstelle eine Nutzertabell mit allen Nutzern, um auf id & username zuzugreifen
+    db.create_table(conn_all_users, all_users_table)
+
+    project_table = """CREATE TABLE IF NOT EXISTS PROJECT (
+                      PID VARCHAR(40) PRIMARY KEY,
+                      NAME VARCHAR(30) NOT NULL,
+                      DESCRIPTION TEXT NOT NULL,
+                      ADMIN VARCHAR(40) NOT NULL,
+                      FUNDER TEXT
+                ); """
+
+    # Erstelle ein Projekttabelle für alle Projekte
+    db.create_table(conn_project, project_table)
+
 
 @app.route("/")
 def starting_page():
     return redirect("login")
 
+
 @app.route("/login")
 def login():
-    return render_template ("login.html")
+    return render_template("login.html")
 
 
 @app.route("/dashboard")
@@ -38,12 +84,6 @@ def dashboard():
         projects.append(new_project)
 
     return render_template("dashboard.html", text_for_column=projects)
-
-
-# Dictionary which safes the information for the new project
-new_project_info = dict(
-    project_name="", project_description="", project_member=[], project_funder=[]
-)
 
 
 @app.route("/NewProject")
@@ -113,7 +153,7 @@ def add_funding():
 def create_project():
 
     # Objekt der Datenbank erzeugen und connecten
-    db = database.Database()
+
     nid = db.get_id()
     conn = db.create_connection(db.project_db)
 
@@ -200,7 +240,6 @@ def print_table(conn, table_name):
             print(row)
     except sqlite3.Error as e:
         print(f"Error reading from table {table_name}: {e}")
-
 
 
 if __name__ == "__main__":

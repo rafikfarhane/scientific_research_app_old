@@ -95,7 +95,14 @@ h1 {
     border-radius: 100px;   
 }
 
+.login_button button:hover{
+    background-color: #593aaf;
+    cursor: pointer;
+}
+
 #no_account{
+    padding-top: 5px;
+    font-weight:bolder;
     text-align: center;
 }
 
