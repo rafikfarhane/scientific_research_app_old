@@ -11,24 +11,24 @@
 <body>
 
     <div class="center">
-        <h1> Welcome back </h1>
-        
-        <div class="username_input">
-            <i class="fa-solid fa-circle-user"></i>
-            <input id="username" type="text" placeholder="username">
-        </div>
+        <form class="login" method="POST" action="/login/check">
+            <h1> Welcome back </h1>
+            
+            <div class="username_input">
+                <i class="fa-solid fa-circle-user"></i>
+                <input id="username" type="text" name="username" placeholder="username">
+            </div>
 
-        <div class="password_input">
-            <i class="fa-solid fa-lock"></i>
-            <input id="password" type="password" placeholder="password">
-        </div>
+            <div class="password_input">
+                <i class="fa-solid fa-lock"></i>
+                <input id="password" type="password" name="password" placeholder="password">
+            </div>
 
-        <div class="login_button">
-            <button >Log in </button>
-        </div>
-
+            <div class="login_button">
+                <button >Log in </button>
+        </from>
+    </div>
         <p id="no_account"> Don't have an account ?</br> <a id="sign_up" href='/sign_up'>Sign up</a></p>
-
     </div>
 
 </body>

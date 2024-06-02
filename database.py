@@ -10,7 +10,6 @@ class Database:
         self.login_db = "sign_in_user_data.db"
         self.all_users_db = "all_users.db"
 
-
     def create_connection(self, name):
         # Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank
         conn = None
@@ -21,26 +20,21 @@ class Database:
             print(e)
         return conn
 
-
     def hash_password(self, password):
         # Hashen eines Passworts
         # passwort wird mit encode() als Byte-Sequenz angegeben und dann gehasht
         hash_object = hashlib.sha256(password.encode())
         return hash_object.hexdigest()
 
-
     def generate_user_id(self):
         # Generiere zufällige user_id
         return str(uuid.uuid4())
 
-
     def get_id(self):
         return self.id
 
-
     def set_id(self, new_id):
         self.id = new_id
-
 
     def create_table(self, conn, sqlcode):
         try:
@@ -51,9 +45,8 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
     def register_user(self, conn, username, mail, password):
-        # Hinzufügen eines neuen Benutzers zur Tabelle "user_data
+        # Hinzufügen eines neuen Benutzers zur Tabelle "user_data" -> login_dn
         password_hash = self.hash_password(password)
         user_id = self.generate_user_id()
         try:
@@ -70,7 +63,6 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
     def add_user_to_all_users(self, username, user_id):
         conn = self.create_connection(self.all_users_db)
 
@@ -83,7 +75,7 @@ class Database:
 
         print(f"User {username} was added")
 
-
+    # if 0 -> FAIL
     def get_from_name_id(self, conn, username):
         try:
             cursor = conn.cursor()
@@ -100,10 +92,11 @@ class Database:
                 return db_user_id
             else:
                 print("User not found.")
+                return 0
 
         except sqlite3.Error as e:
             print(e)
-
+            return 0
 
     def login_user(self, conn, username, password):
         # Einloggen eines Benutzers
@@ -123,13 +116,16 @@ class Database:
                     # Setze self.id auf die ID des eingeloggten Benutzers
                     self.id = db_user_id
                     print("Login successful.")
+                    return True
                 else:
                     print("Incorrect password.")
+                    return False
             else:
                 print("User not found.")
+                return False
         except sqlite3.Error as e:
             print(e)
-
+            return False
 
     def insert_user(self, conn, tupel):
         # Values werden in die User Tabelle eingefügt
@@ -148,7 +144,6 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
     def insert_project(self, conn, tupel):
         # Values werden in die Projekt Tabelle eingefügt
         try:
@@ -161,7 +156,6 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-
     def add_values_to_member(self, conn, nid, tupel):
         # Values werden in die Tabelle eines anderen Users eingefügt
         try:
@@ -173,11 +167,7 @@ class Database:
             return cur.lastrowid
         except sqlite3.Error as e:
             print(e)
-    
 
-        
-    
-    
     def test(self):
         # Erstelle eine Instanz der Database-Klasse
         db = Database()

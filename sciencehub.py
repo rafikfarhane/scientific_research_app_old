@@ -56,12 +56,52 @@ def create_dbs():
 
 @app.route("/")
 def starting_page():
+
+    #### TEST ####
+    create_dbs()
+
+    con = db.create_connection(db.login_db)
+    db.register_user(con, "LukasB", "wasgeht@Email.com", "Test123")
+
+    ### TEST ENDE ###
+
     return redirect("login")
 
 
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+
+@app.route("/login/check", methods=["POST"])
+def check_login():
+    username = request.form["username"]
+
+    password = request.form["password"]
+
+    if username == "" or password == "":
+        return redirect(url_for("login"))
+
+    login_conn = db.create_connection(db.login_db)
+
+    if db.login_user(login_conn, username, password):
+        cursor = login_conn.cursor()
+        id = cursor.execute(
+            "SELECT user_id FROM user_data WHERE username = ?",
+            (username,),
+        )
+        
+        row = cursor.fetchone()
+        if row is not None:
+            # Tupel entpacken
+            id = row[0]
+        
+        db.set_id(id)
+
+        return redirect(url_for("dashboard"))
+
+    else:
+        return redirect(url_for("login"))
 
 
 @app.route("/dashboard")
