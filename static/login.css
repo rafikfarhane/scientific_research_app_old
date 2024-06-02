@@ -1,70 +1,104 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
-    background-color: #2D2C34;
-    /*color: white;*/
-    font-family: Inter;
-    zoom: 95%;
-    height: 100vh;
-    /* Full viewport height */
     display: flex;
     justify-content: center;
-    /* Center horizontally */
     align-items: center;
-    /* Center vertically */
+    position: relative;
+
+    background-color: #2D2C34;
+
+    font-family: Inter;
+
+    /* vh = volle Höhe des Browser-Fensters */
+    height: 100vh;
 }
 
 
 .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    margin: 0;
-    padding: 0;
+    background-color: #B7AADF;
+
     height: 545px;
     width: 469px;
-    background-color: #B7AADF;
-    /*display: flex;*/
-    flex-direction: row;
-    justify-content: center;
-    /* Center horizontally */
-    align-items: center;
-    /* Center vertically */
 }
 
 h1 {
-    margin-top: 45px;
-    margin-left: 110px;
-    color: black;
+    position: relative;
+    padding-top: 50px;
+    
     font-family: Inter;
     font-weight: bold;
+    color: black;
 }
 
-.input_container {
+.username_input,
+.password_input {
     position: relative;
-    display: flex;
-    /*Use flexbox for easy positioning */
-    align-items: center;
-    /* Center items vertically */
-    margin-top: 20px;
-    /* Adjust as needed */
+
+    margin-top: 60px;
+    right: 12px;
 }
 
+.password_input {
+    margin-top: 40px;
+}
 
-.input_container i {
-    position: absolute;
-;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
+.username_input i,
+.password_input i {
+    position: relative;
+
+    left: 29px;
     color: #999;
 }
 
-#username {
-    width: 260px;
-    height: 48px;
-    border: none;
-    color: black;
-    padding: 0 0 0 20px;
-    font-size: 18px;
-    border-radius: 10px;
+#username,
+#password {
+    padding-top: 5%;
+    padding: 0 0 0 31px;
 
+    width: 200px;
+    height: 50px;
+
+    border-radius: 17px;
+    border: none;
+    
+    color: black;
+    font-size: 15px;
+}
+
+#username::-webkit-input-placeholder,
+#password::-webkit-input-placeholder {
+    font-weight: bold;
+}
+
+
+.login_button{
+    padding-top:60px;
+}
+
+.login_button button{
+    width: 225px;
+    height: 40px;
+    
+    font-size: 17px;
+    font-weight: bold;
+    color:white;
+    
+
+    background-color: #443471;
+    
+    border: none;
+    border-radius: 100px;   
+}
+
+#no_account{
+    text-align: center;
+}
+
+#sign_up {
+text-align: center;
 }
