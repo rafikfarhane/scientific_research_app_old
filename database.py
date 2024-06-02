@@ -65,7 +65,9 @@ class Database:
 
     def add_user_to_all_users(self, username, user_id):
         conn = self.create_connection(self.all_users_db)
-
+        
+        user_id = str(user_id)
+        
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
@@ -76,7 +78,10 @@ class Database:
         print(f"User {username} was added")
 
     # if 0 -> FAIL
-    def get_from_name_id(self, conn, username):
+    def get_from_name_id(self, username):
+        
+        conn = self.create_connection(self.all_users_db)
+
         try:
             cursor = conn.cursor()
             cursor.execute(
@@ -87,7 +92,7 @@ class Database:
             row = cursor.fetchone()
             if row is not None:
                 # Tupel entpacken
-                db_user_id = row
+                db_user_id = row[0]
                 print("Login successful.")
                 return db_user_id
             else:

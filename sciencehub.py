@@ -60,8 +60,9 @@ def starting_page():
     #### TEST ####
     create_dbs()
 
-    con = db.create_connection(db.login_db)
-    db.register_user(con, "LukasB", "wasgeht@Email.com", "Test123")
+    con_login = db.create_connection(db.login_db)
+    db.register_user(con_login, "LukasB", "wasgeht@Email.com", "Test123")
+    db.register_user(con_login, "LukasD", "wasgeht@Email.com", "Test2")
 
     ### TEST ENDE ###
 
@@ -75,37 +76,53 @@ def login():
 
 @app.route("/login/check", methods=["POST"])
 def check_login():
+    # username vom input Field bekommen
     username = request.form["username"]
 
+    # password vom input Field bekommen
     password = request.form["password"]
 
+    # wenn eins der beiden leer, erneuter versuch
     if username == "" or password == "":
         return redirect(url_for("login"))
 
+    # conection zur login Datenbank
     login_conn = db.create_connection(db.login_db)
 
+    # wenn Passwort & Nutzername korrekt
     if db.login_user(login_conn, username, password):
+
+        # id des nutzer aus der DB anfragen
         cursor = login_conn.cursor()
         id = cursor.execute(
             "SELECT user_id FROM user_data WHERE username = ?",
             (username,),
         )
-        
+
+        # id aus der Anfrage ziehen
         row = cursor.fetchone()
         if row is not None:
             # Tupel entpacken
             id = row[0]
-        
+
+        # id auf den eingelogten Nutzersetzten
         db.set_id(id)
 
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("dashboard", username=username))
 
     else:
         return redirect(url_for("login"))
 
 
-@app.route("/dashboard")
-def dashboard():
+@app.route("/dashboard/<username>")
+def dashboard(username):
+
+
+    print("Drinnen")
+    print(db.get_id())
+    print(db.get_from_name_id(username))
+    if db.get_id() != db.get_from_name_id(username):
+        return redirect(url_for("login"))
 
     # Erstellt eine Liste von Projektdaten für 19 Projekte mit formatierten Details
     projects = []
