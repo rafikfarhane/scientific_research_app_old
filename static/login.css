@@ -9,9 +9,9 @@ body {
     background-color: #2D2C34;
 
     font-family: Inter;
-    height: 85vh;
+   
     /* vh = volle Höhe des Browser-Fensters */
-
+    height: 85vh;
 }
 
 .website {
@@ -40,6 +40,9 @@ body {
 
 h1 {
     position: relative;
+    flex-direction: column;
+    align-items: center;
+
     padding-top: 50px;
 
     font-family: Inter;
@@ -50,9 +53,12 @@ h1 {
 .username_input,
 .password_input {
     position: relative;
-
+    flex-direction: column;
+    align-items: center;
+    
     margin-top: 60px;
-    right: 12px;
+    
+    right: 18px;
 }
 
 .password_input {
@@ -84,10 +90,7 @@ h1 {
 }
 
 
-.flashes {
-    list-style-type: none;
-    
-}
+
 
 
 .login_button {
@@ -118,6 +121,8 @@ h1 {
     padding-top: 5px;
     font-weight: bolder;
     text-align: center;
+    margin-right: 32px;
+
 }
 
 #sign_up {

@@ -28,7 +28,7 @@ class Database:
 
     def generate_user_id(self):
         # Generiere zufällige user_id
-        id = str(uuid.uuid4()).replace("-", "")
+        id = "d" + str(uuid.uuid4()).replace("-", "")
         return id
 
     def get_id(self):

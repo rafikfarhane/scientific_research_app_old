@@ -25,22 +25,14 @@
                     <i class="fa-solid fa-lock"></i>
                     <input id="password" type="password" name="password" placeholder="password" required>
                 </div>
-                
-                {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <ul class="flashes">
-                                {% for message in messages %}
-                                    <li>! {{ message }} !</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endwith %}
-                
+         
                 <div class="login_button">
                     <button >Log in </button>
-            </from>
-        </div>
-            <p id="no_account"> Don't have an account ?</br> <a id="sign_up" href='/sign_up'>Sign up</a></p>
+
+                </div>
+            </form>
+       
+            <p id="no_account"> Don't have an account ?</br> <a id="sign_up" href='/sign_up'>Sign up</a></p>        
         </div>
     </div>
 
