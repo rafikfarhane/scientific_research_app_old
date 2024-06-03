@@ -8,36 +8,45 @@
     <title>Register</title>
 </head>
 <body>
+
     <div class="register_page">
         <h1> science HUB</h1>
-        <div class="register_window">
-            <h2> Sign Up </h2>
-            <div class="register_input">
-                <div class="register_inputfield">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <input type="text" placeholder="user name" maxlength="20"></input>
+        <form class = "register_window" method="POST" action="/sign_up/complete_registration">
+                <h2> Sign Up </h2>
+                <div class="register_input">
+                    <div class="register_inputfield">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <input type="text" name="username" placeholder="user name" maxlength="20" required>
+                    </div>
+                    <div class="register_inputfield">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" name="email" placeholder="e-mail" maxlength="20" required>
+                    </div>
+                    <div class="register_inputfield">
+                        <i class="fa-regular fa-lock"></i>
+                        <input type="password" name="password" placeholder="password" maxlength="40" required>
+                    </div>
+                    <div class="register_inputfield">
+                        <i class="fa-regular fa-lock"></i>
+                        <input type="password" name="repeat_password" placeholder="repeat password" maxlength="40" required>
+                    </div>
                 </div>
-                <div class="register_inputfield">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="email" placeholder="e-mail" maxlength="20"></input>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class="flashes">
+                                {% for message in messages %}
+                                    <li>! {{ message }} !</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                <div class="register_button">
+                    <button type="submit"><p>Sign Up</p></button>
                 </div>
-                <div class="register_inputfield">
-                    <i class="fa-regular fa-lock"></i>
-                    <input type="password" placeholder="password" maxlength="20"></input>
+                <div class="register_backtext">
+                    <p>Back To <a href="#">Log In</a></p>
                 </div>
-                <div class="register_inputfield">
-                    <i class="fa-regular fa-lock"></i>
-                    <input type="password" placeholder="repeat password" maxlength="20"></input>
-                </div>
-            </div>
-            <div class="register_button">
-                <button type="button"><p>Sign Up</p></button>
-            </div>
-            <div class="register_backtext">
-                <p>Back To <a href="#">Log In</a></p>
-            </div>
-
-        </div>
+        </form>
     </div>
     
 </body>

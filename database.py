@@ -228,3 +228,27 @@ class Database:
         # Schließe die Verbindung zur Datenbank
         conn.close()
         conn_all_users.close()
+    
+
+    def sesrch_user(self, name, email) -> bool:
+        conn = self.create_connection(self.login_db)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT user_id FROM user_data WHERE username = ?", 
+            (name,),
+        )
+        conn.commit()
+        row = cursor.fetchone()
+        if row is not None:
+            return False
+        
+        else:
+            cursor.execute(
+                "SELECT user_id FROM user_data WHERE mail = ?",
+                (email,), 
+            )
+            conn.commit()
+            row = cursor.fetchone()
+            if row is not None:
+                return False
+        return True

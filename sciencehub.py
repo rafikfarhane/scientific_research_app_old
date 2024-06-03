@@ -2,16 +2,99 @@ from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
+from flask import flash
 import sqlite3
 import uuid
 import database
 
 app = Flask(__name__)
 
+app.secret_key = 'your_secret_key'
+
+db=database.Database()
+
+# Dictionary which safes the information for the new project
+new_project_info = dict(
+    project_name="", project_description="", project_member=[], project_funder=[]
+)
+
+def create_dbs():
+    # Öffne eine Verbindung zur Datenbank
+    conn_user_data = db.create_connection(db.login_db)
+    conn_all_users = db.create_connection(db.all_users_db)
+    conn_project = db.create_connection(db.project_db)
+
+    user_table = """
+            CREATE TABLE IF NOT EXISTS user_data (
+                user_id TEXT PRIMARY KEY,
+                username VARCHAR UNIQUE NOT NULL,
+                mail TEXT VARCHAR NOT NULL,
+                passwort_hash TEXT NOT NULL
+            )"""
+
+    # Erstelle die Nutzertabelle mit allen Nutzern fürs login & registrieren
+    db.create_table(conn_user_data, user_table)
+
+    all_users_table = """CREATE TABLE IF NOT EXISTS all_users (
+                user_id TEXT PRIMARY KEY,
+                username VARCHAR UNIQUE NOT NULL
+            )"""
+
+    # Erstelle eine Nutzertabell mit allen Nutzern, um auf id & username zuzugreifen
+    db.create_table(conn_all_users, all_users_table)
+
+    project_table = """CREATE TABLE IF NOT EXISTS PROJECT (
+                      PID VARCHAR(40) PRIMARY KEY,
+                      NAME VARCHAR(30) NOT NULL,
+                      DESCRIPTION TEXT NOT NULL,
+                      ADMIN VARCHAR(40) NOT NULL,
+                      FUNDER TEXT
+                ); """
+
+    # Erstelle ein Projekttabelle für alle Projekte
+    db.create_table(conn_project, project_table)
 
 @app.route("/sign_up")
 def register():
     return render_template("register.html")
+
+
+@app.route("/sign_up/complete_registration", methods=["POST"])
+def complete_registration():
+    name = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+    repeat_password = request.form["repeat_password"]
+
+    print(name, email, password, repeat_password)
+
+    if password != repeat_password:
+        flash("The passwords are not identical!")
+        return redirect(url_for("register"))
+    
+
+    
+    else:
+        conn = db.create_connection(db.login_db)
+        
+        if db.sesrch_user(name, email) == True:
+            register = db.register_user(conn, name, email, password)
+            if register == False:
+                flash("ERROR something went wrong")
+                return redirect(url_for("register"))
+            return redirect(url_for("dashboard"))
+        else:
+            flash("Username or E-Mail already exists")
+            return redirect(url_for("register"))
+        
+     
+        
+
+
+    
+
+
+
 
 
 @app.route("/dashboard")
@@ -36,10 +119,7 @@ def dashboard():
     return render_template("dashboard.html", text_for_column=projects)
 
 
-# Dictionary which safes the information for the new project
-new_project_info = dict(
-    project_name="", project_description="", project_member=[], project_funder=[]
-)
+
 
 
 @app.route("/NewProject")
@@ -200,4 +280,5 @@ def print_table(conn, table_name):
 
 
 if __name__ == "__main__":
+    create_dbs()
     app.run(debug=True)
