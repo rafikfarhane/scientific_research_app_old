@@ -72,16 +72,48 @@ def complete_registration():
         flash("The passwords are not identical!")
         return redirect(url_for("register"))
     
-
-    
     else:
         conn = db.create_connection(db.login_db)
         
         if db.sesrch_user(name, email) == True:
             register = db.register_user(conn, name, email, password)
+          
             if register == False:
                 flash("ERROR something went wrong")
                 return redirect(url_for("register"))
+            
+            cursor = conn.cursor()           
+            id = cursor.execute(
+                "SELECT user_id FROM user_data WHERE username = ?",
+                (name,),
+            )
+
+            row = cursor.fetchone()
+            if row is not None:
+                id = str(row[0])
+            
+            print(id)
+            db.set_id(id)
+            
+            user_table = f"""
+            CREATE TABLE IF NOT EXISTS {id} (
+                    PID VARCHAR(40) NOT NULL,
+                    ROLE VARCHAR(5) NOT NULL,
+                    FOREIGN KEY (PID) REFERENCES PROJECT(PID)
+                );
+            """
+            user_conn = db.create_connection(db.project_db)
+            db.create_table(user_conn, user_table)
+            
+            ko_cursor = user_conn.cursor()
+            ko_cursor.execute('SELECT * FROM "{}"'.format(db.get_id()))
+            user_conn.commit()
+            rows = cursor.fetchall()
+            print(rows)
+            print(f"Data from {id}:")
+            
+            #print_table(user_conn, id)
+            
             return redirect(url_for("dashboard"))
         else:
             flash("Username or E-Mail already exists")
@@ -201,16 +233,6 @@ def create_project():
                       FUNDER TEXT
                 ); """
 
-    user_table = f"""
-                CREATE TABLE IF NOT EXISTS {nid} (
-                      PID VARCHAR(40) NOT NULL,
-                      ROLE VARCHAR(5) NOT NULL,
-                      FOREIGN KEY (PID) REFERENCES PROJECT(PID)
-                );
-            """
-
-    # User Tabelle erstellen
-    db.create_table(conn, user_table)
 
     # PID erstellen
     pid = str(uuid.uuid4())

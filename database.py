@@ -31,7 +31,9 @@ class Database:
 
     def generate_user_id(self):
         # Generiere zufällige user_id
-        return str(uuid.uuid4())
+        id = "d" + str(uuid.uuid4())
+        id = id.replace("-", "")
+        return id
 
 
     def get_id(self):
