@@ -10,7 +10,7 @@ import database
 app = Flask(__name__)
 
 app.secret_key = "your_secret_key"
-# db Instanz
+
 db = database.Database()
 
 # Dictionary which safes the information for the new project
@@ -41,7 +41,7 @@ def create_dbs():
                 username VARCHAR UNIQUE NOT NULL
             )"""
 
-    # Erstelle eine Nutzertabell mit allen Nutzern, um auf id & username zugreifen zu können
+    # Erstelle eine Nutzertabell mit allen Nutzern, um auf id & username zuzugreifen
     db.create_table(conn_all_users, all_users_table)
 
     project_table = """CREATE TABLE IF NOT EXISTS PROJECT (
@@ -108,6 +108,63 @@ def check_login():
         db.set_id(id)
 
         return redirect(url_for("dashboard", username=username))
+
+
+@app.route("/sign_up")
+def register():
+    return render_template("register.html")
+
+
+@app.route("/sign_up/complete_registration", methods=["POST"])
+def complete_registration():
+    name = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+    repeat_password = request.form["repeat_password"]
+
+    print(name, email, password, repeat_password)
+
+    if password != repeat_password:
+        flash("The passwords are not identical!")
+        return redirect(url_for("register"))
+
+    else:
+        conn = db.create_connection(db.login_db)
+
+        if db.sesrch_user(name, email) == True:
+            register = db.register_user(conn, name, email, password)
+
+            if register == False:
+                flash("ERROR something went wrong")
+                return redirect(url_for("register"))
+
+            cursor = conn.cursor()
+            id = cursor.execute(
+                "SELECT user_id FROM user_data WHERE username = ?",
+                (name,),
+            )
+
+            row = cursor.fetchone()
+            if row is not None:
+                id = str(row[0])
+
+            print(id)
+            db.set_id(id)
+
+            user_table = f"""
+            CREATE TABLE IF NOT EXISTS {id} (
+                    PID VARCHAR(40) NOT NULL,
+                    ROLE VARCHAR(5) NOT NULL,
+                    FOREIGN KEY (PID) REFERENCES PROJECT(PID)
+                );
+            """
+            user_conn = db.create_connection(db.project_db)
+            db.create_table(user_conn, user_table)
+
+            return redirect(url_for("dashboard", username=name))
+        else:
+            flash("Username or E-Mail already exists")
+            return redirect(url_for("register"))
 
 
 @app.route("/dashboard/<username>")
@@ -215,17 +272,6 @@ def create_project():
                       FUNDER TEXT
                 ); """
 
-    user_table = f"""
-                CREATE TABLE IF NOT EXISTS {nid} (
-                      PID VARCHAR(40) NOT NULL,
-                      ROLE VARCHAR(5) NOT NULL,
-                      FOREIGN KEY (PID) REFERENCES PROJECT(PID)
-                );
-            """
-
-    # User Tabelle erstellen
-    db.create_table(conn, user_table)
-
     # PID erstellen
     pid = str(uuid.uuid4())
 
@@ -261,7 +307,7 @@ def create_project():
     )
 
     # Tupel in Projekt Tabelle einfügen
-    db.insert_project(conn, project_values)
+    db.add_project(conn, project_values)
 
     # Plan: Die PID zu den einzelnen Member Tabellen einfügen
     for member in new_project_info["project_member"]:
@@ -294,4 +340,5 @@ def print_table(conn, table_name):
 
 
 if __name__ == "__main__":
+    create_dbs()
     app.run(debug=True)

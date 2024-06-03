@@ -37,14 +37,17 @@ class Database:
     def set_id(self, new_id):
         self.id = new_id
 
-    def create_table(self, conn, sqlcode):
+    def create_table(self, conn, sqlcode) -> bool:
         try:
             cursor = conn.cursor()
             cursor.execute(sqlcode)
             conn.commit()
             print("Created table")
+            return True
+
         except sqlite3.Error as e:
             print(e)
+            return False
 
     def register_user(self, conn, username, mail, password) -> bool:
         # Hinzufügen eines neuen Benutzers zur Tabelle "user_data" -> login_dn
@@ -60,18 +63,19 @@ class Database:
             self.add_user_to_all_users(username, user_id)
             print(f"User added successfully with ID {user_id}.")
             return True
+
         except sqlite3.IntegrityError:
-            print("Username or email already exists.")
             return False
+
         except sqlite3.Error as e:
             print(e)
             return False
 
     def add_user_to_all_users(self, username, user_id):
         conn = self.create_connection(self.all_users_db)
-        
+
         user_id = str(user_id)
-        
+
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO all_users (user_id, username) VALUES (?, ?)",
@@ -82,7 +86,7 @@ class Database:
         print(f"User {username} was added")
 
     def get_from_name_id(self, username) -> str:
-        
+
         conn = self.create_connection(self.all_users_db)
 
         try:
@@ -125,17 +129,20 @@ class Database:
                     self.id = db_user_id
                     print("Login successful.")
                     return True
+
                 else:
                     print("Incorrect password.")
                     return False
+
             else:
                 print("User not found.")
                 return False
+
         except sqlite3.Error as e:
             print(e)
             return False
 
-    def insert_project(self, conn, tupel):
+    def add_project(self, conn, tupel):
         # Values werden in die Projekt Tabelle eingefügt
         try:
             sql = f""" INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
@@ -159,56 +166,25 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-    def test(self):
-        # Erstelle eine Instanz der Database-Klasse
-        db = Database()
+    def sesrch_user(self, name, email) -> bool:
+        conn = self.create_connection(self.login_db)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT user_id FROM user_data WHERE username = ?",
+            (name,),
+        )
+        conn.commit()
+        row = cursor.fetchone()
+        if row is not None:
+            return False
 
-        # Öffne eine Verbindung zur Datenbank
-        conn = db.create_connection(self.login_db)
-        conn_all_users = db.create_connection(self.all_users_db)
-
-        user_table = """
-                CREATE TABLE IF NOT EXISTS user_data (
-                    user_id TEXT PRIMARY KEY,
-                    username VARCHAR UNIQUE NOT NULL,
-                    mail TEXT VARCHAR NOT NULL,
-                    passwort_hash TEXT NOT NULL
-                )"""
-        # Erstelle die Nutzertabelle
-        db.create_table(conn, user_table)
-
-        all_users_table = """CREATE TABLE IF NOT EXISTS all_users (
-                    user_id TEXT PRIMARY KEY,
-                    username VARCHAR UNIQUE NOT NULL
-                )"""
-        # Erstelle all nutzertabelle
-        db.create_table(conn_all_users, all_users_table)
-
-        # Registriere einen neuen Benutzer
-        # db.register_user(conn, "testuser13", "test5@example.com", "password13")
-
-        # Logge den Benutzer ein
-        # db.login_user(conn, "testuser13", "password13")
-
-        # Gib die UserID des eingeloggten Benutzers aus
-        print("User ID:", db.get_id())
-
-        # Teste get_from_name_id Methode
-        user_id = db.get_from_name_id(conn_all_users, "testuser12")
-        print("Returned User ID from get_from_name_id:", user_id)
-
-        cursor = conn_all_users.cursor()
-        cursor.execute(f"SELECT * FROM all_users")
-
-        # Spaltennamen abrufen
-        column_names = [description[0] for description in cursor.description]
-        print(" | ".join(column_names))
-
-        # Zeilen abrufen und drucken
-        rows = cursor.fetchall()
-        for row in rows:
-            print(" | ".join(map(str, row)))
-
-        # Schließe die Verbindung zur Datenbank
-        conn.close()
-        conn_all_users.close()
+        else:
+            cursor.execute(
+                "SELECT user_id FROM user_data WHERE mail = ?",
+                (email,),
+            )
+            conn.commit()
+            row = cursor.fetchone()
+            if row is not None:
+                return False
+        return True
