@@ -299,8 +299,9 @@ def create_project():
 
     # Das Dictonary nach dem eingeben wieder leeren
     new_project_info.clear()
+    name = db.get_from_name_id(nid)
 
-    return redirect(url_for("dashboard"))
+    return redirect(url_for("dashboard" , name))
 
 
 if __name__ == "__main__":
