@@ -114,23 +114,14 @@ def complete_registration():
             
             #print_table(user_conn, id)
             
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("dashboard", username = name))
         else:
             flash("Username or E-Mail already exists")
             return redirect(url_for("register"))
         
-     
-        
 
-
-    
-
-
-
-
-
-@app.route("/dashboard")
-def dashboard():
+@app.route("/dashboard/<username>")
+def dashboard(username):
 
     # Erstellt eine Liste von Projektdaten für 19 Projekte mit formatierten Details
     projects = []
