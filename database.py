@@ -188,3 +188,14 @@ class Database:
             if row is not None:
                 return False
         return True
+
+    def print_table(self, conn, table_name):
+        try:
+            cursor = conn.cursor()
+            cursor.execute(f'SELECT * FROM "{table_name}"')
+            rows = cursor.fetchall()
+            print(f"Data from {table_name}:")
+            for row in rows:
+                print(row)
+        except sqlite3.Error as e:
+            print(f"Error reading from table {table_name}: {e}")

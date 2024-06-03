@@ -259,18 +259,8 @@ def add_funding():
 @app.route("/NewProject/create_project")
 def create_project():
 
-    # Objekt der Datenbank erzeugen und connecten
-
     nid = db.get_id()
     conn = db.create_connection(db.project_db)
-
-    project_table = """CREATE TABLE IF NOT EXISTS PROJECT (
-                      PID VARCHAR(40) PRIMARY KEY,
-                      NAME VARCHAR(30) NOT NULL,
-                      DESCRIPTION TEXT NOT NULL,
-                      ADMIN VARCHAR(40) NOT NULL,
-                      FUNDER TEXT
-                ); """
 
     # PID erstellen
     pid = str(uuid.uuid4())
@@ -282,20 +272,13 @@ def create_project():
     user_values = (pid, "admin")
 
     # Tupel in Tabelle einfügen
-    # HIER FEHLER -> Hier muss add_values_to_member aufgerufen werden!!!!
     db.insert_user(conn, user_values)
-
-    # Drucke User Tabelle
-    print_table(conn, nid)
 
     # die benötigten Daten aus dem Dictionary holen
     project_name = new_project_info["project_name"]
     project_description = new_project_info["project_description"]
     project_funder = new_project_info["project_funder"]
     project_funder_str = ",".join(project_funder)
-
-    # Projekt Tabelle erstellen
-    db.create_table(conn, project_table)
 
     # Tupel erstellen
     project_values = (
@@ -314,29 +297,10 @@ def create_project():
         member_id = db.get_from_name_id(conn, member)
         db.add_values_to_member(conn, member_id, (pid, "read"))
 
-    # drucke PROJKET Tabelle
-    print_table(conn, "PROJECT")
-
     # Das Dictonary nach dem eingeben wieder leeren
-    new_project_info["project_name"] = ""
-    new_project_info["project_description"] = ""
-    new_project_info["project_funder"] = []
-    new_project_info["project_member"] = []
+    new_project_info.clear()
 
     return redirect(url_for("dashboard"))
-
-
-# Druckt die Tabelle
-def print_table(conn, table_name):
-    try:
-        cursor = conn.cursor()
-        cursor.execute(f'SELECT * FROM "{table_name}"')
-        rows = cursor.fetchall()
-        print(f"Data from {table_name}:")
-        for row in rows:
-            print(row)
-    except sqlite3.Error as e:
-        print(f"Error reading from table {table_name}: {e}")
 
 
 if __name__ == "__main__":
