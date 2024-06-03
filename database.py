@@ -28,7 +28,8 @@ class Database:
 
     def generate_user_id(self):
         # Generiere zufällige user_id
-        return str(uuid.uuid4())
+        id = str(uuid.uuid4()).replace("-", "")
+        return id
 
     def get_id(self):
         return self.id
@@ -133,23 +134,6 @@ class Database:
         except sqlite3.Error as e:
             print(e)
             return False
-
-    def insert_user(self, conn, tupel):
-        # Values werden in die User Tabelle eingefügt
-        try:
-            # Values(?,?) sind Platzhalter die vom Tupel ersetzt werden
-            sql = f""" INSERT INTO {self.id}(PID, ROLE)
-                    VALUES(?,?) """
-            cur = conn.cursor()
-            cur.execute(sql, tupel)
-            conn.commit()
-
-            # Rückgabe der ID der zuletzt eingefügten Zeile, nützlich für
-            # Referenzzwecke in nachfolgenden Operationen
-            return cur.lastrowid
-
-        except sqlite3.Error as e:
-            print(e)
 
     def insert_project(self, conn, tupel):
         # Values werden in die Projekt Tabelle eingefügt

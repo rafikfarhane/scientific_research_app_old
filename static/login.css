@@ -9,11 +9,23 @@ body {
     background-color: #2D2C34;
 
     font-family: Inter;
-
+    height: 85vh;
     /* vh = volle Höhe des Browser-Fensters */
-    height: 100vh;
+
 }
 
+.website {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#head {
+    font-size: 60px;
+    letter-spacing: -2px;
+    color: #CDC4DE;
+
+}
 
 .center {
     display: flex;
@@ -29,7 +41,7 @@ body {
 h1 {
     position: relative;
     padding-top: 50px;
-    
+
     font-family: Inter;
     font-weight: bold;
     color: black;
@@ -52,7 +64,7 @@ h1 {
     position: relative;
 
     left: 29px;
-    color: white;
+    color: #CBCBCB;
 }
 
 #username,
@@ -66,48 +78,48 @@ h1 {
 
     border-radius: 17px;
     border: none;
-    
+
     color: white;
     font-size: 15px;
 }
 
-#username::-webkit-input-placeholder,
-#password::-webkit-input-placeholder {
-    font-weight: bold;
-    color: white;
+
+.flashes {
+    list-style-type: none;
+    
 }
 
 
-.login_button{
-    padding-top:60px;
+.login_button {
+    padding-top: 60px;
 }
 
-.login_button button{
+.login_button button {
     width: 225px;
     height: 40px;
-    
+
     font-size: 17px;
     font-weight: bold;
-    color:white;
-    
+    color: white;
+
 
     background-color: #443471;
-    
+
     border: none;
-    border-radius: 100px;   
+    border-radius: 100px;
 }
 
-.login_button button:hover{
+.login_button button:hover {
     background-color: #593aaf;
     cursor: pointer;
 }
 
-#no_account{
+#no_account {
     padding-top: 5px;
-    font-weight:bolder;
+    font-weight: bolder;
     text-align: center;
 }
 
 #sign_up {
-text-align: center;
+    text-align: center;
 }

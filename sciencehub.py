@@ -2,12 +2,14 @@ from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
+from flask import flash
 import sqlite3
 import uuid
 import database
 
 app = Flask(__name__)
 
+app.secret_key = "your_secret_key"
 # db Instanz
 db = database.Database()
 
@@ -56,7 +58,6 @@ def create_dbs():
 
 @app.route("/")
 def starting_page():
-
     """
     ### TEST ###
     create_dbs()
@@ -81,15 +82,12 @@ def check_login():
     # password vom input Field bekommen
     password = request.form["password"]
 
-    # wenn eins der beiden leer: erneuter Versuch
-    if username == "" or password == "":
-        return redirect(url_for("login"))
-
     # conection zur login Datenbank
     login_conn = db.create_connection(db.login_db)
 
     # wenn Passwort & Nutzername inkorrekt
     if db.login_user(login_conn, username, password) == False:
+        flash("Usernaem or password is wrong")
         return redirect(url_for("login"))
 
     else:
@@ -238,6 +236,7 @@ def create_project():
     user_values = (pid, "admin")
 
     # Tupel in Tabelle einfügen
+    # HIER FEHLER -> Hier muss add_values_to_member aufgerufen werden!!!!
     db.insert_user(conn, user_values)
 
     # Drucke User Tabelle
