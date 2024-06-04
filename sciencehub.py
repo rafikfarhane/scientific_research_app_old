@@ -206,7 +206,7 @@ def new_project():
     )
 
 
-#ruecker zum dashboard wenn man doch kein neues projekt erstellen will
+#zurueck zum dashboard wenn man doch kein neues projekt erstellen will
 @app.route("/NewProject/back_to_dashboard")
 def back_to_dashboard():
     
