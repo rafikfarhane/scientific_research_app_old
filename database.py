@@ -202,7 +202,7 @@ class Database:
                 print(row)
         except sqlite3.Error as e:
             print(f"Error reading from table {table_name}: {e}")
-    
+
     def get_name_from_id(self, id) -> str:
         conn = self.create_connection(self.all_users_db)
 
