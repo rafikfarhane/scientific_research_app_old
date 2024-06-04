@@ -202,6 +202,14 @@ def new_project():
     )
 
 
+@app.route("/NewProject/back_to_dashboard")
+def back_to_dashboard():
+    
+    id = db.get_id()
+    name = db.get_name_from_id(id)
+    return redirect(url_for("dashboard", username = name))
+
+
 # Function to add a new Member to a newProject
 @app.route("/NewProject/add_user", methods=["POST"])
 def add_user():

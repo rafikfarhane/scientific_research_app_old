@@ -10,7 +10,7 @@
 <body>
     <div class="NP_UI">
         <div class="NP_UI_Heading">
-            <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/dashboard';">
+            <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/NewProject/back_to_dashboard';">
             <h1>scienceHUB</h1>
         </div>
         <hr>
@@ -72,8 +72,13 @@
                 </div>
             </div>
         </div>
-        <div class="NP_UI_create">
-            <button type="button" onclick="window.location.href='/NewProject/create_project';"><i class="fa-solid fa-file-circle-plus"></i><p>create project</p></button>
+        <div class="buttons_cr_ca">
+            <div class="NP_UI_back_to_d">
+                <button type="button" onclick="window.location.href='/NewProject/back_to_dashboard';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
+            </div>
+            <div class="NP_UI_create">
+                <button type="button" onclick="window.location.href='/NewProject/create_project';"><i class="fa-solid fa-file-circle-plus"></i><p>create project</p></button>
+            </div>
         </div>
     </div>
 </body>
