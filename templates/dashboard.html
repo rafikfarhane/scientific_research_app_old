@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../static/dashboardStyle.css">
-    <script src="https://kit.fontawesome.com/179535dd9d.js" crossorigin="annonymus"></script>
+    <script src="https://kit.fontawesome.com/179535dd9d.js" crossorigin="anonymous"></script>
     <title>Dashboard</title>
 </head>
 
@@ -17,17 +17,13 @@
     <table class="projects_table">
         <caption>
             <div class="captioncontent">
-                <h2>
-                    Projects
-                </h2>
+                <h2>Projects</h2>
                 <button class="new_project_button" type="button" onclick="window.location.href='/NewProject';">
                     <i class="fa-solid fa-circle-plus"></i>
                     <span class="button_text">new project</span>
                 </button>
             </div>
-
-            <hr> </hr>
-
+            <hr>
         </caption>
         
         <thead>
@@ -40,11 +36,23 @@
             </tr>
         </thead>
 
+        <!-- Flash Nachrichten Bereich direkt unter der Kopfzeile der Tabelle -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <tr class="flash-messages">
+                <td colspan="5"> <!-- Verwenden Sie colspan, um die Nachricht über alle Spalten zu strecken -->
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
+        {% endwith %}
+        
         <tbody>
-            
             <!-- Hier werden von python die Daten eingesetzt -->
             {% for list in text_for_column %}
-            <tr  class= "projects_button" onclick="window.location.href='/project/{{list[0]}}';">
+            <tr class="projects_button" onclick="window.location.href='/project/{{list[0]}}';">
                 <td class="projects_name">{{list[0]}}</td>
                 <td>{{list[1]}}</td>
                 <td>{{list[2]}}</td>
@@ -52,7 +60,6 @@
                 <td>{{list[4]}}</td>
             </tr>
             {% endfor %}
-
         </tbody>
     </table>
 </div>

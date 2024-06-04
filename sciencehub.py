@@ -54,8 +54,8 @@ def create_dbs():
                       ADMIN VARCHAR(40) NOT NULL,
                       FUNDER TEXT,
                       MEMBERS TEXT,
-                      STATUS VARCHAR(7),
-                      CREATED_DATE
+                      STATUS VARCHAR(7) NOT NULL,
+                      CREATED_DATE NOT NULL
                 ); """
 
     # Erstelle ein Projekttabelle für alle Projekte
@@ -194,10 +194,13 @@ def dashboard(username):
                 date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
             except ValueError:
                 # Falls das Umwandeln fehlschlägt, setze date auf None oder eine Standardmeldung
-                date = None
+                date = date.today()
+                print("No date found")
 
-            # Dies teilt den String an jedem Komma und erstellt eine Liste
-            members_count = len(members.split(',')) 
+            if members:
+                members_count = len(members.split(','))
+            else:
+                members_count = 0
 
             values = [
                 project_name,
@@ -209,7 +212,7 @@ def dashboard(username):
             ]
             projects.append(values)
     else:
-        flash("No projects found for this user.")
+        flash("No projects found for this user")
 
     return render_template("dashboard.html", text_for_column=projects)
 
@@ -318,8 +321,6 @@ def create_project():
 
     # Tupel in Projekt Tabelle einfügen
     db.add_project(conn, project_values)
-
-    db.print_table(conn, "PROJECT")
 
     # Plan: Die PID zu den einzelnen Member Tabellen einfügen
     for member in new_project_info["project_member"]:

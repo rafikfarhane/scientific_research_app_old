@@ -172,3 +172,17 @@ table tbody {
     font: Inter;
     font-weight: bold;
 }
+
+.flash-messages {
+    text-align: center;
+    width: 90%;
+    margin: 30px auto 0 auto; /* Oben 30px Abstand, zentriert */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #CDC4DE; /* Hintergrundfarbe wie in der Tabelle */
+    color: #000000; /* Textfarbe */
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 15px solid #000000; /* Unterer Rand wie in der Tabelle */
+}
