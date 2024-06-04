@@ -4,11 +4,13 @@ from flask import request, redirect, url_for
 from flask import jsonify
 from flask import flash
 import sqlite3
+import hashlib
 import uuid
 import database
 
 app = Flask(__name__)
 
+# Flash key
 app.secret_key = "your_secret_key"
 
 db = database.Database()
@@ -58,14 +60,6 @@ def create_dbs():
 
 @app.route("/")
 def starting_page():
-    """
-    ### TEST ###
-    create_dbs()
-
-    con_login = db.create_connection(db.login_db)
-    db.register_user(con_login, "LukasB", "wasgeht@Email.com", "Test123")
-    db.register_user(con_login, "LukasD", "wasgeht@Email.com", "Test2")
-    """
     return redirect("login")
 
 
@@ -87,7 +81,7 @@ def check_login():
 
     # wenn Passwort & Nutzername inkorrekt
     if db.login_user(login_conn, username, password) == False:
-        flash("Usernaem or password is wrong")
+        # flash("Usernaem or password is wrong")
         return redirect(url_for("login"))
 
     else:
@@ -111,32 +105,30 @@ def check_login():
 
 
 @app.route("/sign_up")
-def register():
+def sign_up():
     return render_template("register.html")
 
 
-@app.route("/sign_up/complete_registration", methods=["POST"])
-def complete_registration():
+@app.route("/sign_up/complete_sign_up", methods=["POST"])
+def complete_sign_up():
     name = request.form["username"]
     email = request.form["email"]
     password = request.form["password"]
     repeat_password = request.form["repeat_password"]
 
-    print(name, email, password, repeat_password)
-
     if password != repeat_password:
         flash("The passwords are not identical!")
-        return redirect(url_for("register"))
+        return redirect(url_for("sign_up"))
 
     else:
         conn = db.create_connection(db.login_db)
 
-        if db.sesrch_user(name, email) == True:
+        if db.search_user(name, email) == True:
             register = db.register_user(conn, name, email, password)
 
             if register == False:
                 flash("ERROR something went wrong")
-                return redirect(url_for("register"))
+                return redirect(url_for("sign_up"))
 
             cursor = conn.cursor()
             id = cursor.execute(
@@ -148,7 +140,6 @@ def complete_registration():
             if row is not None:
                 id = str(row[0])
 
-            print(id)
             db.set_id(id)
 
             user_table = f"""
@@ -164,14 +155,14 @@ def complete_registration():
             return redirect(url_for("dashboard", username=name))
         else:
             flash("Username or E-Mail already exists")
-            return redirect(url_for("register"))
+            return redirect(url_for("sign_up"))
 
 
 @app.route("/dashboard/<username>")
 def dashboard(username):
 
     # wenn der übergebene Nutzer nicht mit dem angemeldeten Nutzer übereinstimmt, zurück zu login
-    if db.get_id() != db.get_from_name_id(username):
+    if db.get_id() != db.get_id_from_name(username):
         return redirect(url_for("login"))
 
     # Erstellt eine Liste von Projektdaten für 19 Projekte mit formatierten Details
@@ -193,6 +184,7 @@ def dashboard(username):
     return render_template("dashboard.html", text_for_column=projects)
 
 
+# Add a project
 @app.route("/NewProject")
 def new_project():
     # rendering the NewProject page with project_user and project_funding as parameters
@@ -205,7 +197,7 @@ def new_project():
     )
 
 
-# function to add a new Member to a newProject
+# Function to add a new Member to a newProject
 @app.route("/NewProject/add_user", methods=["POST"])
 def add_user():
     # request from the html where forms have the name name. Because this is an input the typed name of the new member is selected.
@@ -259,20 +251,20 @@ def add_funding():
 @app.route("/NewProject/create_project")
 def create_project():
 
-    nid = db.get_id()
+    id = db.get_id()
     conn = db.create_connection(db.project_db)
 
     # PID erstellen
-    pid = str(uuid.uuid4())
+    pid = "p" + str(uuid.uuid4())
 
     # Die NID des Admins vom Projekt
-    user_admin = nid
+    user_admin = id
 
     # Tupel erstellen
     user_values = (pid, "admin")
 
     # Tupel in Tabelle einfügen
-    db.insert_user(conn, user_values)
+    db.add_values_to_member(conn, id, user_values)
 
     # die benötigten Daten aus dem Dictionary holen
     project_name = new_project_info["project_name"]
@@ -294,14 +286,18 @@ def create_project():
 
     # Plan: Die PID zu den einzelnen Member Tabellen einfügen
     for member in new_project_info["project_member"]:
-        member_id = db.get_from_name_id(conn, member)
+        member_id = db.get_id_from_name(member)
         db.add_values_to_member(conn, member_id, (pid, "read"))
 
     # Das Dictonary nach dem eingeben wieder leeren
-    new_project_info.clear()
-    name = db.get_from_name_id(nid)
 
-    return redirect(url_for("dashboard" , name))
+    new_project_info["project_name"] = ""
+    new_project_info["project_description"] = ""
+    new_project_info["project_funder"] = []
+    new_project_info["project_member"] = []
+    name = db.get_name_from_id(id)
+
+    return redirect(url_for("dashboard", username=name))
 
 
 if __name__ == "__main__":
