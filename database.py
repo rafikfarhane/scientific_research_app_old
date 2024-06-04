@@ -146,8 +146,8 @@ class Database:
     def add_project(self, conn, tupel) -> int:
         # Values werden in die Projekt Tabelle eingefügt
         try:
-            sql = f""" INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER)
-                    VALUES(?,?,?,?,?) """
+            sql = f""" INSERT INTO PROJECT(PID, NAME, DESCRIPTION, ADMIN, FUNDER, MEMBERS, STATUS, CREATED_DATE)
+                    VALUES(?,?,?,?,?,?,?,?) """
             cur = conn.cursor()
             cur.execute(sql, tupel)
             conn.commit()
@@ -202,7 +202,7 @@ class Database:
                 print(row)
         except sqlite3.Error as e:
             print(f"Error reading from table {table_name}: {e}")
-    
+
     def get_name_from_id(self, id) -> str:
         conn = self.create_connection(self.all_users_db)
 

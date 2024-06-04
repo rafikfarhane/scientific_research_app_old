@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request, redirect, url_for
 from flask import jsonify
 from flask import flash
+from datetime import date, datetime
 import sqlite3
 import hashlib
 import uuid
@@ -51,7 +52,10 @@ def create_dbs():
                       NAME VARCHAR(30) NOT NULL,
                       DESCRIPTION TEXT NOT NULL,
                       ADMIN VARCHAR(40) NOT NULL,
-                      FUNDER TEXT
+                      FUNDER TEXT,
+                      MEMBERS TEXT,
+                      STATUS VARCHAR(7) NOT NULL,
+                      CREATED_DATE NOT NULL
                 ); """
 
     # Erstelle ein Projekttabelle für alle Projekte
@@ -164,22 +168,51 @@ def dashboard(username):
     # wenn der übergebene Nutzer nicht mit dem angemeldeten Nutzer übereinstimmt, zurück zu login
     if db.get_id() != db.get_id_from_name(username):
         return redirect(url_for("login"))
+    
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
 
-    # Erstellt eine Liste von Projektdaten für 19 Projekte mit formatierten Details
+    # Die ID des Benutzers basierend auf dem Benutzernamen abrufen
+    user_id = db.get_id_from_name(username)
+
+    # Führen Sie die Abfrage aus, um alle Projekte des Benutzers zu erhalten
+    cursor.execute(
+        f"""SELECT P.NAME, P.STATUS, B.ROLE, P.ADMIN, P.MEMBERS, P.CREATED_DATE
+        FROM {user_id} AS B JOIN PROJECT AS P ON B.PID = P.PID"""
+    )
+
+    # Holt alle Ergebnisse
+    results = cursor.fetchall()
+
+    # Erstellt eine Liste von Projektdaten für alle Projekte des Nutzers
     projects = []
+    if results:
+        for result in results:
+            project_name, status, role, creator, members, date_str = result
+            try:
+                # Versuche, den Datum-String in ein Datum-Objekt umzuwandeln
+                date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
+            except ValueError:
+                # Falls das Umwandeln fehlschlägt, setze date auf None oder eine Standardmeldung
+                date = date.today()
+                print("No date found")
 
-    for i in range(1, 20):
-        if i < 10:
-            i = "0" + str(i)
+            if members:
+                members_count = len(members.split(','))
+            else:
+                members_count = 0
 
-        new_project = [
-            "name" + str(i),
-            "open",
-            "writer",
-            "namen + " + str(i) + " member",
-            str(i) + ".06.2024",
-        ]
-        projects.append(new_project)
+            values = [
+                project_name,
+                status,
+                role,
+                db.get_name_from_id(creator) + " + " + str(members_count) + " more members",
+                # Datum zum dd.mm.yyyy Format umändern
+                date.strftime('%d.%m.%Y') if date else "No Date"
+            ]
+            projects.append(values)
+    else:
+        flash("No projects found for this user")
 
     return render_template("dashboard.html", text_for_column=projects)
 
@@ -269,6 +302,8 @@ def create_project():
     # die benötigten Daten aus dem Dictionary holen
     project_name = new_project_info["project_name"]
     project_description = new_project_info["project_description"]
+    project_members = new_project_info["project_member"]
+    project_members_str = ",".join(project_members)
     project_funder = new_project_info["project_funder"]
     project_funder_str = ",".join(project_funder)
 
@@ -279,6 +314,9 @@ def create_project():
         project_description,
         user_admin,
         project_funder_str,
+        project_members_str,
+        "open",
+        date.today(),
     )
 
     # Tupel in Projekt Tabelle einfügen
