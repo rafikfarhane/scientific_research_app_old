@@ -81,7 +81,7 @@ def check_login():
 
     # wenn Passwort & Nutzername inkorrekt
     if db.login_user(login_conn, username, password) == False:
-        # flash("Usernaem or password is wrong")
+        flash("Username or password is wrong")
         return redirect(url_for("login"))
 
     else:
@@ -183,9 +183,13 @@ def dashboard(username):
 
     return render_template("dashboard.html", text_for_column=projects)
 
+
+#log out aus aus seinem Account
 @app.route("/log_out")
 def log_out():
+    #id wird auf none gesetzt somit ist man abgemeldet
     db.set_id(None)
+    #zurueckleiten auf start seite
     return redirect(url_for("starting_page"))
 
 
@@ -202,11 +206,15 @@ def new_project():
     )
 
 
+#ruecker zum dashboard wenn man doch kein neues projekt erstellen will
 @app.route("/NewProject/back_to_dashboard")
 def back_to_dashboard():
     
+    #hole die aktuelle id des nutzers
     id = db.get_id()
+    #hole den dazu entsprechenden nutzername aus der datenbank
     name = db.get_name_from_id(id)
+    #leite zurueck auf die nutzer dashboard seite
     return redirect(url_for("dashboard", username = name))
 
 
