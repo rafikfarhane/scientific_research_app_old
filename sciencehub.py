@@ -183,6 +183,11 @@ def dashboard(username):
 
     return render_template("dashboard.html", text_for_column=projects)
 
+@app.route("/log_out")
+def log_out():
+    db.set_id(None)
+    return redirect(url_for("starting_page"))
+
 
 # Add a project
 @app.route("/NewProject")
