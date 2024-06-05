@@ -134,12 +134,72 @@ hr{
     list-style-type:none;
 }
 
+.buttons_cr_ca{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 20px;
+}
+
+.NP_UI_back_to_d{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-left: 78px;
+}
+
+.NP_UI_back_to_d button{
+    height: 50px;
+    width: 250px;
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    align-items : center;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #C92937;   /*1*/
+    transition: all 800ms;
+    overflow: hidden;
+    outline: 2px solid #C92937; /*1*/
+    cursor: pointer;
+}
+
+.NP_UI_back_to_d button p{
+    margin-left: 15px;
+}
+
+.NP_UI_back_to_d button:hover{
+    color: #fff;
+    transform: scale(1.1);
+    outline: 2px solid #de434f;  /*2*/
+    box-shadow: 4px 5px 17px -4px #b02430;  /*3*/
+}
+
+.NP_UI_back_to_d button::before{
+    content:"";
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background-color: #C92937; /*1*/
+    transform: skewX(45deg);
+    z-index: -1;
+    transition: width 800ms;
+}
+
+.NP_UI_back_to_d button:hover::before{
+    width: 250%;
+}
+
 .NP_UI_create{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    width: 95%;
-    margin-top: 20px;
 }
 
 .NP_UI_create button{
