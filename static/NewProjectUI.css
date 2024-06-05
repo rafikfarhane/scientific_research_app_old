@@ -103,9 +103,12 @@ hr{
     border: 1px solid #d4d4d4;
     margin-top: 40px;
     max-height: 150px;
+    min-width: 60px;
     overflow-y: auto;
+    margin-left: 20px;
     position: absolute;
     background-color: white;
+    color: black;
     z-index: 1000;
 }
 .autocomplete-suggestion {
@@ -137,6 +140,16 @@ hr{
 
 #namesubmit:hover{
     background-color: #44a787;
+}
+
+ 
+.flash_list{
+    background-color: #D9D7E2;
+}
+
+.flash_list ul{
+    color: red;
+    list-style-type: none;
 }
 
 .mf_list{

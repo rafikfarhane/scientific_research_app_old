@@ -88,16 +88,18 @@
                                 }
                             });
                         });
-                    </script>   
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <ul class="flashes">
-                                {% for message in messages %}
-                                <li>! {{ message }} !</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endwith %}
+                    </script>
+                    <div class="flash_list">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul class="flashes">
+                                    {% for message in messages %}
+                                    <li>! {{ message }} !</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
                     <ul class="mf_list">
                         {% for u in user %}
                             <li>{{ u }}</li>

@@ -280,8 +280,11 @@ def add_user():
     user = request.form["name"]
     #test ob user ueberhaupt existiert
     if db.user_exists(user) == True:
-        # the new Member is appended to the project_user list
-        new_project_info["project_member"].append(user)
+        if user not in new_project_info["project_member"]:
+            # the new Member is appended to the project_user list
+            new_project_info["project_member"].append(user)
+        else:
+            flash("This User is already part of your project")
     else:
         flash("This User does not exist")
     # with redirect(url_for) we directly get back to the NewProject page
