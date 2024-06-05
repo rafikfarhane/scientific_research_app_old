@@ -56,35 +56,35 @@
                     </form>
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            const nameInput = document.getElementById('nameinput');
-                            const autocompleteList = document.getElementById('autocomplete-list');
+                            const name_input = document.getElementById('nameinput');
+                            const autocomplete_list = document.getElementById('autocomplete-list');
                 
-                            nameInput.addEventListener('input', function() {
+                            name_input.addEventListener('input', function() {
                                 const query = this.value;
                                 if (query.length > 0) {
                                     fetch(`/search_users?q=${query}`)
                                         .then(response => response.json())
                                         .then(data => {
-                                            autocompleteList.innerHTML = '';
+                                            autocomplete_list.innerHTML = '';
                                             data.forEach(user => {
                                                 const suggestion = document.createElement('div');
                                                 suggestion.classList.add('autocomplete-suggestion');
-                                                suggestion.textContent = user.username;
+                                                suggestion.textContent = "+  " + user.username;
                                                 suggestion.addEventListener('click', function() {
-                                                    nameInput.value = user.username;
-                                                    autocompleteList.innerHTML = '';
+                                                    name_input.value = user.username;
+                                                    autocomplete_list.innerHTML = '';
                                                 });
-                                                autocompleteList.appendChild(suggestion);
+                                                autocomplete_list.appendChild(suggestion);
                                             });
                                         });
                                 } else {
-                                    autocompleteList.innerHTML = '';
+                                    autocomplete_list.innerHTML = '';
                                 }
                             });
                 
                             document.addEventListener('click', function(event) {
-                                if (!autocompleteList.contains(event.target) && event.target !== nameInput) {
-                                    autocompleteList.innerHTML = '';
+                                if (!autocomplete_list.contains(event.target) && event.target !== name_input) {
+                                    autocomplete_list.innerHTML = '';
                                 }
                             });
                         });
