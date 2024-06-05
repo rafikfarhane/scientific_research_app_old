@@ -103,11 +103,12 @@ hr{
     border: 1px solid #d4d4d4;
     margin-top: 40px;
     max-height: 150px;
-    min-width: 60px;
+    min-width: 180px;
     overflow-y: auto;
     margin-left: 20px;
     position: absolute;
     background-color: white;
+    font-size: 18px;
     color: black;
     z-index: 1000;
 }
