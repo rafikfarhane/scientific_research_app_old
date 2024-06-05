@@ -247,6 +247,18 @@ def new_project():
     )
 
 
+@app.route('/search_users', methods=['GET'])
+def search_users():
+    query = request.args.get('q', '')
+    conn = db.create_connection(db.all_users_db)
+    cursor = conn.cursor()
+    cursor.execute('SELECT username FROM all_users WHERE username LIKE ?', (query + '%',))
+    users = cursor.fetchall()
+    conn.close()
+    user_list = [{'username': user[0]} for user in users]
+    return jsonify(user_list)
+
+
 #zurueck zum dashboard wenn man doch kein neues projekt erstellen will
 @app.route("/NewProject/back_to_dashboard")
 def back_to_dashboard():
@@ -266,8 +278,12 @@ def back_to_dashboard():
 def add_user():
     # request from the html where forms have the name name. Because this is an input the typed name of the new member is selected.
     user = request.form["name"]
-    # the new Member is appended to the project_user list
-    new_project_info["project_member"].append(user)
+    #test ob user ueberhaupt existiert
+    if db.user_exists(user) == True:
+        # the new Member is appended to the project_user list
+        new_project_info["project_member"].append(user)
+    else:
+        flash("This User does not exist")
     # with redirect(url_for) we directly get back to the NewProject page
     return redirect(url_for("new_project"))
 

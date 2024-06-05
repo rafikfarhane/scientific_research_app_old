@@ -227,3 +227,15 @@ class Database:
         except sqlite3.Error as e:
             print(e)
             return "0"
+
+    def user_exists(self, username) -> bool:
+        conn = self.create_connection(self.all_users_db)
+        print(username)
+        cursor = conn.cursor()
+        cursor.execute("SELECT username FROM all_users WHERE username = ?",
+                       (username,),
+                       )
+        row = cursor.fetchone()
+        if row == None:
+            return False
+        return True
