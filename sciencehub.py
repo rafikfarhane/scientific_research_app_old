@@ -61,6 +61,14 @@ def create_dbs():
     # Erstelle ein Projekttabelle für alle Projekte
     db.create_table(conn_project, project_table)
 
+def empty_dict():
+    new_project_info["project_name"] = ""
+    new_project_info["project_description"] = ""
+    new_project_info["project_funder"] = []
+    new_project_info["project_member"] = []
+
+
+
 
 @app.route("/")
 def starting_page():
@@ -247,6 +255,8 @@ def back_to_dashboard():
     id = db.get_id()
     #hole den dazu entsprechenden nutzername aus der datenbank
     name = db.get_name_from_id(id)
+    #new_project_info dict leeren
+    empty_dict()
     #leite zurueck auf die nutzer dashboard seite
     return redirect(url_for("dashboard", username = name))
 
@@ -350,10 +360,7 @@ def create_project():
 
     # Das Dictonary nach dem eingeben wieder leeren
 
-    new_project_info["project_name"] = ""
-    new_project_info["project_description"] = ""
-    new_project_info["project_funder"] = []
-    new_project_info["project_member"] = []
+    empty_dict()
     name = db.get_name_from_id(id)
 
     return redirect(url_for("dashboard", username=name))
