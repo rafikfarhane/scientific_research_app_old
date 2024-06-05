@@ -62,7 +62,7 @@
                             name_input.addEventListener('input', function() {
                                 const query = this.value;
                                 if (query.length > 0) {
-                                    fetch(`/search_users?q=${query}`)
+                                    fetch(`/NewProject/search_users?q=${query}`)
                                         .then(response => response.json())
                                         .then(data => {
                                             autocomplete_list.innerHTML = '';

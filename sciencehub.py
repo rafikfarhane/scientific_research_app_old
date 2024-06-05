@@ -61,11 +61,29 @@ def create_dbs():
     # Erstelle ein Projekttabelle für alle Projekte
     db.create_table(conn_project, project_table)
 
+
+#Funktion um das new_project_info dict zu leeren
 def empty_dict():
     new_project_info["project_name"] = ""
     new_project_info["project_description"] = ""
     new_project_info["project_funder"] = []
     new_project_info["project_member"] = []
+
+
+#Funktion welche zu einem String die user zurueckgibt deren username mit diesem String beginnt
+def search_for_users(query) -> dict:
+
+    #Verbindung zur all_users databass erstellen
+    conn = db.create_connection(db.all_users_db)
+    cursor = conn.cursor()
+    #Nutzer aus der Database abfragen, die mit dem selben String beginnen welcher eingegeben wurde 
+    cursor.execute('SELECT username FROM all_users WHERE username LIKE ?', (query + '%',))
+    users = cursor.fetchall()
+    conn.close()
+    #usernames zurueck an die html datei senden 
+    user_list = [{'username': user[0]} for user in users]
+    return user_list
+
 
 
 
@@ -247,15 +265,13 @@ def new_project():
     )
 
 
-@app.route('/search_users', methods=['GET'])
+@app.route('/NewProject/search_users', methods=['GET'])
 def search_users():
+
+    #Erhalt der Eingegeben Buchstaben aus dem Inputfeld
     query = request.args.get('q', '')
-    conn = db.create_connection(db.all_users_db)
-    cursor = conn.cursor()
-    cursor.execute('SELECT username FROM all_users WHERE username LIKE ?', (query + '%',))
-    users = cursor.fetchall()
-    conn.close()
-    user_list = [{'username': user[0]} for user in users]
+    #Rufe Funktion auf welche nach den entsprechenden usern sucht
+    user_list = search_for_users(query)
     return jsonify(user_list)
 
 
