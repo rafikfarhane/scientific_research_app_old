@@ -52,7 +52,54 @@
                     <form class="addMF_input" method="POST" action="/NewProject/add_user">
                             <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add member" required>
                             <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
+                            <div id="autocomplete-list" class="autocomplete-suggestions"></div>
                     </form>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const name_input = document.getElementById('nameinput');
+                            const autocomplete_list = document.getElementById('autocomplete-list');
+                
+                            name_input.addEventListener('input', function() {
+                                const query = this.value;
+                                if (query.length > 0) {
+                                    fetch(`/NewProject/search_users?q=${query}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            autocomplete_list.innerHTML = '';
+                                            data.forEach(user => {
+                                                const suggestion = document.createElement('div');
+                                                suggestion.classList.add('autocomplete-suggestion');
+                                                suggestion.textContent = "+  " + user.username;
+                                                suggestion.addEventListener('click', function() {
+                                                    name_input.value = user.username;
+                                                    autocomplete_list.innerHTML = '';
+                                                });
+                                                autocomplete_list.appendChild(suggestion);
+                                            });
+                                        });
+                                } else {
+                                    autocomplete_list.innerHTML = '';
+                                }
+                            });
+                
+                            document.addEventListener('click', function(event) {
+                                if (!autocomplete_list.contains(event.target) && event.target !== name_input) {
+                                    autocomplete_list.innerHTML = '';
+                                }
+                            });
+                        });
+                    </script>
+                    <div class="flash_list">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul class="flashes">
+                                    {% for message in messages %}
+                                    <li>! {{ message }} !</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
                     <ul class="mf_list">
                         {% for u in user %}
                             <li>{{ u }}</li>

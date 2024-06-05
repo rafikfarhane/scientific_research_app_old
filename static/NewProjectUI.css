@@ -99,6 +99,27 @@ hr{
     background-color: #D9D7E2;
 }
 
+.autocomplete-suggestions {
+    margin-top: 40px;
+    max-height: 150px;
+    width: 400px;
+    overflow-y: auto;
+    margin-left: 20px;
+    position: absolute;
+    background-color: white;
+    font-size: 20px;
+    color: black;
+    z-index: 1000;
+}
+.autocomplete-suggestion {
+    padding: 10px;
+    cursor: pointer;
+}
+.autocomplete-suggestion:hover {
+    background-color: #9c9b9b;
+    color:rgb(255, 255, 255);
+}
+
 #nameinput{
     height: 50px;
     width: 85%;
@@ -120,6 +141,16 @@ hr{
 
 #namesubmit:hover{
     background-color: #44a787;
+}
+
+ 
+.flash_list{
+    background-color: #D9D7E2;
+}
+
+.flash_list ul{
+    color: red;
+    list-style-type: none;
 }
 
 .mf_list{

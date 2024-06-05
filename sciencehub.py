@@ -62,6 +62,32 @@ def create_dbs():
     db.create_table(conn_project, project_table)
 
 
+#Funktion um das new_project_info dict zu leeren
+def empty_dict():
+    new_project_info["project_name"] = ""
+    new_project_info["project_description"] = ""
+    new_project_info["project_funder"] = []
+    new_project_info["project_member"] = []
+
+
+#Funktion welche zu einem String die user zurueckgibt deren username mit diesem String beginnt
+def search_for_users(query) -> dict:
+
+    #Verbindung zur all_users databass erstellen
+    conn = db.create_connection(db.all_users_db)
+    cursor = conn.cursor()
+    #Nutzer aus der Database abfragen, die mit dem selben String beginnen welcher eingegeben wurde 
+    cursor.execute('SELECT username FROM all_users WHERE username LIKE ?', (query + '%',))
+    users = cursor.fetchall()
+    conn.close()
+    #usernames zurueck an die html datei senden 
+    user_list = [{'username': user[0]} for user in users]
+    return user_list
+
+
+
+
+
 @app.route("/")
 def starting_page():
     return redirect("login")
@@ -239,6 +265,16 @@ def new_project():
     )
 
 
+@app.route('/NewProject/search_users', methods=['GET'])
+def search_users():
+
+    #Erhalt der Eingegeben Buchstaben aus dem Inputfeld
+    query = request.args.get('q', '')
+    #Rufe Funktion auf welche nach den entsprechenden usern sucht
+    user_list = search_for_users(query)
+    return jsonify(user_list)
+
+
 #zurueck zum dashboard wenn man doch kein neues projekt erstellen will
 @app.route("/NewProject/back_to_dashboard")
 def back_to_dashboard():
@@ -247,6 +283,8 @@ def back_to_dashboard():
     id = db.get_id()
     #hole den dazu entsprechenden nutzername aus der datenbank
     name = db.get_name_from_id(id)
+    #new_project_info dict leeren
+    empty_dict()
     #leite zurueck auf die nutzer dashboard seite
     return redirect(url_for("dashboard", username = name))
 
@@ -256,8 +294,15 @@ def back_to_dashboard():
 def add_user():
     # request from the html where forms have the name name. Because this is an input the typed name of the new member is selected.
     user = request.form["name"]
-    # the new Member is appended to the project_user list
-    new_project_info["project_member"].append(user)
+    #test ob user ueberhaupt existiert
+    if db.user_exists(user) == True:
+        if user not in new_project_info["project_member"]:
+            # the new Member is appended to the project_user list
+            new_project_info["project_member"].append(user)
+        else:
+            flash("This User is already part of your project")
+    else:
+        flash("This User does not exist")
     # with redirect(url_for) we directly get back to the NewProject page
     return redirect(url_for("new_project"))
 
@@ -350,10 +395,7 @@ def create_project():
 
     # Das Dictonary nach dem eingeben wieder leeren
 
-    new_project_info["project_name"] = ""
-    new_project_info["project_description"] = ""
-    new_project_info["project_funder"] = []
-    new_project_info["project_member"] = []
+    empty_dict()
     name = db.get_name_from_id(id)
 
     return redirect(url_for("dashboard", username=name))
