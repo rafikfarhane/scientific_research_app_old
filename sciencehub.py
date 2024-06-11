@@ -86,8 +86,6 @@ def search_for_users(query) -> dict:
 
 
 
-
-
 @app.route("/")
 def starting_page():
     return redirect("login")
