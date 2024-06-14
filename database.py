@@ -173,23 +173,25 @@ class Database:
         conn = self.create_connection(self.login_db)
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT user_id FROM user_data WHERE username = ?",
-            (name,),
+            "SELECT username FROM user_data",
         )
+        
         conn.commit()
-        row = cursor.fetchone()
-        if row is not None:
-            return False
-
-        else:
-            cursor.execute(
-                "SELECT user_id FROM user_data WHERE mail = ?",
-                (email,),
-            )
-            conn.commit()
-            row = cursor.fetchone()
-            if row is not None:
+        row = cursor.fetchall()
+        # Die Name werden hier im Lowercase verglichen, damit keine ähnlichen Namen vorkommen also es kann keine zwei Benutzer geben mit Namen Max und max
+        for n in row:
+            if n[0].lower() == name.lower():
                 return False
+
+            else:
+                cursor.execute(
+                    "SELECT user_id FROM user_data WHERE mail = ?",
+                    (email,),
+                )
+                conn.commit()
+                row = cursor.fetchone()
+                if row is not None:
+                    return False
         return True
 
     def print_table(self, conn, table_name) -> None:
