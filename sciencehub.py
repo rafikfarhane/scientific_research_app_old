@@ -250,10 +250,10 @@ def log_out():
     return redirect(url_for("starting_page"))
 
 
-# Add a project
+# Fuege ein neues Projekt hinzu
 @app.route("/NewProject")
 def new_project():
-    # rendering the NewProject page with project_user and project_funding as parameters
+    # Die New Project page wird mit den entsprechenden Parametern gerendert
     return render_template(
         "NewProjectUI.html",
         name_value=new_project_info["project_name"],
@@ -287,34 +287,34 @@ def back_to_dashboard():
     return redirect(url_for("dashboard", username = name))
 
 
-# Function to add a new Member to a newProject
+# Funktion um neue Member zu einem neuen Projekt hinzuzufuegen
 @app.route("/NewProject/add_user", methods=["POST"])
 def add_user():
-    # request from the html where forms have the name name. Because this is an input the typed name of the new member is selected.
+    # Request aus der Html datei wo die Request form den Namen name hat
     user = request.form["name"]
     #test ob user ueberhaupt existiert
     if db.user_exists(user) == True:
         if user not in new_project_info["project_member"]:
-            # the new Member is appended to the project_user list
+            # fuege den neuen Member in die Member Liste hinzu
             new_project_info["project_member"].append(user)
         else:
             flash("This User is already part of your project")
     else:
         flash("This User does not exist")
-    # with redirect(url_for) we directly get back to the NewProject page
+    # kehre zur new_project Seite zurueck
     return redirect(url_for("new_project"))
 
 
-# Function to save the projectname and the project description
+# Funktion welche Projektnamen und beschreibung sichert
 @app.route("/NewProject/save_data", methods=["POST"])
 def save_data():
-    # request the json data which contains the projectname and the projectdescription
+    # Request die Json Daten welche den Projektnamen und die Projektbeschreibung enthalten
     data = request.json
-    # set variables to save the project_name and the project_description
+    # Setze die Variablen um Projektnamen und Projektbeschreibung zu speichern
     project_name = data.get("project_name")
     project_description = data.get("project_description")
 
-    # if Project_name data or project_description data were correctly transfered save the data in the dictionary
+    # Wenn die Daten korrekt übertragen wurde übernehme sie in das Dictionary
     if project_name or project_description:
         new_project_info["project_name"] = project_name
         new_project_info["project_description"] = project_description
@@ -328,7 +328,7 @@ def save_data():
             ),
             200,
         )
-    # if data was not transfered correctly
+    # Wenn die Daten nicht korrekt transferiert wurden
     else:
         # return error message
         return jsonify({"message": "Invalid data"}), 400
@@ -336,11 +336,11 @@ def save_data():
 
 @app.route("/NewProject/add_funding", methods=["POST"])
 def add_funding():
-    # request from the html where forms have the name name. Because this is an input the typed name of the new funder is selected
+    # Request aus der Html Datei wo das form den Namen name hat um von dort die funder abzufragen
     funder = request.form["name"]
-    # the new funder is added to the project_funder list
+    # Fuege den Funder zur Funder Liste hinzu
     new_project_info["project_funder"].append(funder)
-    # redirect to the NewProject page
+    # kehre zur new_project Seite zurueck
     return redirect(url_for("new_project"))
 
 
