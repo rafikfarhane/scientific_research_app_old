@@ -295,8 +295,14 @@ def add_user():
     #test ob user ueberhaupt existiert
     if db.user_exists(user) == True:
         if user not in new_project_info["project_member"]:
-            # fuege den neuen Member in die Member Liste hinzu
-            new_project_info["project_member"].append(user)
+            id = db.get_id()
+            name = db.get_name_from_id(id)
+
+            if name != user:
+                # fuege den neuen Member in die Member Liste hinzu
+                new_project_info["project_member"].append(user)
+            else:
+                flash("You can not add yourself")
         else:
             flash("This User is already part of your project")
     else:
