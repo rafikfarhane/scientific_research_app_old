@@ -175,7 +175,7 @@ class Database:
         cursor.execute(
             "SELECT username FROM user_data",
         )
-        
+
         conn.commit()
         row = cursor.fetchall()
         # Die Name werden hier im Lowercase verglichen, damit keine ähnlichen Namen vorkommen also es kann keine zwei Benutzer geben mit Namen Max und max
@@ -233,9 +233,10 @@ class Database:
     def user_exists(self, username) -> bool:
         conn = self.create_connection(self.all_users_db)
         cursor = conn.cursor()
-        cursor.execute("SELECT username FROM all_users WHERE username = ?",
-                       (username,),
-                       )
+        cursor.execute(
+            "SELECT username FROM all_users WHERE username = ?",
+            (username,),
+        )
         row = cursor.fetchone()
         if row == None:
             return False
