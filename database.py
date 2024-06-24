@@ -6,9 +6,9 @@ import uuid
 class Database:
     def __init__(self):
         self.id = None
-        self.project_db = "project.db"
-        self.login_db = "sign_in_user_data.db"
-        self.all_users_db = "all_users.db"
+        self.project_db = "database/project.db"
+        self.login_db = "database/sign_in_user_data.db"
+        self.all_users_db = "database/all_users.db"
 
     def create_connection(self, name) -> sqlite3.Connection:
         # Erstellen einer Datenbankverbindung zu einer SQLite-Datenbank
