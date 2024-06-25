@@ -231,6 +231,7 @@ class Database:
             return "0"
 
     def user_exists(self, username) -> bool:
+    
         conn = self.create_connection(self.all_users_db)
         cursor = conn.cursor()
         cursor.execute(
@@ -241,3 +242,6 @@ class Database:
         if row == None:
             return False
         return True
+    
+    #to do: Funktionen um Projektname, Projektbeschreibung und Projektmember
+    #eines Projektes zu erhalten auf grundlage der Projektid

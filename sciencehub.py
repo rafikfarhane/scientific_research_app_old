@@ -201,7 +201,7 @@ def dashboard(username):
 
     # Führen Sie die Abfrage aus, um alle Projekte des Benutzers zu erhalten
     cursor.execute(
-        f"""SELECT P.NAME, P.STATUS, B.ROLE, P.ADMIN, P.MEMBERS, P.CREATED_DATE
+        f"""SELECT P.NAME, P.STATUS, B.ROLE, P.ADMIN, P.MEMBERS, P.CREATED_DATE, P.PID
         FROM {user_id} AS B JOIN PROJECT AS P ON B.PID = P.PID"""
     )
 
@@ -212,7 +212,7 @@ def dashboard(username):
     projects = []
     if results:
         for result in results:
-            project_name, status, role, creator, members, date_str = result
+            project_name, status, role, creator, members, date_str, project_id = result
             try:
                 # Versuche, den Datum-String in ein Datum-Objekt umzuwandeln
                 date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
@@ -232,7 +232,8 @@ def dashboard(username):
                 role,
                 db.get_name_from_id(creator) + " + " + str(members_count) + " more members",
                 # Datum zum dd.mm.yyyy Format umändern
-                date.strftime('%d.%m.%Y') if date else "No Date"
+                date.strftime('%d.%m.%Y') if date else "No Date",
+                project_id
             ]
             projects.append(values)
     else:
@@ -403,6 +404,14 @@ def create_project():
     name = db.get_name_from_id(id)
 
     return redirect(url_for("dashboard", username=name))
+
+
+@app.route("/project/<projectid>")
+def project(projectid):
+    #Hier müssen dann die Funktionen aufgerufen welche aus der Projektid die 
+    #Beschreibung, Member, Funder und Name ausgeben
+    #Mit diesen Parameter wird dann die Projektseite aufgerufen
+    return render_template("project_page.html")
 
 
 if __name__ == "__main__":
