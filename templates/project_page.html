@@ -10,10 +10,11 @@
 <body>
     <div class="page_header">
         <div class="logo_return">
-
+            <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/NewProject/back_to_dashboard';">
         </div>
         <div class="log_out_button">
-
+            <i class="fa-solid fa-arrow-left" onclick="window.location.href='/NewProject/back_to_dashboard';"></i>
+            <i class="fa-solid fa-right-from-bracket" onclick="window.location.href='/log_out';"></i>
         </div>
     </div>
     <div class="project_page">
@@ -21,13 +22,13 @@
             <h1>Projectname</h1>
             <p>(Status)</p>
             <div class="add_member_button">
-
+                <button>ADD COLLABORATOR</button>
             </div>
             <div class="archive_project_button">
-
+                <button type="button"><i class="fa-solid fa-box-archive"></i></button>
             </div>
             <div class="delete_project_button">
-
+                <button type="button"><i class="fa-solid fa-trash-can"></i></button>
             </div>
         </div>
         <div class="project_description_box">
@@ -36,15 +37,45 @@
         </div>
         <div class="colaborators_funder_ressource_boxes">
             <div class="coll_funder_box">
+                <h3>Collaborators</h3>
                 <div class="coll_box">
-
+                    <div class="option_line">
+                        <p style="color: blue;">select all</p>
+                        <p style="color: grey;">change role</p>
+                        <p style="color: red;">delete selected</p>
+                    </div>
+                    <div class="collaborator_line">
+                        <input type="checkbox"></input>
+                        <p>Lukas Baumeister</p>
+                        <select name="roles_select">
+                            <option value="admin">Admin</option>
+                            <option value="read">Read</option>
+                            <option value="write">Write</option>
+                        </select>
+                        <p style="color: red;">delete</p>
+                    </div>
                 </div>
+                <h3>Funding</h3>
                 <div class="funder_box">
-
+                    <div class="Sum">27,989.98$</div>
+                    <div class="funder_line">
+                        <p>Funder</p>
+                        <p style="color: forestgreen;">Sum</p>
+                    </div>
                 </div>
             </div>
             <div class="ressource_box">
-
+                <p>Ressourcen</p>
+                <div class="ressources_up">
+                    <img src="../static/Webex.png" alt="webex">
+                    <img src="../static/sciebo.svg.png" alt="sciebo">
+                </div>
+                <div class="ressources_down">
+                    <img src="../static/Asana.png" alt="asana">
+                </div>
+                <div>
+                    <button type="button">assign ressources</button>
+                </div>
             </div>
         </div>
     </div>
