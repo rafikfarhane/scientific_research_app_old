@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body{
+    background-color: #2d2c37;
+    color: white;
+    font-family: Inter;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page_header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page_header img{
+    width: 110px;
+    height: 110px;
+    cursor: pointer;
+}
+
+.page_header i{
+    font-size: 40px;
+    padding: 1rem;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.project_page{
+    display: flex;
+    flex-direction: column;
+}
+
+.project_name_buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 3rem;
+    border-bottom: white solid 5px;
+}
+
+.project_name_buttons h1{
+    font-size: 48px;
+    letter-spacing: -2.0px;
+    margin-bottom: 3px;
+}
+
+.project_name_buttons p{
+    margin-left: 10px;
+    margin-top: 60px;
+    font-size: 20px;
+}
+
+.add_member_button{
+    display: flex;
+    flex-direction: row;
+    margin-left: 41rem;
+    margin-bottom: -35px;
+}
+
+.add_member_button button {
+    height: 40px;
+    width: 200px;
+    font-size:16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #1e7617;
+    color: white;
+    cursor: pointer;
+}
+
+.archive_project_button, .delete_project_button{
+    margin-left: 2rem;
+    margin-bottom: -35px;
+}
+
+.archive_project_button button, .delete_project_button button{
+    height: 40px;
+    width: 40px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.archive_project_button button{
+    background-color: #796e6e;
+}
+
+.delete_project_button button{
+    background-color: #900606;
+}
+
+.project_description_box{
+    margin-left: 3rem;
+    color: white;
+    background-color: inherit;
+    margin-top: 15px;
+    height: 120px;
+    overflow-y: hidden;
+}
+
+.project_description_box h2{
+    font-size: 24px;
+    text-decoration: underline;
+    margin-top: 3px;
+}
+
+.project_description_box p{
+    font-size: 18px;
+    margin-top: -12px;
+}
+
+.colaborators_funder_ressource_boxes{
+    display: flex;
+    flex-direction: row;
+    margin-left: 3rem;
+}
+
+.coll_funder_box{
+    display: flex;
+    flex-direction: column;
+    width: 680px;
+}
+
+.coll_funder_box h3{
+    font-size: 38px;
+}
+
+.coll_box{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid white;
+}
+
+.option_line{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom: 2px solid white;
+}
+
+.option_line input{
+    margin-right: 5rem; 
+}
+
+.option_line i{
+position: absolute;
+color: black;
+margin-right: 620px;
+}
+
+
+
+.option_line p{
+    font-size: 16px;
+    margin-right: 3rem;
+    cursor: pointer;
+}
+
+.collaborator_table{
+    display: flex;
+    flex-direction: column;
+    height: 440px;
+    overflow-y: hidden;
+}
+
+.collaborator_line{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 48px;
+    border: solid #515151 1px;
+    margin-top: 10px;
+}
+
+.collaborator_line input{
+    margin-left: 1rem;
+    height: 18px;
+    width: 18px;
+}
+
+.collaborator_line p{
+    font-size: 18px;
+    margin-left: 5rem;
+}
+
+.collaborator_line select{
+    background-color: #686868;
+    width: 88px;
+    height: 22px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    margin-left: 5rem;
+    margin-right: 5rem;
+
+}
+
+
+.ressources_up img, .ressources_down img{
+    width: 110px;
+    height: 110px;
+}
+
+
+
+
+
+
+
+
+
