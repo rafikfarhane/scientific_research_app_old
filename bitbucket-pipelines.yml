@@ -17,5 +17,5 @@ clone:
 
 pipelines:
   branches:
-    "{main}":
+    "{development}":
       - step: *build-step
