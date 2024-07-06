@@ -40,8 +40,10 @@
                 <h3>Collaborators</h3>
                 <div class="coll_box">
                     <div class="option_line">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="search"></input>
+                        <div class="search_container">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="searchbar" type="search" placeholder="search user"></input>
+                        </div>
                         <p style="color: #86b7ff;">select all</p>
                         <p style="color: grey;">change role</p>
                         <p style="color: red;">delete selected</p>
@@ -52,7 +54,7 @@
                             <p>Lukas Baumeister</p>
                             <select name="roles_select">
                                 <option value="admin">Admin</option>
-                                <option value="read">Read</option>
+                                <option value="read" selected>Read</option>
                                 <option value="write">Write</option>
                             </select>
                             <p style="color: red;">delete</p>
@@ -61,10 +63,10 @@
                 </div>
                 <h3>Funding</h3>
                 <div class="funder_box">
-                    <div class="Sum">27,989.98$</div>
+                    <div class="sum">27,989.98$</div>
                     <div class="funder_line">
-                        <p>Funder</p>
-                        <p style="color: forestgreen;">Sum</p>
+                        <p style="margin-left: 15px;">Funder</p>
+                        <p style="color: forestgreen; margin-right: 15px;">Sum</p>
                     </div>
                 </div>
             </div>

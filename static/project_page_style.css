@@ -138,6 +138,7 @@ body{
     display: flex;
     flex-direction: column;
     border: 2px solid white;
+    margin-top: -1.5rem;
 }
 
 .option_line{
@@ -148,17 +149,30 @@ body{
     border-bottom: 2px solid white;
 }
 
-.option_line input{
-    margin-right: 5rem; 
+.search_container{
+    display: flex;
+    flex-direction: row;
+    margin-right: 50px;
+    height: 50px;
+    align-items: center;
 }
 
-.option_line i{
-position: absolute;
-color: black;
-margin-right: 620px;
+#searchbar{
+    width: 180px;
+    font-size: 18px;
+    height: 30px;
+    border: none;
+    padding-left: 25px;
+    background-color: inherit;
+    box-sizing: border-box;
 }
 
-
+.search_container i{
+    position: absolute;
+    margin-left: 3px;
+    font-size: 14px;
+    color: white;
+}
 
 .option_line p{
     font-size: 16px;
@@ -205,10 +219,48 @@ margin-right: 620px;
 
 }
 
+.funder_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid white;
+    height: 440px;
+    overflow-y: hidden;
+    margin-top: -1.5rem;
+}
+
+.sum{
+    color: #1e7617;
+    font-size: 48px;
+    margin-top: 7px;
+    font-weight: bold;
+}
+
+.funder_line{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #515151;
+    justify-content: space-between;
+    width: 650px;
+    margin-top: 10px;
+}
+
+.funder_line p{
+    font-size: 28px;
+}
+
 
 .ressources_up img, .ressources_down img{
     width: 110px;
     height: 110px;
+}
+
+
+
+input[type="search"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 
