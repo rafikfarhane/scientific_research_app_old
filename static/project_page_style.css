@@ -251,8 +251,63 @@ body{
 
 
 .ressources_up img, .ressources_down img{
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
+}
+
+.ressource{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.ressources_box{
+    border: white 2px solid;
+    width: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 7rem;
+    height: 494px;
+    margin-top: -1.5rem;
+}
+
+
+.ressource p {
+    font-size: 38px;
+    font-weight: bold;
+    margin-right: 14rem;
+}
+
+.ressources_up{
+    display: flex;
+    margin-top: 2rem;
+    flex-direction: row;
+}
+
+.ressources_down{
+    margin-top: 2rem;
+}
+
+.ressources_button{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.ressources_button button{
+    height: 70px;
+    width: 300px;
+    font-size:24px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #3487d4;
+    color: white;
+    cursor: pointer;
+
 }
 
 
