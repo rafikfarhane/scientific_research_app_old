@@ -64,7 +64,7 @@ body{
 .add_member_button button {
     height: 40px;
     width: 200px;
-    font-size:16px;
+    font-size:18px;
     border: none;
     border-radius: 10px;
     font-weight: bold;
@@ -72,6 +72,10 @@ body{
     background-color: #1e7617;
     color: white;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .archive_project_button, .delete_project_button{
