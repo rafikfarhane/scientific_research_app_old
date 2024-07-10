@@ -190,7 +190,7 @@ body{
 .collaborator_line{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     height: 48px;
     border: solid #515151 1px;
@@ -200,7 +200,13 @@ body{
 
 .collaborator_line p{
     font-size: 18px;
-    margin-left: 5rem;
+    margin-right: 2rem;
+}
+
+
+.collaborator_line i {
+    margin-left:  3rem;
+    
 }
 
 

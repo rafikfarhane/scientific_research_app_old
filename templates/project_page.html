@@ -42,66 +42,68 @@
                     <div class="option_line">
                         <div class="search_container">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input id="searchbar" type="search" placeholder="search user"></input>
+                            <input id="searchbar" type="search" placeholder="search user" onkeyup="filter_users()"></input>
                         </div>
                     </div>
                     <div class="collaborator_table">
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">LukasBaumeister</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">TorgeR</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">ImadA</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">RafikF</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">MAxM</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">OlafS</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">VladimirP</p>
                             <p>Admin</p>
                         </div>
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
-                            <p>Admin</p>
-                        </div>
-                        <div class="collaborator_line">
-                            <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
-                            <p>Admin</p>
-                        </div>
-                        <div class="collaborator_line">
-                            <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
-                            <p>Admin</p>
-                        </div>
-                        <div class="collaborator_line">
-                            <i class="fa-solid fa-user"></i>
-                            <p>Lukas Baumeister</p>
+                            <p id="user">xx_gamer_xxHD</p>
                             <p>Admin</p>
                         </div>
                     </div>
+
+                    <script>
+                        function filter_users() {
+                            const search_term = document.getElementById('searchbar').value.toLowerCase();
+                            const collaborator_table = document.getElementsByClassName('collaborator_table')[0];
+                            const collaborator_lines = collaborator_table.getElementsByClassName('collaborator_line');
+
+                            for (let i = 0; i < collaborator_lines.length; i++){
+                                let user_name = collaborator_lines[i].querySelector('#user').textContent.toLowerCase();
+                                if (user_name.includes(search_term)){
+                                    collaborator_lines[i].style.display = "";
+                                } else {
+                                    collaborator_lines[i].style.display = "none";
+                                }
+                            }
+                        }
+                    </script>
                 </div>
                 <h3>Funding</h3>
                 <div class="funder_box">
