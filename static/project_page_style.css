@@ -169,6 +169,7 @@ body{
     padding-left: 25px;
     background-color: inherit;
     box-sizing: border-box;
+    color: white;
 }
 
 .search_container i{
@@ -178,50 +179,30 @@ body{
     color: white;
 }
 
-.option_line p{
-    font-size: 16px;
-    margin-right: 3rem;
-    cursor: pointer;
-}
 
 .collaborator_table{
     display: flex;
     flex-direction: column;
     height: 440px;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 .collaborator_line{
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
     height: 48px;
     border: solid #515151 1px;
     margin-top: 10px;
 }
 
-.collaborator_line input{
-    margin-left: 1rem;
-    height: 18px;
-    width: 18px;
-}
 
 .collaborator_line p{
     font-size: 18px;
     margin-left: 5rem;
 }
 
-.collaborator_line select{
-    background-color: #686868;
-    width: 88px;
-    height: 22px;
-    border: none;
-    color: white;
-    font-size: 16px;
-    margin-left: 5rem;
-    margin-right: 5rem;
-
-}
 
 .funder_box{
     display: flex;
@@ -229,7 +210,7 @@ body{
     align-items: center;
     border: 2px solid white;
     height: 440px;
-    overflow-y: hidden;
+    overflow-y: auto;
     margin-top: -1.5rem;
 }
 
