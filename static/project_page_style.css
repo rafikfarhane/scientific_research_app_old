@@ -50,8 +50,8 @@ body{
 
 .project_name_buttons p{
     margin-left: 10px;
-    margin-top: 60px;
-    font-size: 20px;
+    margin-top: 70px;
+    font-size: 16px;
 }
 
 .add_member_button{
@@ -108,7 +108,9 @@ body{
     background-color: inherit;
     margin-top: 15px;
     height: 120px;
-    overflow-y: hidden;
+    border: white 2px solid;
+    overflow-y: scroll;
+    padding: 10px;
 }
 
 .project_description_box h2{
@@ -120,12 +122,14 @@ body{
 .project_description_box p{
     font-size: 18px;
     margin-top: -12px;
+
 }
 
 .colaborators_funder_ressource_boxes{
     display: flex;
     flex-direction: row;
     margin-left: 3rem;
+    margin-top: 2rem;
 }
 
 .coll_funder_box{
@@ -184,7 +188,7 @@ body{
     display: flex;
     flex-direction: column;
     height: 440px;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .collaborator_line{
@@ -216,13 +220,13 @@ body{
     align-items: center;
     border: 2px solid white;
     height: 440px;
-    overflow-y: auto;
+    overflow-y: scroll;
     margin-top: -1.5rem;
 }
 
 .sum{
-    color: #1e7617;
-    font-size: 48px;
+    color: #49ec3d;
+    font-size: 42px;
     margin-top: 7px;
     font-weight: bold;
 }
@@ -232,12 +236,12 @@ body{
     flex-direction: row;
     border: 1px solid #515151;
     justify-content: space-between;
-    width: 650px;
-    margin-top: 10px;
+    width: 660px;
+    margin-top: 15px;
 }
 
 .funder_line p{
-    font-size: 28px;
+    font-size: 22px;
 }
 
 
@@ -308,6 +312,60 @@ input[type="search"] {
     -moz-appearance: none;
     appearance: none;
 }
+
+
+#scrollable::-webkit-scrollbar {
+    width: 8px;
+    background: inherit ;
+}
+
+#scrollable {
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Scrollbar beim Hovern sichtbar machen */
+#scrollable:hover::-webkit-scrollbar {
+    width: 8px;
+}
+
+#scrollable:hover::-webkit-scrollbar-track {
+    background: rgba(183, 170, 223, 0.5);
+}
+
+#scrollable:hover::-webkit-scrollbar-thumb {
+    background: rgb(183, 170, 223);
+    border-radius: 4px;
+}
+
+#scrollable:hover::-webkit-scrollbar-thumb:hover {
+    background: rgb(205, 196, 232);
+}
+
+/* Scrollbar beim Scrollen sichtbar machen */
+#scrollable.scrolling::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    
+}
+
+#scrollable.scrolling::-webkit-scrollbar-track {
+    background: rgba(183, 170, 223, 0.5);
+}
+
+#scrollable.scrolling::-webkit-scrollbar-thumb {
+    background: rgb(183, 170, 223);
+    border-radius: 4px;
+}
+
+#scrollable.scrolling::-webkit-scrollbar-thumb:hover {
+    background: rgb(205, 196, 232);
+}
+
+#scrollable.scrolling {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(183, 170, 223, 0.5) rgb(183, 170, 223);
+}
+
 
 
 

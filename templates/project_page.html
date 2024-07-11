@@ -20,7 +20,7 @@
     <div class="project_page">
         <div class="project_name_buttons">
             <h1>Projectname</h1>
-            <p>(Status)</p>
+            <p>Open</p>
             <div class="add_member_button">
                 <button><i class="fa-solid fa-pencil"></i>EDIT PROJECT</button>
             </div>
@@ -31,9 +31,9 @@
                 <button type="button"><i class="fa-solid fa-trash-can"></i></button>
             </div>
         </div>
-        <div class="project_description_box">
+        <div class="project_description_box" id="scrollable">
             <h2>Project description: </h2>
-            <p>"description"</p>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."description"</p>
         </div>
         <div class="colaborators_funder_ressource_boxes">
             <div class="coll_funder_box">
@@ -45,7 +45,7 @@
                             <input id="searchbar" type="search" placeholder="search user" onkeyup="filter_users()"></input>
                         </div>
                     </div>
-                    <div class="collaborator_table">
+                    <div class="collaborator_table" id="scrollable">
                         <div class="collaborator_line">
                             <i class="fa-solid fa-user"></i>
                             <p id="user">LukasBaumeister</p>
@@ -106,11 +106,35 @@
                     </script>
                 </div>
                 <h3>Funding</h3>
-                <div class="funder_box">
+                <div class="funder_box" id="scrollable">
                     <div class="sum">27,989.98$</div>
                     <div class="funder_line">
                         <p style="margin-left: 20px;">Funder</p>
-                        <p style="color: forestgreen; margin-right: 20px;">Sum</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
+                    </div>
+                    <div class="funder_line">
+                        <p style="margin-left: 20px;">Funder</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
+                    </div>
+                    <div class="funder_line">
+                        <p style="margin-left: 20px;">Funder</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
+                    </div>
+                    <div class="funder_line">
+                        <p style="margin-left: 20px;">Funder</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
+                    </div>
+                    <div class="funder_line">
+                        <p style="margin-left: 20px;">Funder</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
+                    </div>
+                    <div class="funder_line">
+                        <p style="margin-left: 20px;">Funder</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
+                    </div>
+                    <div class="funder_line">
+                        <p style="margin-left: 20px;">Funder</p>
+                        <p style="color: #49ec3d; margin-right: 20px;">Sum</p>
                     </div>
                 </div>
             </div>
@@ -131,5 +155,18 @@
             </div>
         </div>
     </div>
+    <script>
+        const scrollableElements = document.querySelectorAll('#scrollable');
+
+        scrollableElements.forEach(element => {
+            element.addEventListener('scroll', () => {
+                element.classList.add('scrolling');
+                clearTimeout(element.scrollTimeout);
+                element.scrollTimeout = setTimeout(() => {
+                    element.classList.remove('scrolling');
+                }, 1000);
+            });
+        });
+    </script>
 </body>
 </html>    
