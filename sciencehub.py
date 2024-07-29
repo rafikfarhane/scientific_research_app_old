@@ -51,7 +51,7 @@ def create_dbs():
                       PID VARCHAR(40) PRIMARY KEY,
                       NAME VARCHAR(30) NOT NULL,
                       DESCRIPTION TEXT NOT NULL,
-                      ADMIN VARCHAR(40) NOT NULL,
+                      ADMIN TEXT,
                       FUNDER TEXT,
                       MEMBERS TEXT,
                       STATUS VARCHAR(7) NOT NULL,
@@ -406,12 +406,44 @@ def create_project():
     return redirect(url_for("dashboard", username=name))
 
 
+
 @app.route("/project/<projectid>")
 def project(projectid):
-    #Hier müssen dann die Funktionen aufgerufen welche aus der Projektid die 
-    #Beschreibung, Member, Funder und Name ausgeben
-    #Mit diesen Parameter wird dann die Projektseite aufgerufen
-    return render_template("project_page.html")
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS, STATUS FROM PROJECT WHERE PID = ?", (projectid,)
+    )
+
+    project = cursor.fetchone()
+
+    if not project:
+        flash("Project not found")
+        return redirect(url_for("dashboard", username=db.get_name_from_id(db.get_id())))
+
+    project_name, description, funder, members, status = project
+
+    # Mitglieder sind kommagetrennt gespeichert, z.B. "user1,user2"
+    member_names = members.split(',') if members else []
+    members_roles = []
+
+    for name in member_names:
+        member_id = db.get_id_from_name(name)
+        user_conn = db.create_connection(db.project_db)
+        user_cursor = user_conn.cursor()
+
+        # Tabelle basierend auf Benutzer-ID für die Rolleninformation
+        user_cursor.execute(f"SELECT ROLE FROM {member_id} WHERE PID = ?", (projectid,))
+        role = user_cursor.fetchone()
+        
+        if role:
+            members_roles.append((name, role[0]))
+        else:
+            members_roles.append((name, 'No role assigned'))
+
+    return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+
 
 
 if __name__ == "__main__":
