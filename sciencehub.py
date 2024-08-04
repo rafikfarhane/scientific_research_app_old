@@ -415,7 +415,7 @@ def project(projectid):
     cursor.execute(
         "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS, STATUS FROM PROJECT WHERE PID = ?", (projectid,)
     )
-
+    
     project = cursor.fetchone()
 
     if not project:
@@ -423,26 +423,49 @@ def project(projectid):
         return redirect(url_for("dashboard", username=db.get_name_from_id(db.get_id())))
 
     project_name, description, funder, members, status = project
-
-    # Mitglieder sind kommagetrennt gespeichert, z.B. "user1,user2"
     member_names = members.split(',') if members else []
     members_roles = []
 
     for name in member_names:
         member_id = db.get_id_from_name(name)
-        user_conn = db.create_connection(db.project_db)
-        user_cursor = user_conn.cursor()
+        if member_id:
+            user_conn = db.create_connection(db.project_db)
+            user_cursor = user_conn.cursor()
 
-        # Tabelle basierend auf Benutzer-ID für die Rolleninformation
-        user_cursor.execute(f"SELECT ROLE FROM {member_id} WHERE PID = ?", (projectid,))
-        role = user_cursor.fetchone()
-        
-        if role:
-            members_roles.append((name, role[0]))
+            try:
+                user_cursor.execute(f"SELECT ROLE FROM '{member_id}' WHERE PID = ?", (projectid,))
+                role = user_cursor.fetchone()
+                if role:
+                    members_roles.append((name, role[0]))
+                else:
+                    members_roles.append((name, 'No role assigned'))
+            except sqlite3.Error as e:
+                print(f"Database error: {e}")
+                members_roles.append((name, 'Error fetching role'))
         else:
-            members_roles.append((name, 'No role assigned'))
+            members_roles.append((name, 'Invalid user ID'))
 
-    return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+    user_id = db.get_id()
+    if user_id:
+        new_conn = db.create_connection(db.project_db)
+        new_cursor = new_conn.cursor()
+
+        try:
+            new_cursor.execute(f"SELECT ROLE FROM '{user_id}' WHERE PID = ?", (projectid,))
+            role = new_cursor.fetchone()
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            flash("Error fetching user role")
+            return redirect(url_for("dashboard", username=db.get_name_from_id(db.get_id())))
+    else:
+        flash("Invalid user ID")
+        return redirect(url_for("dashboard", username=db.get_name_from_id(db.get_id())))
+
+    if role and (role[0] == 'admin' or role[0] == 'write'):
+        return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+    else:
+        return render_template("project_page_read.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+
 
 
 
