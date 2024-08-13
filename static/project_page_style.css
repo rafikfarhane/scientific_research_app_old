@@ -54,14 +54,14 @@ body{
     font-size: 16px;
 }
 
-.add_member_button{
+.edit_project_button{
     display: flex;
     flex-direction: row;
     margin-left: 41rem;
     margin-bottom: -35px;
 }
 
-.add_member_button button {
+.edit_project_button button {
     height: 40px;
     width: 200px;
     font-size:18px;

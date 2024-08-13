@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/179535dd9d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/edit_page.css">
+    <title>NewProjectUI</title>
+</head>
+<body>
+    <div class="EP_UI">
+        <div class="EP_UI_Heading">
+            <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/NewProject/back_to_dashboard';">
+            <h1>scienceHUB</h1>
+        </div>
+        <hr>
+        <div class="EP_UI_input">
+            <input id="ProNam" type="text" placeholder="project name"  name="ProNam" maxlength="50"></input>
+            <textarea id="ProDes" type="text" placeholder="description" name="ProDes" maxlength="750"></textarea>
+            <div class="EP_UI_horinput">
+                <div class="EP_UI_editMF">
+                    <form class="EditMF_input" method="POST" action="/#">
+                            <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add member" required>
+                            <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
+                            <div id="autocomplete-list" class="autocomplete-suggestions"></div>
+                    </form>
+                    <div class="flash_list">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul class="flashes">
+                                    {% for message in messages %}
+                                    <li>! {{ message }} !</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <ul class="mf_list">
+                            <li>Testuser1<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>Testuser2<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>Testuser3<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>Testuser4<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>Testuser5<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>Testuser6<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                    </ul>
+                </div>
+                <div class="EP_UI_editMF">
+                    <form class="EditMF_input" method="POST" action="/#">
+                        <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add funding" required>
+                        <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
+                    </form>
+                    <ul class="mf_list">
+                        <li>Testfunder1<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        <li>Testfunder2<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        <li>Testfunder3<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        <li>Testfunder4<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        <li>Testfunder5<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        <li>Testfunder6<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="buttons_cr_ca">
+            <div class="EP_UI_back_to_d">
+                <button type="button" onclick="window.location.href='/#';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
+            </div>
+            <div class="EP_UI_safe">
+                <button type="button" onclick="window.location.href='/#';"><i class="fa-solid fa-cloud-arrow-up"></i><p>save changes</p></button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

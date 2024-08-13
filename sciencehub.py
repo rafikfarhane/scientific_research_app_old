@@ -441,11 +441,13 @@ def project(projectid):
     role = new_cursor.fetchone()
 
     if role and (role[0] == 'admin' or role[0] == 'write'):
-        return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+        return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status, project_id=projectid)
     else:
         return render_template("project_page_read.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
     
-
+@app.route("/edit_project/<projectid>")
+def edit_project(projectid):
+    return render_template("edit_project.html")
 
 
 if __name__ == "__main__":
