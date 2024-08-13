@@ -447,7 +447,18 @@ def project(projectid):
     
 @app.route("/edit_project/<projectid>")
 def edit_project(projectid):
-    return render_template("edit_project.html")
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS FROM PROJECT WHERE PID = ?", (projectid,)
+    )
+
+    project = cursor.fetchone()
+
+    project_name, project_description, project_funders, project_members = project
+    member_names = project_members.split(',') if project_members else []
+    return render_template("edit_project.html", project_name=project_name, project_description=project_description, project_funders=project_funders, project_members=member_names)
 
 
 if __name__ == "__main__":

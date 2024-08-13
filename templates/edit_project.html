@@ -15,8 +15,8 @@
         </div>
         <hr>
         <div class="EP_UI_input">
-            <input id="ProNam" type="text" placeholder="project name"  name="ProNam" maxlength="50"></input>
-            <textarea id="ProDes" type="text" placeholder="description" name="ProDes" maxlength="750"></textarea>
+            <input id="ProNam" type="text" value="{{project_name}}"  name="ProNam" maxlength="50"></input>
+            <textarea id="ProDes" type="text" name="ProDes" maxlength="750">{{ project_description }}</textarea>
             <div class="EP_UI_horinput">
                 <div class="EP_UI_editMF">
                     <form class="EditMF_input" method="POST" action="/#">
@@ -36,12 +36,9 @@
                         {% endwith %}
                     </div>
                     <ul class="mf_list">
-                            <li>Testuser1<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                            <li>Testuser2<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                            <li>Testuser3<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                            <li>Testuser4<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                            <li>Testuser5<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                            <li>Testuser6<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        {% for member in project_members %}
+                            <li>{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="EP_UI_editMF">
@@ -50,12 +47,9 @@
                         <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
                     </form>
                     <ul class="mf_list">
-                        <li>Testfunder1<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                        <li>Testfunder2<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                        <li>Testfunder3<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                        <li>Testfunder4<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                        <li>Testfunder5<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
-                        <li>Testfunder6<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        {% for funder in project_funders %}
+                            <li>{{ funder }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
