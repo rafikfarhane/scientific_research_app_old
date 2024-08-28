@@ -411,6 +411,7 @@ def create_project():
 def project(projectid):
     conn = db.create_connection(db.project_db)
     cursor = conn.cursor()
+    print(projectid)
 
     cursor.execute(
         "SELECT NAME, DESCRIPTION, FUNDER, ADMIN, MEMBERS, STATUS FROM PROJECT WHERE PID = ?", (projectid,)
@@ -450,6 +451,8 @@ def edit_project(projectid):
     conn = db.create_connection(db.project_db)
     cursor = conn.cursor()
 
+    pid = projectid
+
     cursor.execute(
         "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS FROM PROJECT WHERE PID = ?", (projectid,)
     )
@@ -458,7 +461,7 @@ def edit_project(projectid):
 
     project_name, project_description, project_funders, project_members = project
     member_names = project_members.split(',') if project_members else []
-    return render_template("edit_project.html", project_name=project_name, project_description=project_description, project_funders=project_funders, project_members=member_names)
+    return render_template("edit_project.html", project_name=project_name, project_description=project_description, project_funders=project_funders, project_members=member_names, project_id=pid)
 
 
 if __name__ == "__main__":

@@ -72,8 +72,9 @@
                     </div>
                     <ul class="mf_list">
                         {% for member in project_members %}
-                            <li>{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="removeDiv(this)"></i></li>
                         {% endfor %}
+                        <li>Testuser<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="removeDiv(this)"></i></li>
                     </ul>
                 </div>
                 <div class="EP_UI_editMF">
@@ -83,15 +84,22 @@
                     </form>
                     <ul class="mf_list">
                         {% for funder in project_funders %}
-                            <li>{{ funder }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;"></i></li>
+                            <li>{{ funder }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;" onclick="removeDiv(this)"></i></li>
                         {% endfor %}
                     </ul>
                 </div>
+
+                <script>
+                    function removeDiv(element){
+                        element.parentElement.style.display = 'none';
+                    }
+                </script>
+
             </div>
         </div>
         <div class="buttons_cr_ca">
             <div class="EP_UI_back_to_d">
-                <button type="button" onclick="window.location.href='/#';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
+                <button type="button" onclick="window.location.href='/project/{{project_id}}';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
             </div>
             <div class="EP_UI_safe">
                 <button type="button" onclick="window.location.href='/#';"><i class="fa-solid fa-cloud-arrow-up"></i><p>save changes</p></button>
