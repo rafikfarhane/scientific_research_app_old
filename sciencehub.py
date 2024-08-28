@@ -21,6 +21,10 @@ new_project_info = dict(
     project_name="", project_description="", project_member=[], project_funder=[]
 )
 
+edit_project_info = dict(
+    new_project_name="", new_project_desc="", new_member = [], new_funder = []
+)
+
 
 def create_dbs():
     # Öffne eine Verbindung zur Datenbank
@@ -460,8 +464,21 @@ def edit_project(projectid):
     project = cursor.fetchone()
 
     project_name, project_description, project_funders, project_members = project
-    member_names = project_members.split(',') if project_members else []
-    return render_template("edit_project.html", project_name=project_name, project_description=project_description, project_funders=project_funders, project_members=member_names, project_id=pid)
+
+    print(project_members)
+
+    edit_project_info["new_project_name"] = project_name
+    edit_project_info["new_project_desc"] = project_description
+    
+    member_list = project_members.split(',') if project_members else []
+    for member in member_list:
+        edit_project_info["new_member"].append(member)
+    
+    funder_list = project_funders.split(',') if project_funders else []
+    for funder in funder_list:
+        edit_project_info["new_funder"].append(funder)
+
+    return render_template("edit_project.html", project_name=edit_project_info["new_project_name"], project_description=edit_project_info["new_project_desc"], project_funders=edit_project_info["new_funder"], project_members=edit_project_info["new_member"], project_id=pid)
 
 
 if __name__ == "__main__":
