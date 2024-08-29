@@ -19,7 +19,7 @@
             <textarea id="ProDes" type="text" name="ProDes" maxlength="750">{{ project_description }}</textarea>
             <div class="EP_UI_horinput">
                 <div class="EP_UI_editMF">
-                    <form class="EditMF_input" method="POST" action="/#">
+                    <form class="EditMF_input" method="POST" action="/edit_project/{{project_id}}/add_user_project">
                             <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add member" required>
                             <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
                             <div id="autocomplete-list" class="autocomplete-suggestions"></div>
@@ -74,7 +74,6 @@
                         {% for member in project_members %}
                             <li>{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="removeDiv(this)"></i></li>
                         {% endfor %}
-                        <li>Testuser<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="removeDiv(this)"></i></li>
                     </ul>
                 </div>
                 <div class="EP_UI_editMF">
@@ -99,7 +98,7 @@
         </div>
         <div class="buttons_cr_ca">
             <div class="EP_UI_back_to_d">
-                <button type="button" onclick="window.location.href='/project/{{project_id}}';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
+                <button type="button" onclick="window.location.href='/edit_project/{{project_id}}/back_to_project';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
             </div>
             <div class="EP_UI_safe">
                 <button type="button" onclick="window.location.href='/#';"><i class="fa-solid fa-cloud-arrow-up"></i><p>save changes</p></button>

@@ -90,6 +90,7 @@ def search_for_users(query) -> dict:
 
 
 
+
 @app.route("/")
 def starting_page():
     return redirect("login")
@@ -457,28 +458,62 @@ def edit_project(projectid):
 
     pid = projectid
 
-    cursor.execute(
-        "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS FROM PROJECT WHERE PID = ?", (projectid,)
-    )
+    if edit_project_info["new_project_name"] == "":
 
-    project = cursor.fetchone()
+        cursor.execute(
+            "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS FROM PROJECT WHERE PID = ?", (projectid,)
+        )
 
-    project_name, project_description, project_funders, project_members = project
+        project = cursor.fetchone()
 
-    print(project_members)
+        project_name, project_description, project_funders, project_members = project
 
-    edit_project_info["new_project_name"] = project_name
-    edit_project_info["new_project_desc"] = project_description
-    
-    member_list = project_members.split(',') if project_members else []
-    for member in member_list:
-        edit_project_info["new_member"].append(member)
-    
-    funder_list = project_funders.split(',') if project_funders else []
-    for funder in funder_list:
-        edit_project_info["new_funder"].append(funder)
+
+        edit_project_info["new_project_name"] = project_name
+        edit_project_info["new_project_desc"] = project_description
+        
+        member_list = project_members.split(',') if project_members else []
+        for member in member_list:
+            edit_project_info["new_member"].append(member)
+        
+        funder_list = project_funders.split(',') if project_funders else []
+        for funder in funder_list:
+            edit_project_info["new_funder"].append(funder)
 
     return render_template("edit_project.html", project_name=edit_project_info["new_project_name"], project_description=edit_project_info["new_project_desc"], project_funders=edit_project_info["new_funder"], project_members=edit_project_info["new_member"], project_id=pid)
+
+@app.route("/edit_project/<projectid>/add_user_project", methods = ["POST"])
+def add_user_project(projectid):
+    # Request aus der Html datei wo die Request form den Namen name hat
+    user = request.form["name"]
+    #test ob user ueberhaupt existiert
+    if db.user_exists(user) == True:
+        if user not in edit_project_info["new_member"]:
+            id = db.get_id()
+            name = db.get_name_from_id(id)
+
+            if name != user:
+                # fuege den neuen Member in die Member Liste hinzu
+                edit_project_info["new_member"].append(user)
+            else:
+                flash("You can not add yourself")
+        else:
+            flash("This User is already part of your project")
+    else:
+        flash("This User does not exist")
+    # kehre zur new_project Seite zurueck
+    return redirect(url_for("edit_project", projectid = projectid))
+
+
+@app.route("/edit_project/<projectid>/back_to_project")
+def back_to_project(projectid):
+    edit_project_info["new_project_name"] = ""
+    edit_project_info["new_project_desc"] = ""
+    edit_project_info["new_member"] = []
+    edit_project_info["new_funder"] = []
+
+    return redirect(url_for("project", projectid = projectid))
+
 
 
 if __name__ == "__main__":
