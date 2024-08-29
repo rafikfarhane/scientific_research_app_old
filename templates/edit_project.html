@@ -17,6 +17,38 @@
         <div class="EP_UI_input">
             <input id="ProNam" type="text" value="{{project_name}}"  name="ProNam" maxlength="50"></input>
             <textarea id="ProDes" type="text" name="ProDes" maxlength="750">{{ project_description }}</textarea>
+
+            <script>
+                document.getElementById('ProNam').addEventListener('input', save_data);
+                document.getElementById('ProDes').addEventListener('input', save_data);
+
+                function save_data() {
+                    let project_name = document.getElementById('ProNam').value;
+                    let project_description = document.getElementById('ProDes').value;
+
+                    let data = {
+                        project_name: project_name,
+                        project_description: project_description
+                    };
+
+                    fetch("/edit_project/{{project_id}}/save_new_data", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error', error)
+                    });
+                }
+                    
+            </script>
+
             <div class="EP_UI_horinput">
                 <div class="EP_UI_editMF">
                     <form class="EditMF_input" method="POST" action="/edit_project/{{project_id}}/add_user_project">
@@ -77,7 +109,7 @@
                     </ul>
                 </div>
                 <div class="EP_UI_editMF">
-                    <form class="EditMF_input" method="POST" action="/#">
+                    <form class="EditMF_input" method="POST" action="/edit_project/{{project_id}}/add_funding_project">
                         <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add funding" required>
                         <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
                     </form>

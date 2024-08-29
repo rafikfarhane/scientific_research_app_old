@@ -482,6 +482,33 @@ def edit_project(projectid):
 
     return render_template("edit_project.html", project_name=edit_project_info["new_project_name"], project_description=edit_project_info["new_project_desc"], project_funders=edit_project_info["new_funder"], project_members=edit_project_info["new_member"], project_id=pid)
 
+@app.route("/edit_project/<projectid>/save_new_data", methods = ["POST"])
+def save_new_data(projectid):
+     # Request die Json Daten welche den Projektnamen und die Projektbeschreibung enthalten
+    data = request.json
+    # Setze die Variablen um Projektnamen und Projektbeschreibung zu speichern
+    project_name = data.get("project_name")
+    project_description = data.get("project_description")
+
+    # Wenn die Daten korrekt übertragen wurde übernehme sie in das Dictionary
+    if project_name or project_description:
+        edit_project_info["new_project_name"] = project_name
+        edit_project_info["new_project_desc"] = project_description
+        # return successmessage
+        return (
+            jsonify(
+                {
+                    "message": "Project data saved successfully",
+                    "projects": edit_project_info,
+                }
+            ),
+            200,
+        )
+    # Wenn die Daten nicht korrekt transferiert wurden
+    else:
+        # return error message
+        return jsonify({"message": "Invalid data"}), 400
+
 @app.route("/edit_project/<projectid>/add_user_project", methods = ["POST"])
 def add_user_project(projectid):
     # Request aus der Html datei wo die Request form den Namen name hat
@@ -501,6 +528,15 @@ def add_user_project(projectid):
             flash("This User is already part of your project")
     else:
         flash("This User does not exist")
+    # kehre zur new_project Seite zurueck
+    return redirect(url_for("edit_project", projectid = projectid))
+
+@app.route("/edit_project/<projectid>/add_funding_project", methods = ["POST"])
+def add_funding_project(projectid):
+    # Request aus der Html Datei wo das form den Namen name hat um von dort die funder abzufragen
+    funder = request.form["name"]
+    # Fuege den Funder zur Funder Liste hinzu
+    edit_project_info["new_funder"].append(funder)
     # kehre zur new_project Seite zurueck
     return redirect(url_for("edit_project", projectid = projectid))
 
