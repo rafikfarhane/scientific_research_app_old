@@ -451,6 +451,8 @@ def project(projectid):
     else:
         return render_template("project_page_read.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
     
+
+#Seite um ein Projekt zu bearbeiten   
 @app.route("/edit_project/<projectid>")
 def edit_project(projectid):
     conn = db.create_connection(db.project_db)
@@ -458,8 +460,10 @@ def edit_project(projectid):
 
     pid = projectid
 
+    #Wenn edit_project_info leer ist, heißt das die entsprechenden Daten müssen erst geladen werden
     if edit_project_info["new_project_name"] == "":
 
+        #Daten des Projektes werden aus der Datenbank geladen und in das Dict eingefügt
         cursor.execute(
             "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS FROM PROJECT WHERE PID = ?", (projectid,)
         )
@@ -482,6 +486,8 @@ def edit_project(projectid):
 
     return render_template("edit_project.html", project_name=edit_project_info["new_project_name"], project_description=edit_project_info["new_project_desc"], project_funders=edit_project_info["new_funder"], project_members=edit_project_info["new_member"], project_id=pid)
 
+#save_new_data speichert änderungen am Projektnamen und der Projektbeschriebung
+#Funktion identisch zu der Funktion wenn man ein neues Projekt erstellt
 @app.route("/edit_project/<projectid>/save_new_data", methods = ["POST"])
 def save_new_data(projectid):
      # Request die Json Daten welche den Projektnamen und die Projektbeschreibung enthalten
@@ -509,6 +515,8 @@ def save_new_data(projectid):
         # return error message
         return jsonify({"message": "Invalid data"}), 400
 
+
+#Funktion um Nutzer zu einem Projekt hinzuzufuegen
 @app.route("/edit_project/<projectid>/add_user_project", methods = ["POST"])
 def add_user_project(projectid):
     # Request aus der Html datei wo die Request form den Namen name hat
@@ -521,9 +529,11 @@ def add_user_project(projectid):
 
             if name != user:
                 # fuege den neuen Member in die Member Liste hinzu
+                # und in die Liste der neu hinzugefuegten Member
                 edit_project_info["new_member"].append(user)
                 edit_project_info["added_member"].append(user)
 
+                #Wenn der Member vorher schon einmal entfernt wurde muss er aus der deleted Member Liste geloescht werden
                 if user in edit_project_info["deleted_member"]:
                     edit_project_info["deleted_member"].remove(user)
                     
@@ -536,6 +546,8 @@ def add_user_project(projectid):
     # kehre zur new_project Seite zurueck
     return redirect(url_for("edit_project", projectid = projectid))
 
+
+#Funktion um Funding hinzuzufuegen
 @app.route("/edit_project/<projectid>/add_funding_project", methods = ["POST"])
 def add_funding_project(projectid):
     # Request aus der Html Datei wo das form den Namen name hat um von dort die funder abzufragen
@@ -545,21 +557,25 @@ def add_funding_project(projectid):
     # kehre zur new_project Seite zurueck
     return redirect(url_for("edit_project", projectid = projectid))
 
+
+#Funktion um Nutzer zu entfernen
 @app.route("/edit_project/<projectid>/remove_user", methods = ["POST"])
 def remove_user(projectid):
     data = request.get_json()
     user = data.get('username')
     print(f'User {user} removed')
 
+    #Nutzer wird aus new_Member Liste entfernt und die Liste der entfernten Nutzer hinzugefuegt
     edit_project_info["new_member"].remove(user)
     edit_project_info["deleted_member"].append(user) 
 
+    #Wenn der Nutzer schon in der added_member Liste auftaucht muss er aus dieser geloescht werden
     if user in edit_project_info["added_member"]:
         edit_project_info["added_member"].remove(user)
 
     return jsonify({'message': f'User {user} has been removed'}), 200
 
-
+#Funktion um funder zu loeschen
 @app.route("/edit_project/<projectid>/remove_funder", methods = ["POST"])
 def  remove_funder(projectid):
     data = request.get_json()
@@ -570,9 +586,12 @@ def  remove_funder(projectid):
 
     return jsonify({'message': f'Funder {name} has been removed'}), 200
 
+#Funktion um die entsprechenden änderungen zu speichern
 @app.route("/edit_project/<projectid>/save_changes")
 def save_changes(projectid):
 
+    #DAten werden aus dem Dict entnommen
+    #Daten die in Listen auftauchen werden zu strings gemacht
     new_name = edit_project_info["new_project_name"]
     new_description = edit_project_info["new_project_desc"]
     new_member = edit_project_info["new_member"]
@@ -580,8 +599,11 @@ def save_changes(projectid):
     new_funder = edit_project_info["new_funder"]
     new_funder_str = ",".join(new_funder)
 
+    #Die PROJECT Tabelle wird an der Stelle der entsprechenden PID mit den neuen Daten geupdated
     conn = db.create_connection(db.project_db)
+
     cursor = conn.cursor()
+
 
     cursor.execute(
         "UPDATE PROJECT SET NAME = ?, DESCRIPTION = ?, FUNDER = ?, MEMBERS = ? WHERE PID = ?",
@@ -590,12 +612,12 @@ def save_changes(projectid):
     
     conn.commit()
 
-    print(edit_project_info["added_member"])
-
+    #Member die neu in das Projekt hinzugefuegt wurden erhalten einen neuen Eintrag des Projektes in ihrer Tabelle
     for member in edit_project_info["added_member"]:
         member_id = db.get_id_from_name(member)
         db.add_values_to_member(conn, member_id, (projectid, "read"))
 
+    #Bei Member die aus dem Projekt geloescht wurden wird auch der entsprechende Tabelleneintrag geloescht
     for member in edit_project_info["deleted_member"]:
         member_id = db.get_id_from_name(member)
 
@@ -607,6 +629,7 @@ def save_changes(projectid):
 
 
 
+    #Das Dict wird geleert
     edit_project_info["new_project_name"] = ""
     edit_project_info["new_project_desc"] = ""
     edit_project_info["new_member"] = []
@@ -617,12 +640,17 @@ def save_changes(projectid):
     return redirect(url_for("project", projectid = projectid))
 
 
+#Funktion um das editieren abzubrechen
 @app.route("/edit_project/<projectid>/back_to_project")
 def back_to_project(projectid):
+
+    #Das dict wird geloescht
     edit_project_info["new_project_name"] = ""
     edit_project_info["new_project_desc"] = ""
     edit_project_info["new_member"] = []
     edit_project_info["new_funder"] = []
+    edit_project_info["added_member"] = []
+    edit_project_info["deleted_member"] = []
 
     return redirect(url_for("project", projectid = projectid))
 

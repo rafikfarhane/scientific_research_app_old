@@ -169,6 +169,7 @@ class Database:
             print(e)
             return 0
 
+
     def search_user(self, name, email) -> bool:
         conn = self.create_connection(self.login_db)
         cursor = conn.cursor()
