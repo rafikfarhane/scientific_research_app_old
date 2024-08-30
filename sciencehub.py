@@ -596,6 +596,17 @@ def save_changes(projectid):
         member_id = db.get_id_from_name(member)
         db.add_values_to_member(conn, member_id, (projectid, "read"))
 
+    for member in edit_project_info["deleted_member"]:
+        member_id = db.get_id_from_name(member)
+
+        cursor = conn.cursor()
+        cursor.execute(
+            f"DELETE FROM '{member_id}' WHERE PID = ?", (projectid,)
+            )
+        conn.commit()
+
+
+
     edit_project_info["new_project_name"] = ""
     edit_project_info["new_project_desc"] = ""
     edit_project_info["new_member"] = []
