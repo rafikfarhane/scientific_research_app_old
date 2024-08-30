@@ -22,7 +22,7 @@ new_project_info = dict(
 )
 
 edit_project_info = dict(
-    new_project_name="", new_project_desc="", new_member = [], new_funder = []
+    new_project_name="", new_project_desc="", new_member = [], new_funder = [], added_member = [], deleted_member = []
 )
 
 
@@ -522,6 +522,11 @@ def add_user_project(projectid):
             if name != user:
                 # fuege den neuen Member in die Member Liste hinzu
                 edit_project_info["new_member"].append(user)
+                edit_project_info["added_member"].append(user)
+
+                if user in edit_project_info["deleted_member"]:
+                    edit_project_info["deleted_member"].remove(user)
+                    
             else:
                 flash("You can not add yourself")
         else:
@@ -539,6 +544,66 @@ def add_funding_project(projectid):
     edit_project_info["new_funder"].append(funder)
     # kehre zur new_project Seite zurueck
     return redirect(url_for("edit_project", projectid = projectid))
+
+@app.route("/edit_project/<projectid>/remove_user", methods = ["POST"])
+def remove_user(projectid):
+    data = request.get_json()
+    user = data.get('username')
+    print(f'User {user} removed')
+
+    edit_project_info["new_member"].remove(user)
+    edit_project_info["deleted_member"].append(user) 
+
+    if user in edit_project_info["added_member"]:
+        edit_project_info["added_member"].remove(user)
+
+    return jsonify({'message': f'User {user} has been removed'}), 200
+
+
+@app.route("/edit_project/<projectid>/remove_funder", methods = ["POST"])
+def  remove_funder(projectid):
+    data = request.get_json()
+    name = data.get('fundername')
+    print(f'Funder {name} removed')
+
+    edit_project_info["new_funder"].remove(name)
+
+    return jsonify({'message': f'Funder {name} has been removed'}), 200
+
+@app.route("/edit_project/<projectid>/save_changes")
+def save_changes(projectid):
+
+    new_name = edit_project_info["new_project_name"]
+    new_description = edit_project_info["new_project_desc"]
+    new_member = edit_project_info["new_member"]
+    new_members_str = ",".join(new_member)
+    new_funder = edit_project_info["new_funder"]
+    new_funder_str = ",".join(new_funder)
+
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "UPDATE PROJECT SET NAME = ?, DESCRIPTION = ?, FUNDER = ?, MEMBERS = ? WHERE PID = ?",
+        (new_name, new_description, new_funder_str, new_members_str, projectid,)
+        )
+    
+    conn.commit()
+
+    print(edit_project_info["added_member"])
+
+    for member in edit_project_info["added_member"]:
+        member_id = db.get_id_from_name(member)
+        db.add_values_to_member(conn, member_id, (projectid, "read"))
+
+    edit_project_info["new_project_name"] = ""
+    edit_project_info["new_project_desc"] = ""
+    edit_project_info["new_member"] = []
+    edit_project_info["new_funder"] = []
+    edit_project_info["added_member"] = []
+    edit_project_info["deleted_member"] = []
+
+    return redirect(url_for("project", projectid = projectid))
 
 
 @app.route("/edit_project/<projectid>/back_to_project")

@@ -104,7 +104,7 @@
                     </div>
                     <ul class="mf_list">
                         {% for member in project_members %}
-                            <li>{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="removeDiv(this)"></i></li>
+                            <li data-name="{{member}}">{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="remove_user(this)"></i></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -115,14 +115,60 @@
                     </form>
                     <ul class="mf_list">
                         {% for funder in project_funders %}
-                            <li>{{ funder }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px;" onclick="removeDiv(this)"></i></li>
+                            <li data-name="{{funder}}">{{ funder }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="remove_funding(this)"></i></li>
                         {% endfor %}
                     </ul>
                 </div>
 
                 <script>
+
                     function removeDiv(element){
+
+                        let name = element.parentElement.getAttribute('data-name');
+
                         element.parentElement.style.display = 'none';
+
+                        return name
+                    }
+
+                    function remove_funding(element){
+
+                        funder_name = removeDiv(element);
+
+                        fetch("/edit_project/{{project_id}}/remove_funder", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ fundername: funder_name }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Erfolg', data);
+                        })
+                        .catch((error) => {
+                            console.error('Fehler', error);
+                        });
+                    }
+
+                    function remove_user(element){
+
+                        user_name = removeDiv(element);
+
+                        fetch("/edit_project/{{project_id}}/remove_user", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ username: user_name }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Erfolg', data);
+                        })
+                        .catch((error) => {
+                            console.error('Fehler', error);
+                        });
                     }
                 </script>
 
@@ -133,7 +179,7 @@
                 <button type="button" onclick="window.location.href='/edit_project/{{project_id}}/back_to_project';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
             </div>
             <div class="EP_UI_safe">
-                <button type="button" onclick="window.location.href='/#';"><i class="fa-solid fa-cloud-arrow-up"></i><p>save changes</p></button>
+                <button type="button" onclick="window.location.href='/edit_project/{{project_id}}/save_changes';"><i class="fa-solid fa-cloud-arrow-up"></i><p>save changes</p></button>
             </div>
         </div>
     </div>
