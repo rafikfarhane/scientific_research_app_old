@@ -106,7 +106,7 @@
                         {% for member in project_members %}
                             <li data-name="{{member.name}}">
                                 {{ member.name }}
-                                <select onchange="changeRole('{{member.name}}', this.value)">
+                                <select class="select_menu" onchange="changeRole('{{member.name}}', this.value)">
                                     <option value="read" {% if member.role == 'read' %} selected {% endif %}>read</option>
                                     <option value="write" {% if member.role == 'write' %} selected {% endif %}>write</option>
                                 </select>

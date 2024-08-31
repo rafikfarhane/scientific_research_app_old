@@ -620,17 +620,16 @@ def  remove_funder(projectid):
 #Funktion um die Rollen von Nutzern zu ändern
 @app.route("/edit_project/<projectid>/change_role", methods = ["POST"])
 def change_role(projectid):
+    #json datei mit Rollenänderungen werden abgefragt
     data = request.json
     name = data.get('name')
     new_role = data.get('role')
 
+    #Es wird nach dem User mit dem passenden Namen gesucht
+    #Und seine Rolle geändert
     for member in edit_project_info["new_member"]:
         if member['name'] == name:
             member['role'] = new_role
-
-    print(edit_project_info["new_member"])
-    
-
 
     return jsonify({"status": "success"})
 
