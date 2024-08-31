@@ -429,6 +429,20 @@ def project(projectid):
     members_roles = []
     members_roles.append((db.get_name_from_id(admin), 'admin'))
 
+
+    ###
+    ###
+    ###
+    ##
+    ###
+    ###
+    ##
+    ###
+    ###
+    ###
+    ###
+    print(member_names)
+
     for name in member_names:
         member_id = db.get_id_from_name(name)
         user_conn = db.create_connection(db.project_db)
@@ -544,7 +558,8 @@ def add_user_project(projectid):
             if name != user:
                 # fuege den neuen Member in die Member Liste hinzu
                 # und in die Liste der neu hinzugefuegten Member
-                edit_project_info["new_member"].append(user)
+                user_role = {'name': user, 'role': 'read'}
+                edit_project_info["new_member"].append(user_role)
                 edit_project_info["added_member"].append(user)
 
                 #Wenn der Member vorher schon einmal entfernt wurde muss er aus der deleted Member Liste geloescht werden
@@ -579,8 +594,22 @@ def remove_user(projectid):
     user = data.get('username')
     print(f'User {user} removed')
 
+    mid = db.get_id_from_name(user)
+
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        f"SELECT ROLE FROM '{mid}' WHERE PID = ?", (projectid,)
+        )
+    
+    value  = cursor.fetchone()
+    role = value[0]
+
+    user_role = {'name': user, 'role': role}
+
     #Nutzer wird aus new_Member Liste entfernt und die Liste der entfernten Nutzer hinzugefuegt
-    edit_project_info["new_member"].remove(user)
+    edit_project_info["new_member"].remove(user_role)
     edit_project_info["deleted_member"].append(user) 
 
     #Wenn der Nutzer schon in der added_member Liste auftaucht muss er aus dieser geloescht werden
@@ -609,7 +638,11 @@ def save_changes(projectid):
     new_name = edit_project_info["new_project_name"]
     new_description = edit_project_info["new_project_desc"]
     new_member = edit_project_info["new_member"]
-    new_members_str = ",".join(new_member)
+    print(new_member)
+    new_member_list = []
+    for member in new_member:
+        new_member_list.append(member['name'])
+    new_members_str = ",".join(new_member_list)
     new_funder = edit_project_info["new_funder"]
     new_funder_str = ",".join(new_funder)
 
@@ -640,6 +673,8 @@ def save_changes(projectid):
             f"DELETE FROM '{member_id}' WHERE PID = ?", (projectid,)
             )
         conn.commit()
+    
+    print(edit_project_info["new_member"])
 
 
 
@@ -650,6 +685,7 @@ def save_changes(projectid):
     edit_project_info["new_funder"] = []
     edit_project_info["added_member"] = []
     edit_project_info["deleted_member"] = []
+
 
     return redirect(url_for("project", projectid = projectid))
 
