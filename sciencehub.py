@@ -430,19 +430,6 @@ def project(projectid):
     members_roles.append((db.get_name_from_id(admin), 'admin'))
 
 
-    ###
-    ###
-    ###
-    ##
-    ###
-    ###
-    ##
-    ###
-    ###
-    ###
-    ###
-    print(member_names)
-
     for name in member_names:
         member_id = db.get_id_from_name(name)
         user_conn = db.create_connection(db.project_db)
@@ -629,6 +616,24 @@ def  remove_funder(projectid):
 
     return jsonify({'message': f'Funder {name} has been removed'}), 200
 
+
+#Funktion um die Rollen von Nutzern zu ändern
+@app.route("/edit_project/<projectid>/change_role", methods = ["POST"])
+def change_role(projectid):
+    data = request.json
+    name = data.get('name')
+    new_role = data.get('role')
+
+    for member in edit_project_info["new_member"]:
+        if member['name'] == name:
+            member['role'] = new_role
+
+    print(edit_project_info["new_member"])
+    
+
+
+    return jsonify({"status": "success"})
+
 #Funktion um die entsprechenden änderungen zu speichern
 @app.route("/edit_project/<projectid>/save_changes")
 def save_changes(projectid):
@@ -638,7 +643,6 @@ def save_changes(projectid):
     new_name = edit_project_info["new_project_name"]
     new_description = edit_project_info["new_project_desc"]
     new_member = edit_project_info["new_member"]
-    print(new_member)
     new_member_list = []
     for member in new_member:
         new_member_list.append(member['name'])
@@ -667,17 +671,26 @@ def save_changes(projectid):
     #Bei Member die aus dem Projekt geloescht wurden wird auch der entsprechende Tabelleneintrag geloescht
     for member in edit_project_info["deleted_member"]:
         member_id = db.get_id_from_name(member)
-
         cursor = conn.cursor()
         cursor.execute(
             f"DELETE FROM '{member_id}' WHERE PID = ?", (projectid,)
             )
         conn.commit()
+
+    #Die Rollen der User werden geupdated
+    for member in edit_project_info["new_member"]:
+        name = member['name']
+        role = member['role']
+        print(name, role)
+
+        mid = db.get_id_from_name(name)
+        cursor = conn.cursor()
+
+        cursor.execute(
+            f"UPDATE '{mid}' SET ROLE = ? WHERE PID = ?", (role, projectid,)
+        )
+        conn.commit()
     
-    print(edit_project_info["new_member"])
-
-
-
     #Das Dict wird geleert
     edit_project_info["new_project_name"] = ""
     edit_project_info["new_project_desc"] = ""
