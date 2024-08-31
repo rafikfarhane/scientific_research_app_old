@@ -477,8 +477,22 @@ def edit_project(projectid):
         edit_project_info["new_project_desc"] = project_description
         
         member_list = project_members.split(',') if project_members else []
+
+        #Für jeden Member wird jetzt auch noch die entsprechende Rolle die der Nutzer im Projekt hat abgerufen.
         for member in member_list:
-            edit_project_info["new_member"].append(member)
+            mid = db.get_id_from_name(member)
+            cursor.execute(
+                f"SELECT ROLE FROM '{mid}' WHERE PID = ?", (projectid,)
+            )
+
+            result = cursor.fetchone()
+            role = result[0]
+
+            print(role)
+
+            member_dict = {'name': member, 'role': role}
+
+            edit_project_info["new_member"].append(member_dict)
         
         funder_list = project_funders.split(',') if project_funders else []
         for funder in funder_list:

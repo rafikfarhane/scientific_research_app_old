@@ -104,7 +104,10 @@
                     </div>
                     <ul class="mf_list">
                         {% for member in project_members %}
-                            <li data-name="{{member}}">{{ member }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="remove_user(this)"></i></li>
+                            <li data-name="{{member}}">
+                                {{ member.name }} {{ member.role }}
+                                <i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="remove_user(this)"></i>
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
