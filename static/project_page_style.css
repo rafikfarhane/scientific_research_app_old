@@ -29,6 +29,7 @@ body{
     cursor: pointer;
 }
 
+
 .project_page{
     display: flex;
     flex-direction: column;
@@ -38,17 +39,24 @@ body{
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     margin-left: 3rem;
     border-bottom: white solid 5px;
 }
 
-.project_name_buttons h1{
+
+.project_buttons, .project_name_status{
+    display: flex;
+    flex-direction: row;
+}
+
+.project_name_status h1{
     font-size: 48px;
     letter-spacing: -2.0px;
     margin-bottom: 3px;
 }
 
-.project_name_buttons p{
+.project_name_status p{
     margin-left: 10px;
     margin-top: 70px;
     font-size: 16px;
