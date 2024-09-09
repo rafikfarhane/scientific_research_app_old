@@ -244,5 +244,3 @@ class Database:
             return False
         return True
     
-    #to do: Funktionen um Projektname, Projektbeschreibung, Projektmember und funder
-    #eines Projektes zu erhalten auf grundlage der Projektid

@@ -718,6 +718,52 @@ def back_to_project(projectid):
 
 
 
+@app.route("/delete_project/<project_id>")
+def delete_project(project_id):
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+    
+    db.print_table(conn, "PROJECT")
+    # Lösche das Projekt aus der PROJECT-Tabelle
+    cursor.execute(
+        "DELETE FROM PROJECT WHERE PID = ?",
+        (project_id,),
+    )
+    conn.commit()
+
+    flash("Project has been deleted successfully")
+
+    # Verbindung zur all_users Datenbank
+    conn2 = db.create_connection(db.all_users_db)
+    cursor2 = conn2.cursor()
+
+    # Alle user_id's aus der all_users Tabelle holen
+    cursor2.execute("SELECT user_id FROM all_users")
+    users = cursor2.fetchall()
+
+    print(users, "\n")
+    print(project_id, "\n")
+    db.print_table(conn, "PROJECT")
+
+    for user in users:
+        user_id = user[0]  # user ist ein Tupel, extrahiere die user_id
+        cursor.execute(f"DELETE FROM '{user_id}' WHERE PID = ?", (project_id,))
+        conn.commit()
+        db.print_table(conn, f"{user_id}")
+
+
+    # hole die aktuelle id des Nutzers
+    id = db.get_id()
+
+    # hole den dazu entsprechenden Nutzername aus der Datenbank
+    name = db.get_name_from_id(id)
+
+    # Leitet den Nutzer zurück zum Dashboard oder einer anderen Seite
+    return redirect(url_for("dashboard", username=name))
+
+
+
+
 if __name__ == "__main__":
     create_dbs()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
