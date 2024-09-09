@@ -21,6 +21,10 @@ new_project_info = dict(
     project_name="", project_description="", project_member=[], project_funder=[]
 )
 
+edit_project_info = dict(
+    new_project_name="", new_project_desc="", new_member = [], new_funder = [], added_member = [], deleted_member = []
+)
+
 
 def create_dbs():
     # Öffne eine Verbindung zur Datenbank
@@ -83,6 +87,7 @@ def search_for_users(query) -> dict:
     #usernames zurueck an die html datei senden 
     user_list = [{'username': user[0]} for user in users]
     return user_list
+
 
 
 
@@ -201,7 +206,7 @@ def dashboard(username):
 
     # Führen Sie die Abfrage aus, um alle Projekte des Benutzers zu erhalten
     cursor.execute(
-        f"""SELECT P.NAME, P.STATUS, B.ROLE, P.ADMIN, P.MEMBERS, P.CREATED_DATE
+        f"""SELECT P.NAME, P.STATUS, B.ROLE, P.ADMIN, P.MEMBERS, P.CREATED_DATE, P.PID
         FROM {user_id} AS B JOIN PROJECT AS P ON B.PID = P.PID"""
     )
 
@@ -212,7 +217,7 @@ def dashboard(username):
     projects = []
     if results:
         for result in results:
-            project_name, status, role, creator, members, date_str = result
+            project_name, status, role, creator, members, date_str, project_id = result
             try:
                 # Versuche, den Datum-String in ein Datum-Objekt umzuwandeln
                 date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
@@ -232,7 +237,8 @@ def dashboard(username):
                 role,
                 db.get_name_from_id(creator) + " + " + str(members_count) + " more members",
                 # Datum zum dd.mm.yyyy Format umändern
-                date.strftime('%d.%m.%Y') if date else "No Date"
+                date.strftime('%d.%m.%Y') if date else "No Date",
+                project_id
             ]
             projects.append(values)
     else:
@@ -295,8 +301,14 @@ def add_user():
     #test ob user ueberhaupt existiert
     if db.user_exists(user) == True:
         if user not in new_project_info["project_member"]:
-            # fuege den neuen Member in die Member Liste hinzu
-            new_project_info["project_member"].append(user)
+            id = db.get_id()
+            name = db.get_name_from_id(id)
+
+            if name != user:
+                # fuege den neuen Member in die Member Liste hinzu
+                new_project_info["project_member"].append(user)
+            else:
+                flash("You can not add yourself")
         else:
             flash("This User is already part of your project")
     else:
@@ -397,6 +409,313 @@ def create_project():
     name = db.get_name_from_id(id)
 
     return redirect(url_for("dashboard", username=name))
+
+
+
+@app.route("/project/<projectid>")
+def project(projectid):
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+    print(projectid)
+
+    cursor.execute(
+        "SELECT NAME, DESCRIPTION, FUNDER, ADMIN, MEMBERS, STATUS FROM PROJECT WHERE PID = ?", (projectid,)
+    )
+    
+    project = cursor.fetchone()
+
+    project_name, description, funder, admin, members, status = project
+    member_names = members.split(',') if members else []
+    members_roles = []
+    members_roles.append((db.get_name_from_id(admin), 'admin'))
+
+
+    for name in member_names:
+        member_id = db.get_id_from_name(name)
+        user_conn = db.create_connection(db.project_db)
+        user_cursor = user_conn.cursor()
+
+        user_cursor.execute(f"SELECT ROLE FROM '{member_id}' WHERE PID = ?", (projectid,))
+        role = user_cursor.fetchone()
+        members_roles.append((name, role[0]))
+
+
+    user_id = db.get_id()
+    new_conn = db.create_connection(db.project_db)
+    new_cursor = new_conn.cursor()
+
+    new_cursor.execute(f"SELECT ROLE FROM '{user_id}' WHERE PID = ?", (projectid,))
+    role = new_cursor.fetchone()
+
+    if role and (role[0] == 'admin' or role[0] == 'write'):
+        return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status, project_id=projectid)
+    else:
+        return render_template("project_page_read.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+    
+
+#Seite um ein Projekt zu bearbeiten   
+@app.route("/edit_project/<projectid>")
+def edit_project(projectid):
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    pid = projectid
+
+    #Wenn edit_project_info leer ist, heißt das die entsprechenden Daten müssen erst geladen werden
+    if edit_project_info["new_project_name"] == "":
+
+        #Daten des Projektes werden aus der Datenbank geladen und in das Dict eingefügt
+        cursor.execute(
+            "SELECT NAME, DESCRIPTION, FUNDER, MEMBERS FROM PROJECT WHERE PID = ?", (projectid,)
+        )
+
+        project = cursor.fetchone()
+
+        project_name, project_description, project_funders, project_members = project
+
+
+        edit_project_info["new_project_name"] = project_name
+        edit_project_info["new_project_desc"] = project_description
+        
+        member_list = project_members.split(',') if project_members else []
+
+        #Für jeden Member wird jetzt auch noch die entsprechende Rolle die der Nutzer im Projekt hat abgerufen.
+        for member in member_list:
+            mid = db.get_id_from_name(member)
+            cursor.execute(
+                f"SELECT ROLE FROM '{mid}' WHERE PID = ?", (projectid,)
+            )
+
+            result = cursor.fetchone()
+            role = result[0]
+
+            print(role)
+
+            member_dict = {'name': member, 'role': role}
+
+            edit_project_info["new_member"].append(member_dict)
+        
+        funder_list = project_funders.split(',') if project_funders else []
+        for funder in funder_list:
+            edit_project_info["new_funder"].append(funder)
+
+    return render_template("edit_project.html", project_name=edit_project_info["new_project_name"], project_description=edit_project_info["new_project_desc"], project_funders=edit_project_info["new_funder"], project_members=edit_project_info["new_member"], project_id=pid)
+
+#save_new_data speichert änderungen am Projektnamen und der Projektbeschriebung
+#Funktion identisch zu der Funktion wenn man ein neues Projekt erstellt
+@app.route("/edit_project/<projectid>/save_new_data", methods = ["POST"])
+def save_new_data(projectid):
+     # Request die Json Daten welche den Projektnamen und die Projektbeschreibung enthalten
+    data = request.json
+    # Setze die Variablen um Projektnamen und Projektbeschreibung zu speichern
+    project_name = data.get("project_name")
+    project_description = data.get("project_description")
+
+    # Wenn die Daten korrekt übertragen wurde übernehme sie in das Dictionary
+    if project_name or project_description:
+        edit_project_info["new_project_name"] = project_name
+        edit_project_info["new_project_desc"] = project_description
+        # return successmessage
+        return (
+            jsonify(
+                {
+                    "message": "Project data saved successfully",
+                    "projects": edit_project_info,
+                }
+            ),
+            200,
+        )
+    # Wenn die Daten nicht korrekt transferiert wurden
+    else:
+        # return error message
+        return jsonify({"message": "Invalid data"}), 400
+
+
+#Funktion um Nutzer zu einem Projekt hinzuzufuegen
+@app.route("/edit_project/<projectid>/add_user_project", methods = ["POST"])
+def add_user_project(projectid):
+    # Request aus der Html datei wo die Request form den Namen name hat
+    user = request.form["name"]
+    #test ob user ueberhaupt existiert
+    if db.user_exists(user) == True:
+        if user not in edit_project_info["new_member"]:
+            id = db.get_id()
+            name = db.get_name_from_id(id)
+
+            if name != user:
+                # fuege den neuen Member in die Member Liste hinzu
+                # und in die Liste der neu hinzugefuegten Member
+                user_role = {'name': user, 'role': 'read'}
+                edit_project_info["new_member"].append(user_role)
+                edit_project_info["added_member"].append(user)
+
+                #Wenn der Member vorher schon einmal entfernt wurde muss er aus der deleted Member Liste geloescht werden
+                if user in edit_project_info["deleted_member"]:
+                    edit_project_info["deleted_member"].remove(user)
+                    
+            else:
+                flash("You can not add yourself")
+        else:
+            flash("This User is already part of your project")
+    else:
+        flash("This User does not exist")
+    # kehre zur new_project Seite zurueck
+    return redirect(url_for("edit_project", projectid = projectid))
+
+
+#Funktion um Funding hinzuzufuegen
+@app.route("/edit_project/<projectid>/add_funding_project", methods = ["POST"])
+def add_funding_project(projectid):
+    # Request aus der Html Datei wo das form den Namen name hat um von dort die funder abzufragen
+    funder = request.form["name"]
+    # Fuege den Funder zur Funder Liste hinzu
+    edit_project_info["new_funder"].append(funder)
+    # kehre zur new_project Seite zurueck
+    return redirect(url_for("edit_project", projectid = projectid))
+
+
+#Funktion um Nutzer zu entfernen
+@app.route("/edit_project/<projectid>/remove_user", methods = ["POST"])
+def remove_user(projectid):
+    data = request.get_json()
+    user = data.get('username')
+    print(f'User {user} removed')
+
+    mid = db.get_id_from_name(user)
+
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        f"SELECT ROLE FROM '{mid}' WHERE PID = ?", (projectid,)
+        )
+    
+    value  = cursor.fetchone()
+    role = value[0]
+
+    user_role = {'name': user, 'role': role}
+
+    #Nutzer wird aus new_Member Liste entfernt und die Liste der entfernten Nutzer hinzugefuegt
+    edit_project_info["new_member"].remove(user_role)
+    edit_project_info["deleted_member"].append(user) 
+
+    #Wenn der Nutzer schon in der added_member Liste auftaucht muss er aus dieser geloescht werden
+    if user in edit_project_info["added_member"]:
+        edit_project_info["added_member"].remove(user)
+
+    return jsonify({'message': f'User {user} has been removed'}), 200
+
+#Funktion um funder zu loeschen
+@app.route("/edit_project/<projectid>/remove_funder", methods = ["POST"])
+def  remove_funder(projectid):
+    data = request.get_json()
+    name = data.get('fundername')
+    print(f'Funder {name} removed')
+
+    edit_project_info["new_funder"].remove(name)
+
+    return jsonify({'message': f'Funder {name} has been removed'}), 200
+
+
+#Funktion um die Rollen von Nutzern zu ändern
+@app.route("/edit_project/<projectid>/change_role", methods = ["POST"])
+def change_role(projectid):
+    #json datei mit Rollenänderungen werden abgefragt
+    data = request.json
+    name = data.get('name')
+    new_role = data.get('role')
+
+    #Es wird nach dem User mit dem passenden Namen gesucht
+    #Und seine Rolle geändert
+    for member in edit_project_info["new_member"]:
+        if member['name'] == name:
+            member['role'] = new_role
+
+    return jsonify({"status": "success"})
+
+#Funktion um die entsprechenden änderungen zu speichern
+@app.route("/edit_project/<projectid>/save_changes")
+def save_changes(projectid):
+
+    #DAten werden aus dem Dict entnommen
+    #Daten die in Listen auftauchen werden zu strings gemacht
+    new_name = edit_project_info["new_project_name"]
+    new_description = edit_project_info["new_project_desc"]
+    new_member = edit_project_info["new_member"]
+    new_member_list = []
+    for member in new_member:
+        new_member_list.append(member['name'])
+    new_members_str = ",".join(new_member_list)
+    new_funder = edit_project_info["new_funder"]
+    new_funder_str = ",".join(new_funder)
+
+    #Die PROJECT Tabelle wird an der Stelle der entsprechenden PID mit den neuen Daten geupdated
+    conn = db.create_connection(db.project_db)
+
+    cursor = conn.cursor()
+
+
+    cursor.execute(
+        "UPDATE PROJECT SET NAME = ?, DESCRIPTION = ?, FUNDER = ?, MEMBERS = ? WHERE PID = ?",
+        (new_name, new_description, new_funder_str, new_members_str, projectid,)
+        )
+    
+    conn.commit()
+
+    #Member die neu in das Projekt hinzugefuegt wurden erhalten einen neuen Eintrag des Projektes in ihrer Tabelle
+    for member in edit_project_info["added_member"]:
+        member_id = db.get_id_from_name(member)
+        db.add_values_to_member(conn, member_id, (projectid, "read"))
+
+    #Bei Member die aus dem Projekt geloescht wurden wird auch der entsprechende Tabelleneintrag geloescht
+    for member in edit_project_info["deleted_member"]:
+        member_id = db.get_id_from_name(member)
+        cursor = conn.cursor()
+        cursor.execute(
+            f"DELETE FROM '{member_id}' WHERE PID = ?", (projectid,)
+            )
+        conn.commit()
+
+    #Die Rollen der User werden geupdated
+    for member in edit_project_info["new_member"]:
+        name = member['name']
+        role = member['role']
+        print(name, role)
+
+        mid = db.get_id_from_name(name)
+        cursor = conn.cursor()
+
+        cursor.execute(
+            f"UPDATE '{mid}' SET ROLE = ? WHERE PID = ?", (role, projectid,)
+        )
+        conn.commit()
+    
+    #Das Dict wird geleert
+    edit_project_info["new_project_name"] = ""
+    edit_project_info["new_project_desc"] = ""
+    edit_project_info["new_member"] = []
+    edit_project_info["new_funder"] = []
+    edit_project_info["added_member"] = []
+    edit_project_info["deleted_member"] = []
+
+
+    return redirect(url_for("project", projectid = projectid))
+
+
+#Funktion um das editieren abzubrechen
+@app.route("/edit_project/<projectid>/back_to_project")
+def back_to_project(projectid):
+
+    #Das dict wird geloescht
+    edit_project_info["new_project_name"] = ""
+    edit_project_info["new_project_desc"] = ""
+    edit_project_info["new_member"] = []
+    edit_project_info["new_funder"] = []
+    edit_project_info["added_member"] = []
+    edit_project_info["deleted_member"] = []
+
+    return redirect(url_for("project", projectid = projectid))
+
 
 
 if __name__ == "__main__":
