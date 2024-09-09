@@ -437,8 +437,10 @@ def project(projectid):
 
         user_cursor.execute(f"SELECT ROLE FROM '{member_id}' WHERE PID = ?", (projectid,))
         role = user_cursor.fetchone()
-        members_roles.append((name, role[0]))
-
+        if role:
+            members_roles.append((name, role[0]))
+        else:
+            members_roles.append((name, 'read'))  # Default role if not found
 
     user_id = db.get_id()
     new_conn = db.create_connection(db.project_db)
@@ -447,10 +449,19 @@ def project(projectid):
     new_cursor.execute(f"SELECT ROLE FROM '{user_id}' WHERE PID = ?", (projectid,))
     role = new_cursor.fetchone()
 
-    if role and (role[0] == 'admin' or role[0] == 'write'):
-        return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status, project_id=projectid)
+    # Überprüfe, ob das Projekt archiviert ist
+    if status == 'archived':
+        # Zeige das Projekt nur dem Admin an
+        if role and role[0] == 'admin':
+            return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status, project_id=projectid)
+        else:
+            return "Access denied", 403
     else:
-        return render_template("project_page_read.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
+        # Zeige das Projekt den Mitgliedern an
+        if role and (role[0] == 'admin' or role[0] == 'write'):
+            return render_template("project_page.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status, project_id=projectid)
+        else:
+            return render_template("project_page_read.html", project_name=project_name, description=description, funder=funder, members=members_roles, status=status)
     
 
 #Seite um ein Projekt zu bearbeiten   
@@ -716,6 +727,76 @@ def back_to_project(projectid):
 
     return redirect(url_for("project", projectid = projectid))
 
+
+
+@app.route("/delete_project/<project_id>")
+def delete_project(project_id):
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+    
+    # Lösche das Projekt aus der PROJECT-Tabelle
+    cursor.execute(
+        "DELETE FROM PROJECT WHERE PID = ?",
+        (project_id,),
+    )
+    conn.commit()
+
+    flash("Project has been deleted successfully")
+
+    # Verbindung zur all_users Datenbank
+    conn2 = db.create_connection(db.all_users_db)
+    cursor2 = conn2.cursor()
+
+    # Alle user_id's aus der all_users Tabelle holen
+    cursor2.execute("SELECT user_id FROM all_users")
+    users = cursor2.fetchall()
+
+    for user in users:
+        user_id = user[0]  # user ist ein Tupel, extrahiere die user_id
+        cursor.execute(f"DELETE FROM '{user_id}' WHERE PID = ?", (project_id,))
+        conn.commit()
+
+    # hole die aktuelle id des Nutzers
+    id = db.get_id()
+
+    # hole den dazu entsprechenden Nutzername aus der Datenbank
+    name = db.get_name_from_id(id)
+
+    # Leitet den Nutzer zurück zum Dashboard oder einer anderen Seite
+    return redirect(url_for("dashboard", username=name))
+
+
+
+@app.route("/archive_project/<project_id>")
+def archive_project(project_id):
+    # Verbindung zur all_users Datenbank
+    conn = db.create_connection(db.project_db)
+    cursor = conn.cursor()
+
+    conn2 = db.create_connection(db.all_users_db)
+    cursor2 = conn2.cursor()
+
+    # Alle user_id's aus der all_users Tabelle holen
+    cursor2.execute("SELECT user_id FROM all_users")
+    users = cursor2.fetchall()
+
+    for user in users:
+        user_id = user[0]  # user ist ein Tupel, extrahiere die user_id
+        cursor.execute(f"DELETE FROM '{user_id}' WHERE PID = ? AND ROLE <> ?", (project_id, 'admin',))
+        conn.commit()
+
+    # Update the project status to "archived"
+    cursor.execute("UPDATE PROJECT SET STATUS = ? WHERE PID = ?", ("archived", project_id))
+    conn.commit()
+
+    # hole die aktuelle id des Nutzers
+    id = db.get_id()
+
+    # hole den dazu entsprechenden Nutzername aus der Datenbank
+    name = db.get_name_from_id(id)
+
+    # Leitet den Nutzer zurück zum Dashboard oder einer anderen Seite
+    return redirect(url_for("dashboard", username=name))
 
 
 if __name__ == "__main__":
