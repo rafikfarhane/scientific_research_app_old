@@ -8,7 +8,7 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
+EXPOSE 8000
 
 # Definiere den Befehl zum Starten der Anwendung
 CMD python ./sciencehub.py
