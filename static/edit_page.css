@@ -8,23 +8,23 @@ body{
     zoom: 95%;
 }
 
-.NP_UI{
+.EP_UI{
     display: flex;
     flex-direction: column;
 }
 
-.NP_UI_Heading{
+.EP_UI_Heading{
     display: flex;
     flex-direction: row;
 }
 
-.NP_UI_Heading img{
+.EP_UI_Heading img{
     width: 110px;
     height: 110px;
     cursor: pointer;
 }
 
-.NP_UI_Heading h1{
+.EP_UI_Heading h1{
     font-size: 48px;
     margin-left: 12px;
     letter-spacing: -2.0px;
@@ -40,14 +40,14 @@ hr{
     width: 100%;
 }
 
-.NP_UI_input{
+.EP_UI_input{
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 40px;
 }
 
-.NP_UI_input input, textarea{
+.EP_UI_input input, textarea{
     background-color: #D9D7E2;
     font-size: 22px;
     width: 90%;
@@ -70,7 +70,7 @@ hr{
     width: 88.2%;
 }
 
-.NP_UI_horinput{
+.EP_UI_horinput{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -79,19 +79,19 @@ hr{
     margin-top: 40px;
 }
 
-.NP_UI_horinput input{
+.EP_UI_horinput input{
     width: 45%;
     height: 250px;
 }
 
-.NP_UI_addMF{
+.EP_UI_editMF{
     display: flex;
     flex-direction: column;
     height: 220px;
     width: 45%;
 }
 
-.addMF_input{
+.EditMF_input{
     display: flex;
     flex-direction: row;
     border-top-left-radius: 5px;
@@ -165,6 +165,53 @@ hr{
     list-style-type:none;
 }
 
+.mf_list li{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.select_menu {
+    appearance: none; /* Entfernt das native Dropdown-Icon */
+    -webkit-appearance: none; /* Für Safari */
+    -moz-appearance: none; 
+
+    width: 100px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 18px;
+    background-color: #f3f3f3;
+    border: solid thin #00a3d7;
+    border-radius: 15px;
+    cursor: pointer;
+    background-image: url(/static/down-arrow-svgrepo-com.svg);
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+
+}
+
+.select_menu:focus{
+    outline: none;
+    border: solid thin #00fa72; 
+    background-image: url(/static/up-arrow-svgrepo-com.svg);
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.select_menu:hover{
+    background-color: #e9e9e9;
+}
+
+
+/*#00c7fc*/
+/*#00fa72*/
+
+
 .buttons_cr_ca{
     display: flex;
     flex-direction: row;
@@ -174,14 +221,14 @@ hr{
     margin-top: 20px;
 }
 
-.NP_UI_back_to_d{
+.EP_UI_back_to_d{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     margin-left: 78px;
 }
 
-.NP_UI_back_to_d button{
+.EP_UI_back_to_d button{
     height: 50px;
     width: 250px;
     font-size: 22px;
@@ -199,18 +246,18 @@ hr{
     cursor: pointer;
 }
 
-.NP_UI_back_to_d button p{
+.EP_UI_back_to_d button p{
     margin-left: 15px;
 }
 
-.NP_UI_back_to_d button:hover{
+.EP_UI_back_to_d button:hover{
     color: #fff;
     transform: scale(1.1);
     outline: 2px solid #de434f;  /*2*/
     box-shadow: 4px 5px 17px -4px #b02430;  /*3*/
 }
 
-.NP_UI_back_to_d button::before{
+.EP_UI_back_to_d button::before{
     content:"";
     position: absolute;
     left: -50px;
@@ -223,17 +270,17 @@ hr{
     transition: width 800ms;
 }
 
-.NP_UI_back_to_d button:hover::before{
+.EP_UI_back_to_d button:hover::before{
     width: 250%;
 }
 
-.NP_UI_create{
+.EP_UI_safe{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
 
-.NP_UI_create button{
+.EP_UI_safe button{
     height: 50px;
     width: 250px;
     font-size: 22px;
@@ -251,18 +298,18 @@ hr{
     cursor: pointer;
 }
 
-.NP_UI_create button p {
+.EP_UI_safe button p {
     margin-left: 15px;
 }
 
-.NP_UI_create button:hover{
+.EP_UI_safe button:hover{
     color: #fff;
     transform: scale(1.1);
     outline: 2px solid #53c4a0;
     box-shadow: 4px 5px 17px -4px #389678;
 }
 
-.NP_UI_create button::before{
+.EP_UI_safe button::before{
     content:"";
     position: absolute;
     left: -50px;
@@ -275,7 +322,7 @@ hr{
     transition: width 800ms;
 }
 
-.NP_UI_create button:hover::before{
+.EP_UI_safe button:hover::before{
     width: 250%;
 }
 

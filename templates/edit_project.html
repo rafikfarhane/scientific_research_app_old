@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/179535dd9d.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/NewProjectUI.css">
+    <link rel="stylesheet" href="../static/edit_page.css">
     <title>NewProjectUI</title>
 </head>
 <body>
-    <div class="NP_UI">
-        <div class="NP_UI_Heading">
+    <div class="EP_UI">
+        <div class="EP_UI_Heading">
             <img src="../static/logo.png" alt="SiteLogo" onclick="window.location.href='/NewProject/back_to_dashboard';">
             <h1>scienceHUB</h1>
         </div>
         <hr>
-        <div class="NP_UI_input">
-            <input id="ProNam" type="text" placeholder="project name" value = "{{ name_value }}" name="ProNam" maxlength="50"></input>
-            <textarea id="ProDes" type="text" placeholder="description" name="ProDes" maxlength="750">{{ description_value }}</textarea>
+        <div class="EP_UI_input">
+            <input id="ProNam" type="text" value="{{project_name}}"  name="ProNam" maxlength="50"></input>
+            <textarea id="ProDes" type="text" name="ProDes" maxlength="750">{{ project_description }}</textarea>
+
             <script>
                 document.getElementById('ProNam').addEventListener('input', save_data);
                 document.getElementById('ProDes').addEventListener('input', save_data);
@@ -30,7 +31,7 @@
                         project_description: project_description
                     };
 
-                    fetch("/NewProject/save_data", {
+                    fetch("/edit_project/{{project_id}}/save_new_data", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -47,9 +48,10 @@
                 }
                     
             </script>
-            <div class="NP_UI_horinput">
-                <div class="NP_UI_addMF">
-                    <form class="addMF_input" method="POST" action="/NewProject/add_user">
+
+            <div class="EP_UI_horinput">
+                <div class="EP_UI_editMF">
+                    <form class="EditMF_input" method="POST" action="/edit_project/{{project_id}}/add_user_project">
                             <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add member" required>
                             <button id="namesubmit" type="submit"><i class="fa-solid fa-user-plus"></i></button> 
                             <div id="autocomplete-list" class="autocomplete-suggestions"></div>
@@ -101,30 +103,110 @@
                         {% endwith %}
                     </div>
                     <ul class="mf_list">
-                        {% for u in user %}
-                            <li>{{ u }}</li>
+                        {% for member in project_members %}
+                            <li data-name="{{member.name}}">
+                                {{ member.name }}
+                                <select class="select_menu" onchange="changeRole('{{member.name}}', this.value)">
+                                    <option value="read" {% if member.role == 'read' %} selected {% endif %}>read</option>
+                                    <option value="write" {% if member.role == 'write' %} selected {% endif %}>write</option>
+                                </select>
+                                <i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="remove_user(this)"></i>
+                            </li>
                         {% endfor %}
                     </ul>
+
+                    <script>
+                        function changeRole(name, role){
+                            fetch("/edit_project/{{project_id}}/change_role", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({name: name, role: role})
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    console.log(`Rolle von ${name} wurde zu ${role} geändert`);
+                                } else{
+                                    console.error("Fehler beim Rollen aktuallieren");
+                                }
+                            });
+                        }
+                    </script>
+
                 </div>
-                <div class="NP_UI_addMF">
-                    <form class="addMF_input" method="POST" action="/NewProject/add_funding">
+                <div class="EP_UI_editMF">
+                    <form class="EditMF_input" method="POST" action="/edit_project/{{project_id}}/add_funding_project">
                         <input id="nameinput" type="text" name="name" maxlength="25" placeholder="add funding" required>
                         <button id="namesubmit" type="submit"><i class="fa-solid fa-dollar-sign"></i></button>
                     </form>
                     <ul class="mf_list">
-                        {% for f in funder %}
-                            <li>{{ f }}</li>
+                        {% for funder in project_funders %}
+                            <li data-name="{{funder}}">{{ funder }}<i class="fa-solid fa-xmark" style="color: red; margin-right: 20px; cursor: pointer;" onclick="remove_funding(this)"></i></li>
                         {% endfor %}
                     </ul>
                 </div>
+
+                <script>
+
+                    function removeDiv(element){
+
+                        let name = element.parentElement.getAttribute('data-name');
+
+                        element.parentElement.style.display = 'none';
+
+                        return name
+                    }
+
+                    function remove_funding(element){
+
+                        funder_name = removeDiv(element);
+
+                        fetch("/edit_project/{{project_id}}/remove_funder", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ fundername: funder_name }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Erfolg', data);
+                        })
+                        .catch((error) => {
+                            console.error('Fehler', error);
+                        });
+                    }
+
+                    function remove_user(element){
+
+                        user_name = removeDiv(element);
+
+                        fetch("/edit_project/{{project_id}}/remove_user", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ username: user_name }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Erfolg', data);
+                        })
+                        .catch((error) => {
+                            console.error('Fehler', error);
+                        });
+                    }
+                </script>
+
             </div>
         </div>
         <div class="buttons_cr_ca">
-            <div class="NP_UI_back_to_d">
-                <button type="button" onclick="window.location.href='/NewProject/back_to_dashboard';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
+            <div class="EP_UI_back_to_d">
+                <button type="button" onclick="window.location.href='/edit_project/{{project_id}}/back_to_project';"><i class="fa-solid fa-xmark"></i><p>cancel</p></button>
             </div>
-            <div class="NP_UI_create">
-                <button type="button" onclick="window.location.href='/NewProject/create_project';"><i class="fa-solid fa-file-circle-plus"></i><p>create project</p></button>
+            <div class="EP_UI_safe">
+                <button type="button" onclick="window.location.href='/edit_project/{{project_id}}/save_changes';"><i class="fa-solid fa-cloud-arrow-up"></i><p>save changes</p></button>
             </div>
         </div>
     </div>

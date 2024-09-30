@@ -11,29 +11,36 @@
 <body>
     <div class="website">
         <h1 id="head"> science HUB </h1>
-        <div class="center">
+        <form class="login" method="POST" action="/login/check">
 
-            <form class="login" method="POST" action="/login/check">
-                <h1> Welcome back </h1>
+            <h1> Welcome back </h1>
                 
-                <div class="username_input">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <input id="username" type="text" name="username" placeholder="username" required>
-                </div>
+            <div class="username_input">
+                <i class="fa-solid fa-circle-user"></i>
+                <input id="username" type="text" name="username" placeholder="username" required>
+            </div>
 
-                <div class="password_input">
-                    <i class="fa-solid fa-lock"></i>
-                    <input id="password" type="password" name="password" placeholder="password" required>
-                </div>
+            <div class="password_input">
+                <i class="fa-solid fa-lock"></i>
+                <input id="password" type="password" name="password" placeholder="password" required>
+            </div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for message in messages %}
+                            <li>! {{ message }} !</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
          
-                <div class="login_button">
-                    <button >Log in </button>
-
-                </div>
-            </form>
-       
-            <p id="no_account"> Don't have an account ?</br> <a id="sign_up" href='/sign_up'>Sign up</a></p>        
-        </div>
+            <div class="login_button">
+                <button >Log in </button>
+            </div>
+            <div class="sign_up_text">   
+                <p id="no_account"> Don't have an account ?</br> <a id="sign_up" href='/sign_up'>Sign up</a></p> 
+            </div>       
+        </form>
     </div>
 
 </body>

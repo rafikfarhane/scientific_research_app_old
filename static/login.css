@@ -27,6 +27,21 @@ body {
 
 }
 
+.login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #B7AADF;
+    height: 560px;
+    width: 469px;
+}
+
+.flashes{
+    list-style-type: none;
+    color: red;
+    margin-right: 42px;
+}
+
 .center {
     display: flex;
     flex-direction: column;
@@ -56,9 +71,8 @@ h1 {
     flex-direction: column;
     align-items: center;
     
-    margin-top: 60px;
-    
-    right: 18px;
+    margin-top: 40px;
+    right: 10px;
 }
 
 .password_input {
@@ -94,20 +108,18 @@ h1 {
 
 
 .login_button {
-    padding-top: 60px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
 }
 
 .login_button button {
     width: 225px;
     height: 40px;
-
     font-size: 17px;
     font-weight: bold;
     color: white;
-
-
     background-color: #443471;
-
     border: none;
     border-radius: 100px;
 }
@@ -117,13 +129,22 @@ h1 {
     cursor: pointer;
 }
 
-#no_account {
+.sign_up_text{
+    display: flex;
+    flex-direction: row;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+}
+
+/*#no_account {
     padding-top: 5px;
     font-weight: bolder;
     text-align: center;
     margin-right: 32px;
 
-}
+}*/
 
 #sign_up {
 
